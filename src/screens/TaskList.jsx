@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { FlatList, Text, View, TouchableOpacity, Alert, TextInput, StyleSheet, Pressable } from 'react-native';
+import { FlatList, Text, View, TouchableOpacity, Alert, TextInput, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { addTask, db } from '../api/firebase';
-import { getDatabase, ref, onValue } from "firebase/database";
 import { colors } from '../const/constants';
-import MyModal from '../components/Modal';
+import AddTaskDialog from '../components/AddTaskDialog';
 import { useAuth } from '../hooks/useAuth';
 
-import { Button } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 
 
 const firebaseConfig = {
@@ -27,7 +26,16 @@ const TaskList = () => {
   const { user } = useAuth()
 
   const [taskList, setTaskList] = useState([])
- 
+  const [visible, setVisible] = useState(false);
+
+
+  const onScroll = ({ nativeEvent }) => {
+    const currentScrollPosition =
+      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+    setIsExtended(currentScrollPosition <= 0);
+  };
+
   useEffect(() => {
 
     const usersCollectionRef = collection(db, 'todolist')
@@ -50,13 +58,10 @@ const TaskList = () => {
 
 
   return (
-    <View style={{
-      paddingTop: 30,
-    }}>
-      <Button icon="camera">
-  Press me
-</Button>
+    <View style={styles.container}
+    >
       <FlatList
+        onScroll={onScroll}
         data={taskList}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -68,39 +73,37 @@ const TaskList = () => {
           </TouchableOpacity>
         )}
       />
-      {/* <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder='Введите наименование задачи'
-          value={taksTitle}
-          onChangeText={setTaskTitle}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Введите комментарий'
-          value={taksComment}
-          onChangeText={setTaskComment}
-        />
-      </View> */}
-
-      <View style={styles.buttonContainer}>
-        <Pressable
-          style={styles.button}
-          onPress={add}
-        >
-          <Text>+</Text>
-        </Pressable>
-      </View>
-      <MyModal add />
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => setVisible(true)}
+      />
+      <AddTaskDialog add visible={visible} setVisible={setVisible} />
     </View>
   );
 }
 
-
 export default TaskList
 
 
+
+
 const styles = StyleSheet.create({
+
+  container: {
+    flexGrow: 1,
+    paddingTop: 30,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+
   buttonContainer: {
     alignItems: 'center',
     justifyContent: 'center',

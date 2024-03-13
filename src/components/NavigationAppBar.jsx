@@ -1,10 +1,11 @@
-import { Appbar } from 'react-native-paper';
+import { Appbar, useTheme } from 'react-native-paper';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Menu } from 'react-native-paper';
 import { useState } from 'react';
 
-export default function NavigationAppBar({ navigation, route, options, back }) {
+export default NavigationAppBar = ({ navigation, route, options, back }) => {
 
+  const theme = useTheme();
 
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
@@ -12,15 +13,21 @@ export default function NavigationAppBar({ navigation, route, options, back }) {
   const title = getHeaderTitle(options, route.name);
 
   return (
-    <Appbar.Header>
-      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-      <Appbar.Content title={title} />
+    <Appbar.Header
+      style={{ backgroundColor: theme.colors.primary }}
+    >
+      {back ? <Appbar.BackAction color={theme.colors.onPrimary} onPress={navigation.goBack} /> : null}
+      <Appbar.Content
+        title={title}
+        color={theme.colors.onPrimary}
+      />
       {back ? (
         <Menu
           visible={visible}
           onDismiss={closeMenu}
           anchor={
             <Appbar.Action
+              color={theme.colors.onPrimary}
               icon="dots-vertical"
               onPress={openMenu}
             />
