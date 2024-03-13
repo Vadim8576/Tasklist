@@ -7,6 +7,7 @@ import { colors } from '../const/constants';
 import MyModal from '../components/Modal';
 import { useAuth } from '../hooks/useAuth';
 
+import { Button } from 'react-native-paper';
 
 
 const firebaseConfig = {
@@ -21,21 +22,12 @@ const firebaseConfig = {
 
 
 
-
 const TaskList = () => {
 
   const { user } = useAuth()
 
   const [taskList, setTaskList] = useState([])
  
-
-
-  const api_key = process.env.REACT_APP_FIREBASE_API_KEY;
-  
-  console.log('api_key = ', api_key)
-  // console.log(firebaseConfig)
-
-
   useEffect(() => {
 
     const usersCollectionRef = collection(db, 'todolist')
@@ -61,6 +53,9 @@ const TaskList = () => {
     <View style={{
       paddingTop: 30,
     }}>
+      <Button icon="camera">
+  Press me
+</Button>
       <FlatList
         data={taskList}
         renderItem={({ item }) => (
