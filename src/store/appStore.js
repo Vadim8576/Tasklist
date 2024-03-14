@@ -25,7 +25,7 @@ class appStore {
 
   getTaskList = (userId) => {
     console.log('appStore ID', userId)
-    const snapshot = fb.snapshot({setTaskList: this.setTaskList, userId})
+    const snapshot = fb.mainTaskListSnapshot({setTaskList: this.setTaskList, userId})
   }
 
   get tasks () {

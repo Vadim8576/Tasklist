@@ -26,58 +26,105 @@ export const fb = {
     return signOut(auth)
   },
 
-  snapshot: async (payload) => {
+  createMainList: async () => {
+
+    const mainTaskListRef = collection(db, "mainTaskList");
+
+    await setDoc(doc(mainTaskListRef, "y4Q2IaI2TSSAhPEmJGC1SvhnCnz1"), {   
+      'mainTask': [
+        {
+          createAt: 165654654654646,
+          title: 'Список задач 1',
+        },
+        {
+          createAt: 175668054654631,
+          title: 'Список задач 2',
+        }
+      ]
+    });
+    
+  },
+
+  createSubList: async() => {
+
+    const subTaskListRef = collection(db, "subTaskList");
+
+    await setDoc(doc(subTaskListRef, "y4Q2IaI2TSSAhPEmJGC1SvhnCnz1"), {
+      'Список задач 1': [
+        {
+          createAt: 165654654654646,
+          title: 'Хлеб',
+          complited: false,
+          comments: 'Черный хлеб'
+        },
+        {
+          createAt: 1623454654654645,
+          title: 'Молоко',
+          complited: false,
+          comments: 'вологодское'
+        },
+        {
+          createAt: 1623454654654645,
+          title: 'Масло',
+          complited: false,
+          comments: 'вологодское'
+        }
+      ],
+      'Список задач 2': [
+        {
+          createAt: 165654654654646,
+          title: 'Сапоги',
+          complited: false,
+          comments: 'Резиновые'
+        },
+        {
+          createAt: 1623454654654645,
+          title: 'Стул',
+          complited: false,
+          comments: ''
+        },
+        {
+          createAt: 1623454654654645,
+          title: 'Топор',
+          complited: false,
+          comments: 'Колун'
+        }
+      ]
+    });
+
+  },
+
+
+  mainTaskListSnapshot: async function (payload) {
     const {setTaskList, userId} = payload
 
 
     if(!userId) return
 
 
-    const citiesRef = collection(db, "cities");
-
-    // await setDoc(doc(citiesRef, "SF"), {
-    //     name: "San Francisco",
-    //     state: "CA",
-    //     country: "USA",
-    //     capital: false,
-    //     population: 860000,
-    //     regions: ["west_coast", "norcal"]
-    //   });
-
-    // await setDoc(doc(citiesRef, "LA"), {
-    //     name: "Los Angeles", state: "CA", country: "USA",
-    //     capital: false, population: 3900000,
-    //     regions: ["west_coast", "socal"] });
-    // await setDoc(doc(citiesRef, "DC"), {
-    //     name: "Washington D.C.", state: null, country: "USA",
-    //     capital: true, population: 680000,
-    //     regions: ["east_coast"] });
-    // await setDoc(doc(citiesRef, "TOK"), {
-    //     name: "Tokyo", state: null, country: "Japan",
-    //     capital: true, population: 9000000,
-    //     regions: ["kanto", "honshu"] });
-    // await setDoc(doc(citiesRef, "BJ"), {
-    //     name: "Beijing", state: null, country: "China",
-    //     capital: true, population: 21500000,
-    //     regions: ["jingjinji", "hebei"] });
 
 
+    // this.createMainList()
+    // this.createSubList()
 
-      const q = query(collection(db, "cities"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const cities = [];
-        querySnapshot.forEach((doc) => {
-            cities.push(doc.data().name);
-        });
-        setTaskList(cities)
-        // console.log("Current cities in CA: ", cities.join(", "));
-      });
+      // const q = query(collection(db, "mainTaskList"));
+      // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      //   const mainTaskList = [];
+      //   querySnapshot.forEach((doc) => {
+      //     mainTaskList.push(doc.data().mainTask);
+      //   });
 
-    
+      //   setTaskList(mainTaskList)
+      //   console.log('firebase snapshot mainTaskList = ', mainTaskList)
+       
+      // }) 
 
 
-
-    // console.log('firebase ID',userId)
+      const unsub = onSnapshot(doc(db, "mainTaskList", userId), (doc) => {
+        console.log("Current data: ", doc.data());
+        console.log("Current data: ", doc.data().mainTask);
+        setTaskList(doc.data().mainTask)
+    });
 
 
   },

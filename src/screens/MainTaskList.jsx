@@ -28,7 +28,7 @@ const TaskList = observer(({ navigation }) => {
     getTaskList(userId)
 
     console.log('TaskList user = ', user.uid)
-    console.log('TaskList tasks = ', taskList)
+    console.log('TaskList tasks = ', taskList.title)
 
 
   }, [userId])
@@ -54,12 +54,12 @@ const TaskList = observer(({ navigation }) => {
               () => navigation.navigate(
                 'SubTaskList',
                 {
-                  item
+                  item: item.title
                 }
               )
             }
           >
-            <Text>{item}</Text>
+            <Text>{item.title}</Text>
           </TouchableOpacity>
         )}
       />
