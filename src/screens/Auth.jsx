@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react"
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { observer } from "mobx-react-lite";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 import { colors } from "../const/constants"
-import { singIn } from "../api/firebase"
+import { fb } from "../api/firebase"
 import { useAuth } from "../hooks/useAuth"
-import { reauthenticateWithPopup } from "firebase/auth"
+import authStore from '../store/authStore'
 
-export const Auth = ({ navigation }) => {
 
-  const { isLoggedIn, user } = useAuth()
+export const Auth = observer(({ navigation }) => {
 
+  //удалить
   const [email, setEmail] = useState('123@gmail.com')
   const [password, setPassword] = useState('123456')
-  // console.log('user email ' ,user.email)
-  // console.log('user id APP' ,user.uid)
 
+  const {singIn} = authStore
 
-  const login = async (email, password) => {
-    await singIn(email, password)
-
+  const login = (email, password) => {
+    singIn(email, password)
     navigation.navigate('TaskList')
   }
 
+
+  // удалить
   useEffect(() => {
     login(email, password)
   }, [])
@@ -55,7 +56,7 @@ export const Auth = ({ navigation }) => {
 
     </View>
   )
-}
+})
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -86,4 +87,4 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: colors.ACCENT,
   }
-});
+})

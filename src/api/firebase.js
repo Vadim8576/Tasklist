@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
-import { Timestamp, doc, getFirestore, setDoc } from "firebase/firestore";
-import { getDatabase, ref, set, push } from "firebase/database";
-import { Alert } from "react-native";
+import { Timestamp, collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -15,43 +13,72 @@ const firebaseConfig = {
 };
 
 
+const app = initializeApp(firebaseConfig)
+export const auth = getAuth()
+export const db = getFirestore(app)
+
+export const fb = {
+  singIn: async (email, password) => {
+    return await signInWithEmailAndPassword(auth, email, password)
+  },
+  logOut: async () => {
+    return await signOut(auth)
+  },
+  snapshot: (fb) => {
+    
+    const usersCollectionRef = collection(db, 'todolist')
+    const sn = onSnapshot(
+      (usersCollectionRef), snapshot => {
+        snapshot.docs.map(doc => {
+          const data = { ...doc.data()}
+          fb(data)
+          // console.log(data)
+      })}
+    )
+    return sn
+
+  },
+  addTask: async (userId) => {
+    console.log('Press Add')
+    await setDoc(doc(db, userId, '6'), {
+      'complite': false,
+      'task': 'Следующая задача',
+      'createdAt': Timestamp.now().seconds
+    })
+  }
+}
+
+// export const auth = getAuth();
+// export const db = getFirestore(app);
 
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
-export const db = getFirestore(app);
-
-// const auth = initializeAuth(app, {
-//   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-// });
-
-// разобраться с регистрацией
-// const provider = new GoogleAuthProvider();
-// export const createUser = (email, password) => {
-//   return createUserWithEmailAndPassword(auth, email, password)
+// export const singIn = (email, password) => {
+//   return signInWithEmailAndPassword(auth, email, password)
 // }
 
-export const singIn = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password)
-}
-
-export const logout = () => {
-  return signOut(auth)
-}
-
-export const addTask = async (userId) => {
-
-  console.log('Press Add')
-
-  await setDoc(doc(db, userId, '6'), {
-    'complite': false,
-    'task': 'Следующая задача',
-    'createdAt': Timestamp.now().seconds
-  })
+// export const logout = () => {
+//   return signOut(auth)
+// }
 
 
+// export const snapshot = () =>{
+  
+// }
 
-}
+
+// export const addTask = async (userId) => {
+
+//   console.log('Press Add')
+
+//   await setDoc(doc(db, userId, '6'), {
+//     'complite': false,
+//     'task': 'Следующая задача',
+//     'createdAt': Timestamp.now().seconds
+//   })
+
+
+
+// }
 
 
 
@@ -85,14 +112,14 @@ export const addTask = async (userId) => {
 
 // транзакция, используется для совместного изменения данных
 // https://firebase.google.com/docs/database/web/read-and-write?hl=ru
-export const toggleTaskComplite = () => {
-  const db = getDatabase();
-  const postRef = ref(db, '/todolist/');
+// export const toggleTaskComplite = () => {
+//   const db = getDatabase();
+//   const postRef = ref(db, '/todolist/');
 
-  runTransaction(postRef, (item) => {
-    if (!item.complite) {
-      item.complite = true;
-    }
-    return item;
-  });
-}
+//   runTransaction(postRef, (item) => {
+//     if (!item.complite) {
+//       item.complite = true;
+//     }
+//     return item;
+//   });
+// }

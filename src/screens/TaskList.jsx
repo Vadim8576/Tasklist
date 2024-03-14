@@ -1,49 +1,39 @@
 import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { FlatList, Text, View, TouchableOpacity, Alert, TextInput, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { addTask, db } from '../api/firebase';
 import { colors } from '../const/constants';
 import AddTaskDialog from '../components/AddTaskDialog';
 import { useAuth } from '../hooks/useAuth';
-
 import { FAB } from 'react-native-paper';
+import { observer } from "mobx-react-lite";
+import appStore from '../store/appStore';
 
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
-};
-
-
-
-
-const TaskList = () => {
+const TaskList = observer(() => {
 
   const { user } = useAuth()
-
-  const [taskList, setTaskList] = useState([])
+  const {getTaskList} = appStore
+  // const [taskList, setTaskList] = useState(getTaskList)
   const [visible, setVisible] = useState(false);
 
+  const taskList = appStore.getTaskList()
 
-  const onScroll = ({ nativeEvent }) => {
-    const currentScrollPosition =
-      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-
-    setIsExtended(currentScrollPosition <= 0);
-  };
+  
 
   useEffect(() => {
+    
 
-    const usersCollectionRef = collection(db, 'todolist')
-    const unSub = onSnapshot((usersCollectionRef), snapshot => {
-      setTaskList(snapshot.docs.map(doc => ({ ...doc.data() })))
-    })
 
-    return unSub
+
+    // console.log('getTaskList = ', toJS(getTaskList))
+
+    // const usersCollectionRef = collection(db, 'todolist')
+    // const unSub = onSnapshot((usersCollectionRef), snapshot => {
+    //   setTaskList(snapshot.docs.map(doc => ({ ...doc.data() })))
+    // })
+
+    // return unSub
 
   }, [])
 
@@ -54,14 +44,17 @@ const TaskList = () => {
 
 
 
-  if (taskList.length === 0) return null
+  if (taskList.length === 0) return (
+    <View style={styles.container}>
+      <Text>Список пуст</Text>
+    </View>
+  )
 
 
   return (
     <View style={styles.container}
     >
       <FlatList
-        onScroll={onScroll}
         data={taskList}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -81,7 +74,7 @@ const TaskList = () => {
       <AddTaskDialog add visible={visible} setVisible={setVisible} />
     </View>
   );
-}
+})
 
 export default TaskList
 
