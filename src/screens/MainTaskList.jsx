@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { addTask, db } from '../api/firebase';
+import { fb } from '../api/firebase';
 import { colors } from '../const/constants';
 import AddTaskDialog from '../components/AddTaskDialog';
 import { useAuth } from '../hooks/useAuth';
@@ -10,45 +9,38 @@ import { observer } from "mobx-react-lite";
 import appStore from '../store/appStore';
 
 
-const TaskList = observer(() => {
+const TaskList = observer(({ navigation }) => {
 
-  const { user } = useAuth()
-  const {getTaskList} = appStore
+
+
   // const [taskList, setTaskList] = useState(getTaskList)
   const [visible, setVisible] = useState(false);
 
-  const taskList = appStore.getTaskList()
+  const {taskList, getTaskList} = appStore
 
-  
+  const {user} = useAuth()
+  const userId = user.uid
 
+
+ 
   useEffect(() => {
-    
+    if(!userId) return
+    getTaskList(userId)
+
+    console.log('TaskList user = ', user.uid)
+    console.log('TaskList tasks = ', taskList)
+
+
+  }, [userId])
 
 
 
-    // console.log('getTaskList = ', toJS(getTaskList))
 
-    // const usersCollectionRef = collection(db, 'todolist')
-    // const unSub = onSnapshot((usersCollectionRef), snapshot => {
-    //   setTaskList(snapshot.docs.map(doc => ({ ...doc.data() })))
-    // })
-
-    // return unSub
-
-  }, [])
-
-
-  const add = async () => {
-    await addTask(user.uid)
-  }
-
-
-
-  if (taskList.length === 0) return (
-    <View style={styles.container}>
-      <Text>Список пуст</Text>
-    </View>
-  )
+  // if (tasks.length === 0) return (
+  //   <View style={styles.container}>
+  //     <Text>Список пуст</Text>
+  //   </View>
+  // )
 
 
   return (
@@ -59,10 +51,15 @@ const TaskList = observer(() => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={
-              () => Alert.alert(`${item.task}`)
+              () => navigation.navigate(
+                'SubTaskList',
+                {
+                  item
+                }
+              )
             }
           >
-            <Text>{item.task}</Text>
+            <Text>{item}</Text>
           </TouchableOpacity>
         )}
       />
@@ -71,7 +68,7 @@ const TaskList = observer(() => {
         style={styles.fab}
         onPress={() => setVisible(true)}
       />
-      <AddTaskDialog add visible={visible} setVisible={setVisible} />
+      <AddTaskDialog visible={visible} setVisible={setVisible} />
     </View>
   );
 })

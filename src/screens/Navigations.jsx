@@ -21,9 +21,10 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
 const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
-import TaskList from './TaskList';
+import TaskList from './MainTaskList';
 import { Auth } from './Auth';
 import NavigationAppBar from '../components/NavigationAppBar';
+import SubTaskList from './SubTaskList';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ export const Navigation = () => {
         }}>
           <Stack.Screen name='Auth' component={Auth} options={{ title: 'Авторизация' }} />
           <Stack.Screen name='TaskList' component={TaskList} options={{ title: 'Список дел' }} />
+          <Stack.Screen name='SubTaskList' component={SubTaskList} options={{ title: 'Подсписок дел' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

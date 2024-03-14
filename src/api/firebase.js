@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
-import { Timestamp, collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { Timestamp, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, where } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -21,26 +21,73 @@ export const fb = {
   singIn: async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password)
   },
-  logOut: async () => {
-    return await signOut(auth)
+
+  logOut: () => {
+    return signOut(auth)
   },
-  snapshot: (fb) => {
+
+  snapshot: async (payload) => {
+    const {setTaskList, userId} = payload
+
+
+    if(!userId) return
+
+
+    const citiesRef = collection(db, "cities");
+
+    // await setDoc(doc(citiesRef, "SF"), {
+    //     name: "San Francisco",
+    //     state: "CA",
+    //     country: "USA",
+    //     capital: false,
+    //     population: 860000,
+    //     regions: ["west_coast", "norcal"]
+    //   });
+
+    // await setDoc(doc(citiesRef, "LA"), {
+    //     name: "Los Angeles", state: "CA", country: "USA",
+    //     capital: false, population: 3900000,
+    //     regions: ["west_coast", "socal"] });
+    // await setDoc(doc(citiesRef, "DC"), {
+    //     name: "Washington D.C.", state: null, country: "USA",
+    //     capital: true, population: 680000,
+    //     regions: ["east_coast"] });
+    // await setDoc(doc(citiesRef, "TOK"), {
+    //     name: "Tokyo", state: null, country: "Japan",
+    //     capital: true, population: 9000000,
+    //     regions: ["kanto", "honshu"] });
+    // await setDoc(doc(citiesRef, "BJ"), {
+    //     name: "Beijing", state: null, country: "China",
+    //     capital: true, population: 21500000,
+    //     regions: ["jingjinji", "hebei"] });
+
+
+
+      const q = query(collection(db, "cities"));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const cities = [];
+        querySnapshot.forEach((doc) => {
+            cities.push(doc.data().name);
+        });
+        setTaskList(cities)
+        // console.log("Current cities in CA: ", cities.join(", "));
+      });
+
     
-    const usersCollectionRef = collection(db, 'todolist')
-    const sn = onSnapshot(
-      (usersCollectionRef), snapshot => {
-        snapshot.docs.map(doc => {
-          const data = { ...doc.data()}
-          fb(data)
-          // console.log(data)
-      })}
-    )
-    return sn
+
+
+
+    // console.log('firebase ID',userId)
+
 
   },
-  addTask: async (userId) => {
+
+  addTask: async (payload) => {
+    const {userId, title, comment} = payload
     console.log('Press Add')
-    await setDoc(doc(db, userId, '6'), {
+    console.log('firebase/addTask = ', userId)
+
+    await setDoc(doc(db, userId, title), {
       'complite': false,
       'task': 'Следующая задача',
       'createdAt': Timestamp.now().seconds

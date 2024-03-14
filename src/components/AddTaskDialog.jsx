@@ -2,15 +2,26 @@ import { useState } from "react";
 // import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { Button, Dialog, Portal, TextInput, Text } from 'react-native-paper';
+import { useAuth } from "../hooks/useAuth";
+import { fb } from "../api/firebase";
+import { observer } from "mobx-react-lite";
 
-
-export default AddTaskDialog = ({ add, visible, setVisible }) => {
+export default AddTaskDialog = observer(({ visible, setVisible }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [taksTitle, setTaskTitle] = useState('')
-  const [taksComment, setTaskComment] = useState('')
+  const [title, setTitle] = useState('')
+  const [comment, setComment] = useState('')
+
+  const { user } = useAuth()
+  const userId = user.uid
 
   const hideDialog = () => setVisible(false);
+
+
+  const onSubmit = () => {
+    console.log('AddTaskDialog = ', userId)
+    fb.addTask({ userId, title, comment })
+  }
 
   return (
     <Portal>
@@ -22,26 +33,26 @@ export default AddTaskDialog = ({ add, visible, setVisible }) => {
             numberOfLines={2}
             style={styles.input}
             placeholder='Введите наименование задачи'
-            value={taksTitle}
-            onChangeText={setTaskTitle}
+            value={title}
+            onChangeText={setTitle}
           />
           <TextInput
             multiline={true}
             numberOfLines={2}
             style={styles.input}
             placeholder='Введите комментарий'
-            value={taksComment}
-            onChangeText={setTaskComment}
+            value={comment}
+            onChangeText={setComment}
           />
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={hideDialog}>Cancel</Button>
-          <Button onPress={() => console.log('Ok')}>Ok</Button>
+          <Button onPress={onSubmit}>Ok</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>
   );
-}
+})
 
 
 const styles = StyleSheet.create({

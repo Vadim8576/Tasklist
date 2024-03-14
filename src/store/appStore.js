@@ -4,25 +4,33 @@ import { fb } from "../api/firebase";
 
 class appStore {
 
-  user = null;
-  isLoggedIn = false;
+  user = null
+  isLoggedIn = false
   taskList = []
+  currentTaskList = ''
 
   constructor() {
     makeAutoObservable(this);
   }
 
+
+  setCurrentTaskList = (task) => {
+    this.currentTaskList = task
+  }
+
   setTaskList = (data) => {
     this.taskList = data;
-    console.log('taskList = ', this.taskList)
+    console.log('appStore ', this.taskList)
   }
 
-  getTaskList = () => {
-    const snapshot = fb.snapshot(this.setTaskList)
-    
-    return snapshot
+  getTaskList = (userId) => {
+    console.log('appStore ID', userId)
+    const snapshot = fb.snapshot({setTaskList: this.setTaskList, userId})
   }
 
+  get tasks () {
+    return this.taskList
+  }
 
 }
 
