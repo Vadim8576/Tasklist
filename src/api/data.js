@@ -1,26 +1,49 @@
-const mainTaskList = {
-  'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1': {
-    createAt: 165654654654646,
-    title: 'Список задач 1'
-  }
-}
+const a = 
+  [
+    {
+      "createAt": 165654654654222, 
+      "subTask": [[Object], [Object], [Object]], 
+      "title": "Список покупок инструментов"
+    }
+  ]
+const b = 
+[
+  {
+    "createAt": 165654654654222, 
+    "subTask": [[Object], [Object], [Object]], 
+    "title": "Список покупок инструментов"}, 
+    {
+      "createAt": 165654654654646, 
+      "subTask": [[Object], [Object], [Object]]
+    }
+]  
 
-const subTaskLais = {
-  'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1': {
-    title: 'Список задач 1',
-    task: [
-      {
-        createAt: 165654654654646,
-        title: 'Хлеб',
-        complited: false,
-        comments: 'Черный хлеб'
-      },
-      {
-        createAt: 1623454654654645,
-        title: 'Молоко',
-        complited: false,
-        comments: 'вологодское'
-      }
-    ]
-  }
-}
+
+const doc = 
+{"_converter": null, 
+"_document": 
+{"createTime": 
+{"timestamp": [Timestamp]},
+ "data": {"value": [Object]},
+  "documentState": 0, 
+  "documentType": 1,
+   "key": {"path": [ResourcePath]},
+    "readTime": {"timestamp": [Timestamp]},
+     "version": {"timestamp": [Timestamp]}},
+      "_firestore": 
+      {"app": [FirebaseAppImpl], 
+      "databaseId": [DatabaseId], 
+      "settings": [FirestoreSettingsImpl]},
+       "_firestoreImpl": 
+       {"app": [FirebaseAppImpl],
+        "databaseId": [DatabaseId],
+         "settings": [FirestoreSettingsImpl]
+        },
+          "_key": {
+            "path": {
+              "len": 2,
+               "offset": 5,
+                "segments": [Array]}
+              }, "_userDataWriter":
+               {"firestore": [Object]},
+                "metadata": {"fromCache": false, "hasPendingWrites": false}}

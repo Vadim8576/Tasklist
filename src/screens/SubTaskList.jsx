@@ -1,32 +1,23 @@
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FAB } from 'react-native-paper';
-import AddTaskDialog from "../components/AddTaskDialog";
-
+import appStore from '../store/appStore';
 
 export default SubTaskList = observer(({ route, navigation }) => {
   
-  const { item } = route.params;
-
-  useEffect(() => {
-
-
-  })
-
+  const { index } = route.params;
 
   return (
-    <View style={styles.container}
-    >
+    <View style={styles.container}>
       <FlatList
-        data={['111','222']}
+        data={appStore.getTaskByIndex(index)?.subTask}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={
-              () => console.log(item)
+              () => console.log(item.title)
             }
           >
-            <Text>{item}</Text>
+            <Text>{item.title}</Text>
           </TouchableOpacity>
         )}
       />

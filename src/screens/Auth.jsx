@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth"
 import authStore from '../store/authStore'
 
 
-export const Auth = observer(({ navigation }) => {
+export default Auth = observer(({ navigation }) => {
 
   //удалить
   const [email, setEmail] = useState('123@gmail.com')

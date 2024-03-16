@@ -26,31 +26,13 @@ export const fb = {
     return signOut(auth)
   },
 
-  createMainList: async () => {
+  createMainList: async (userId) => {
 
-    const mainTaskListRef = collection(db, "mainTaskList");
+    const mainTaskListRef = collection(db, userId);
 
-    await setDoc(doc(mainTaskListRef, "y4Q2IaI2TSSAhPEmJGC1SvhnCnz1"), {   
-      'mainTask': [
-        {
-          createAt: 165654654654646,
-          title: 'Список задач 1',
-        },
-        {
-          createAt: 175668054654631,
-          title: 'Список задач 2',
-        }
-      ]
-    });
-    
-  },
-
-  createSubList: async() => {
-
-    const subTaskListRef = collection(db, "subTaskList");
-
-    await setDoc(doc(subTaskListRef, "y4Q2IaI2TSSAhPEmJGC1SvhnCnz1"), {
-      'Список задач 1': [
+    await setDoc(doc(mainTaskListRef, 'Список покупок продовольствия'), {   
+      createAt: 165654654654646,
+      subTask: [
         {
           createAt: 165654654654646,
           title: 'Хлеб',
@@ -64,24 +46,28 @@ export const fb = {
           comments: 'вологодское'
         },
         {
-          createAt: 1623454654654645,
+          createAt: 1623454654654545,
           title: 'Масло',
           complited: false,
           comments: 'вологодское'
         }
-      ],
-      'Список задач 2': [
+      ]
+    })
+
+    await setDoc(doc(mainTaskListRef, 'Список покупок инструментов'), {   
+      createAt: 165654654654222,
+      subTask: [
         {
           createAt: 165654654654646,
-          title: 'Сапоги',
+          title: 'Отвертка',
           complited: false,
-          comments: 'Резиновые'
+          comments: 'крестовая'
         },
         {
           createAt: 1623454654654645,
-          title: 'Стул',
+          title: 'пила',
           complited: false,
-          comments: ''
+          comments: 'дружба'
         },
         {
           createAt: 1623454654654645,
@@ -90,42 +76,45 @@ export const fb = {
           comments: 'Колун'
         }
       ]
+      
     });
-
+    
   },
 
-
-  mainTaskListSnapshot: async function (payload) {
+  mainTaskListSnapshot: function (payload) {
     const {setTaskList, userId} = payload
-
 
     if(!userId) return
 
+    // await this.createMainList(userId)
 
+    
+    const q = query(collection(db, userId));
 
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const allDocs = []
+      querySnapshot.forEach((doc) => {
+        allDocs.push({
+          title: doc.id,
+          createAt: doc.data().createAt,
+          subTask: doc.data().subTask
+        })
+      });
+      setTaskList(allDocs)
+    });
+      
 
-    // this.createMainList()
-    // this.createSubList()
+  },
 
-      // const q = query(collection(db, "mainTaskList"));
-      // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      //   const mainTaskList = [];
-      //   querySnapshot.forEach((doc) => {
-      //     mainTaskList.push(doc.data().mainTask);
-      //   });
+  subTaskListSnapshot: async function (payload) {
+    const {setTaskList, userId} = payload
 
-      //   setTaskList(mainTaskList)
-      //   console.log('firebase snapshot mainTaskList = ', mainTaskList)
-       
-      // }) 
-
-
+    if(!userId) return
       const unsub = onSnapshot(doc(db, "mainTaskList", userId), (doc) => {
         console.log("Current data: ", doc.data());
         console.log("Current data: ", doc.data().mainTask);
         setTaskList(doc.data().mainTask)
     });
-
 
   },
 

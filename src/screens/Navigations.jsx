@@ -22,7 +22,7 @@ const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
 const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
 import TaskList from './MainTaskList';
-import { Auth } from './Auth';
+import Auth from './Auth';
 import NavigationAppBar from '../components/NavigationAppBar';
 import SubTaskList from './SubTaskList';
 

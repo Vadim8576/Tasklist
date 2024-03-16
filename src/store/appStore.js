@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, autorun } from "mobx";
 import { fb } from "../api/firebase";
 
 
@@ -7,29 +7,27 @@ class appStore {
   user = null
   isLoggedIn = false
   taskList = []
-  currentTaskList = ''
-
+  
   constructor() {
-    makeAutoObservable(this);
-  }
-
-
-  setCurrentTaskList = (task) => {
-    this.currentTaskList = task
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   setTaskList = (data) => {
-    this.taskList = data;
-    console.log('appStore ', this.taskList)
+    this.taskList = [...data];
+    // console.log('appStore ', this.taskList)
+    console.log('appStore ', this.taskList[0].subTask)
   }
 
   getTaskList = (userId) => {
     console.log('appStore ID', userId)
-    const snapshot = fb.mainTaskListSnapshot({setTaskList: this.setTaskList, userId})
+    const snapshot = fb.mainTaskListSnapshot({
+      setTaskList: this.setTaskList,
+      userId
+    })
   }
 
-  get tasks () {
-    return this.taskList
+  getTaskByIndex = (index) => {
+    return this.taskList[index]
   }
 
 }
