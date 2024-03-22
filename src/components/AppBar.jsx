@@ -1,9 +1,13 @@
-import { Appbar, useTheme } from 'react-native-paper';
+import { useState } from 'react'
+import { Appbar, useTheme, Menu, Text } from 'react-native-paper';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Menu } from 'react-native-paper';
-import { useState } from 'react';
+import { fb } from "../api/firebase";
+import { dateOptions } from '../const/constants';
+import { dateConversion } from '../helpers/dateСonversion';
+import appStore from '../store/appStore';
 
-export default NavigationAppBar = ({ navigation, route, options, back }) => {
+
+export default AppBar = ({ navigation, route, options, back }) => {
 
   const theme = useTheme();
 
@@ -12,14 +16,32 @@ export default NavigationAppBar = ({ navigation, route, options, back }) => {
   const closeMenu = () => setVisible(false);
   const title = getHeaderTitle(options, route.name);
 
+
   return (
     <Appbar.Header
       style={{ backgroundColor: theme.colors.primary }}
     >
-      {back ? <Appbar.BackAction color={theme.colors.onPrimary} onPress={navigation.goBack} /> : null}
-      <Appbar.Content
-        title={title}
+      {back ? <Appbar.BackAction
         color={theme.colors.onPrimary}
+        onPress={navigation.goBack} />
+        : null}
+      <Appbar.Content
+        title={
+          <>
+            <Text
+              style={{ color: theme.colors.surface, fontSize: 16 }}
+            >
+              {title}
+            </Text>
+            <Text
+              style={{ color: theme.colors.secondaryContainer, fontSize: 10 }}
+            >
+              {dateConversion(options?.subtitle)}
+            </Text>
+          </>
+        }
+      // color={theme.colors.onPrimary}
+
       />
       {back ? (
         <Menu
@@ -33,10 +55,9 @@ export default NavigationAppBar = ({ navigation, route, options, back }) => {
             />
           }>
           <Menu.Item
-            onPress={() => {
-              console.log('Option 1 was pressed');
-            }}
-            title="Option 1"
+            // onPress={appStore.deleteAllDocuments}
+            onPress={appStore.removeAllTaskList}
+            title="Удалить все"
           />
           <Menu.Item
             onPress={() => {

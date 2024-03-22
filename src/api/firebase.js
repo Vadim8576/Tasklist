@@ -1,6 +1,19 @@
+import { all } from "deepmerge";
 import { initializeApp } from "firebase/app";
 import { getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
-import { Timestamp, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, where } from "firebase/firestore";
+import { Timestamp,
+  collection, 
+  deleteDoc, 
+  doc, 
+  getDoc, 
+  getDocs,
+  getFirestore,
+  onSnapshot, 
+  query, 
+  setDoc, 
+  updateDoc, 
+  where
+} from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -12,6 +25,7 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
+const DB_NAME = 'list';
 
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth()
@@ -26,109 +40,303 @@ export const fb = {
     return signOut(auth)
   },
 
-  createMainList: async (userId) => {
+  createNewDB: (userId) => {
 
-    const mainTaskListRef = collection(db, userId);
-
-    await setDoc(doc(mainTaskListRef, 'Список покупок продовольствия'), {   
+    // const data = {   
+    //   title: 'Список задач4',
+    //   createAt: 165654654654646,
+    //   creatorId: userId,
+    //   usersIDs: [],
+    //   subTasks: [
+    //     {
+    //       createAt: 165654654654646,
+    //       title: 'лом',
+    //       complited: false,
+    //       comments: 'Черный хлеб'
+    //     },
+    //     {
+    //       createAt: 1623454654654645,
+    //       title: 'топор',
+    //       complited: false,
+    //       comments: 'вологодское'
+    //     },
+    //     {
+    //       createAt: 1623454654654545,
+    //       title: 'дрель',
+    //       complited: false,
+    //       comments: 'вологодское'
+    //     }
+    //   ]
+    // }
+    const data = {   
+      title: 'Список задач4',
       createAt: 165654654654646,
-      subTask: [
-        {
-          createAt: 165654654654646,
-          title: 'Хлеб',
-          complited: false,
-          comments: 'Черный хлеб'
-        },
-        {
-          createAt: 1623454654654645,
-          title: 'Молоко',
-          complited: false,
-          comments: 'вологодское'
-        },
-        {
-          createAt: 1623454654654545,
-          title: 'Масло',
-          complited: false,
-          comments: 'вологодское'
-        }
-      ]
-    })
+      creatorId: userId,
+      usersIDs: [],
+      subTasks: []
+    }
 
-    await setDoc(doc(mainTaskListRef, 'Список покупок инструментов'), {   
-      createAt: 165654654654222,
-      subTask: [
-        {
-          createAt: 165654654654646,
-          title: 'Отвертка',
-          complited: false,
-          comments: 'крестовая'
-        },
-        {
-          createAt: 1623454654654645,
-          title: 'пила',
-          complited: false,
-          comments: 'дружба'
-        },
-        {
-          createAt: 1623454654654645,
-          title: 'Топор',
-          complited: false,
-          comments: 'Колун'
-        }
-      ]
-      
-    });
+    const collectionRef = collection(db, DB_NAME)
+    const newDocRef = doc(collectionRef)
+       
+
+    setDoc(newDocRef, data)
+      .then(() => {
+        console.log('Документ успешно добавлен в коллекцию.');
+            
+        const docId = newDocRef.id;
+        console.log('docId = ', docId)
+        const updatedData = { ...data, mainTaskId: docId};
     
+        setDoc(newDocRef, updatedData)
+          .then(() => {
+            console.log('ID успешно добавлен в данные документа.');
+          })
+          .catch((error) => {
+            console.error('Ошибка при добавлении ID в данные документа:', error);
+          })
+      })
+      .catch((error) => {
+        console.error('Ошибка при добавлении документа:', error);
+      })  
   },
 
-  mainTaskListSnapshot: function (payload) {
-    const {setTaskList, userId} = payload
+  taskSnapshot: function (payload) {
+    const {setMainTaskList, userId} = payload
 
     if(!userId) return
 
-    // await this.createMainList(userId)
+    // await this.deleteAllDocuments()
+    // this.createNewDB(userId)
 
     
-    const q = query(collection(db, userId));
+    const q = query(collection(db, DB_NAME), where('creatorId', '==', userId));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const allDocs = []
       querySnapshot.forEach((doc) => {
         allDocs.push({
-          title: doc.id,
-          createAt: doc.data().createAt,
-          subTask: doc.data().subTask
+          mainTaskId: doc.id,
+          title: doc.data().title,
+          createdAt: doc.data().createdAt,
+          subTasks: doc.data().subTasks,
+          creatorId: doc.data().creatorId
         })
-      });
-      setTaskList(allDocs)
-    });
+      })
       
-
-  },
-
-  subTaskListSnapshot: async function (payload) {
-    const {setTaskList, userId} = payload
-
-    if(!userId) return
-      const unsub = onSnapshot(doc(db, "mainTaskList", userId), (doc) => {
-        console.log("Current data: ", doc.data());
-        console.log("Current data: ", doc.data().mainTask);
-        setTaskList(doc.data().mainTask)
-    });
-
-  },
-
-  addTask: async (payload) => {
-    const {userId, title, comment} = payload
-    console.log('Press Add')
-    console.log('firebase/addTask = ', userId)
-
-    await setDoc(doc(db, userId, title), {
-      'complite': false,
-      'task': 'Следующая задача',
-      'createdAt': Timestamp.now().seconds
+      // console.log('allDocs = ', allDocs)
+      setMainTaskList(allDocs)
     })
-  }
+   
+
+    return unsubscribe  
+  },
+
+
+  addTaskList: (payload) => {
+    const {userId, title} = payload
+    console.log('Press Add')
+
+    const data = {   
+      title: title,
+      createdAt: Timestamp.now().seconds,
+      creatorId: userId,
+      usersIDs: [],
+      subTasks: []
+    }
+
+    const collectionRef = collection(db, DB_NAME)
+    const newDocRef = doc(collectionRef)
+       
+
+    setDoc(newDocRef, data)
+      .then(() => {
+        console.log('Документ успешно добавлен в коллекцию.');
+            
+        const docId = newDocRef.id;
+        console.log('docId = ', docId)
+        const updatedData = { ...data, mainTaskId: docId};
+    
+        setDoc(newDocRef, updatedData)
+          .then(() => {
+            console.log('ID успешно добавлен в данные документа.');
+          })
+          .catch((error) => {
+            console.error('Ошибка при добавлении ID в данные документа:', error);
+          })
+      })
+      .catch((error) => {
+        console.error('Ошибка при добавлении документа:', error);
+      })  
+  },
+
+  updateTaskList: (payload) => {
+    const { title, mainTaskId} = payload
+    if(!mainTaskId) return
+
+
+    const docRef = doc(db, DB_NAME, mainTaskId);
+
+    updateDoc(docRef, {
+      title: title
+    })
+    .then((doc) => {
+      console.log('Список задач успешно обновлен')
+    })
+    .catch((error) => {
+      console.log('Ошибка обновления названия списка задач', error)
+    })
+
+  },
+
+  removeMainTask: async (mainTaskId) => {
+    await deleteDoc(doc(db, DB_NAME, mainTaskId))
+  },
+  
+
+
+  addSubTask: (payload) => {
+    const {title, comment, mainTaskId} = payload
+    console.log(title, comment, mainTaskId)
+
+    if(!mainTaskId) return
+
+    const docRef = doc(db, DB_NAME, mainTaskId);
+
+    getDoc(docRef)
+    .then((doc) => {
+      const subTasks = doc.data().subTasks
+
+      updateDoc(docRef, {
+        subTasks: [
+          ...subTasks,
+          {
+            title: title,
+            comment: comment,
+            complited: false
+          } 
+        ]
+      })
+      .then(() => {
+        console.log('Таска успешно добавлена')
+      })
+      .catch((error) => {
+        console.log('Ошибка добавления таски: ', error)
+      })
+    })
+    .catch((error) => {
+      console.log('Ошибка получения документа для обновления', error)
+    })
+
+  },
+
+
+  updateSubTask: (payload) => {
+    const {taskIndex, title, comment, complited = null, mainTaskId} = payload
+    if(!mainTaskId) return
+
+    const docRef = doc(db, DB_NAME, mainTaskId);
+
+    getDoc(docRef)
+    .then((doc) => {
+      const subTasks = doc.data().subTasks
+
+      subTasks[taskIndex] = {
+        ...subTasks[taskIndex],
+        complited: complited != null ? complited : subTasks[taskIndex].complited, 
+        title, 
+        comment
+      }
+
+      updateDoc(docRef, { 
+        subTasks: [
+          ...subTasks
+        ]
+      })
+      .then(() => {
+        console.log('Таска успешно обновлена')
+      })
+      .catch((error) => {
+        console.log('Ошибка обновления таски: ', error)
+      })
+    })
+    .catch((error) => {
+      console.log('Ошибка получения документа для обновления', error)
+    })
+
+  },
+
+  removeSubTask: (payload) => {
+    const {taskIndex,  mainTaskId} = payload
+
+    console.log(taskIndex,  mainTaskId)
+
+    if(!mainTaskId) return
+
+
+
+    const docRef = doc(db, DB_NAME, mainTaskId);
+
+    getDoc(docRef)
+    .then((doc) => {
+      const subTasks = doc.data().subTasks
+
+      const newSubTasks = subTasks.filter((_, index) => index !== taskIndex)
+
+      updateDoc(docRef, { 
+        subTasks: [
+          ...newSubTasks
+        ]
+      })
+      .then(() => {
+        console.log('Таска успешно обновлена')
+      })
+      .catch((error) => {
+        console.log('Ошибка обновления таски: ', error)
+      })
+    })
+    .catch((error) => {
+      console.log('Ошибка получения документа для обновления', error)
+    })
+
+  },
+
+
+  removeAllTaskList: async () => {
+
+    const collectionRef = collection(db, DB_NAME);
+    const docs = await getDocs(collectionRef);
+  
+    docs.forEach((doc) => {
+      deleteDoc(doc.ref)
+        .then(() => {
+          console.log(`Документ ${doc.id} успешно удален`);
+        })
+        .catch((error) => {
+          console.error(`Ошибка при удалении документа ${doc.id}:`, error);
+        });
+    });
+  },
+
+
+  // deleteAllTasks: async () => {
+
+  //   const collectionRef = collection(db, DB_NAME);
+  //   const docs = await getDocs(collectionRef);
+  
+  //   docs.forEach((doc) => {
+  //     deleteDoc(doc.ref)
+  //       .then(() => {
+  //         console.log(`Документ ${doc.id} успешно удален`);
+  //       })
+  //       .catch((error) => {
+  //         console.error(`Ошибка при удалении документа ${doc.id}:`, error);
+  //       });
+  //   });
+  // }
+
+
+
 }
 
 // export const auth = getAuth();

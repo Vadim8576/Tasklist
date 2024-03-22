@@ -17,7 +17,7 @@ export default Auth = observer(({ navigation }) => {
 
   const login = (email, password) => {
     singIn(email, password)
-    navigation.navigate('TaskList')
+    navigation.navigate('MainTaskList', {name: 'MainTaskList'})
   }
 
 
