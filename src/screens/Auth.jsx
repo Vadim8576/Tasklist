@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 import { colors } from "../const/constants"
-import { fb } from "../api/firebase"
-import { useAuth } from "../hooks/useAuth"
 import authStore from '../store/authStore'
 
 
@@ -17,7 +15,7 @@ export default Auth = observer(({ navigation }) => {
 
   const login = (email, password) => {
     singIn(email, password)
-    navigation.navigate('MainTaskList', {name: 'MainTaskList'})
+    navigation.navigate('TaskList', {name: 'TaskList'})
   }
 
 

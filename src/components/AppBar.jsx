@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Appbar, useTheme, Menu, Text } from 'react-native-paper';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { fb } from "../api/firebase";
-import { dateOptions } from '../const/constants';
 import { dateConversion } from '../helpers/dateСonversion';
 import appStore from '../store/appStore';
 
@@ -15,6 +13,11 @@ export default AppBar = ({ navigation, route, options, back }) => {
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
   const title = getHeaderTitle(options, route.name);
+
+  const removeAllTaskList = () => {
+    appStore.removeAllTaskList()
+    closeMenu()
+  }
 
 
   return (
@@ -56,7 +59,7 @@ export default AppBar = ({ navigation, route, options, back }) => {
           }>
           <Menu.Item
             // onPress={appStore.deleteAllDocuments}
-            onPress={appStore.removeAllTaskList}
+            onPress={removeAllTaskList}
             title="Удалить все"
           />
           <Menu.Item

@@ -2,19 +2,19 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List } from 'react-native-paper';
 import { useEffect, useState } from 'react';
-import MainContextMenu from './MainContextMenu';
+import MainContextMenu from './TaskListContextMenu';
 import { useInputDialog } from '../../hooks/useInputDialog';
 import InputDialog from './InputDialog';
 import { dialogActions } from '../../const/constants';
 
 
-//MainTaskList
+//TaskList
 export default ListItem = observer(({ item, navigation }) => {
 
 
   const theme = useTheme();
 
-  const mainTask = item
+  const taskList = item
 
   // const {
   //   showDialog,
@@ -23,10 +23,10 @@ export default ListItem = observer(({ item, navigation }) => {
   //   visible,
   //   title,
   //   setTitle
-  // } = useInputDialog({ type: dialogActions.editTaskList, mainTaskId: item.mainTaskId })
+  // } = useInputDialog({ type: dialogActions.editTaskList, taskListId: item.taskListId })
 
 
-  // console.log('listItem mainTaskId = ', item.mainTaskId)
+  // console.log('listItem taskListId = ', item.taskListId)
 
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -51,7 +51,7 @@ export default ListItem = observer(({ item, navigation }) => {
         <TouchableOpacity
           onPress={() => navigation.navigate(
             'SubTaskList', {
-            mainTask,
+            taskList,
             name: 'SubTaskList'
           })
           }
@@ -70,15 +70,7 @@ export default ListItem = observer(({ item, navigation }) => {
         </TouchableOpacity>
 
       </View>
-      {/* <InputDialog
-        visible={visible}
-        hideDialog={hideDialog}
-        onSubmit={onSubmit}
-        title={title}
-        setTitle={setTitle}
-      /> */}
     </>
-
   )
 })
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useId, useMemo, useState } from "react"
 import { useAuth } from "./useAuth"
 import appStore from "../store/appStore"
 import { dialogActions } from "../const/constants"
@@ -7,7 +7,7 @@ import { dialogActions } from "../const/constants"
 
 export const useInputDialog = (props) => {
 
-  const { type, mainTaskId, taskIndex = null } = props
+  const { type, taskListId, taskIndex = null } = props
   const [visible, setVisible] = useState(false)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
@@ -15,6 +15,9 @@ export const useInputDialog = (props) => {
 
   const { user } = useAuth()
   const userId = user.uid
+
+  // const id = useId()
+  // console.log('id = ', id)
 
 
   // const showDialog = (title = '') => {
@@ -26,7 +29,7 @@ export const useInputDialog = (props) => {
     }
 
     if(type === dialogActions.editTaskListTitle) {
-      setTitle(mainTaskId ? appStore.getMainTaskTitle(mainTaskId).title : '')
+      setTitle(taskListId ? appStore.getTaskListTitle(taskListId).title : '')
     }
 
     if(type === dialogActions.addTask) {
@@ -38,7 +41,7 @@ export const useInputDialog = (props) => {
     
       console.log('edit Task')
 
-      const task = appStore.getTaskTitleAndComment(mainTaskId, taskIndex)
+      const task = appStore.getTaskTitleAndComment(taskListId, taskIndex)
 
       setTitle(task.title)
       setComment(task.comment)
@@ -62,18 +65,19 @@ export const useInputDialog = (props) => {
     console.log('onSubmit')
 
     if (type === dialogActions.addTaskList) {
-      appStore.addMainTaskList({ userId, title })
+      appStore.addTaskList({ userId, title })
     }
     if (type === dialogActions.editTaskListTitle) {
-      appStore.updateMainTaskList({ mainTaskId, title })
+      appStore.updateTaskList({ taskListId, title })
     }
 
     if (type === dialogActions.addTask) {
-      console.log(title, comment, mainTaskId)
-      appStore.addSubTask({ title, comment, mainTaskId })
+      console.log(title, comment, taskListId)
+      
+      appStore.addTask({ title, comment, taskListId })
     }
     if (type === dialogActions.editTask) {
-      appStore.updateSubTask({ taskIndex, title, comment, mainTaskId })
+      appStore.updateTask({ taskIndex, title, comment, taskListId })
     }
 
     hideDialog()

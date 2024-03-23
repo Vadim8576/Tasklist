@@ -3,11 +3,11 @@ import { observer } from "mobx-react-lite";
 import { useTheme, List, Checkbox } from 'react-native-paper';
 import { useState } from 'react';
 import appStore from '../../store/appStore';
-import TaskContextMenu from '../SubTaskList/TaskContextMenu';
+import TaskContextMenu from './SubTaskContextMenu';
 
 
 //SubTaskList
-export default ListItem = observer(({ item, taskIndex, mainTaskId }) => {
+export default ListItem = observer(({ item, taskIndex, taskListId }) => {
 
   const theme = useTheme();
   const [checked, setChecked] = useState(item.complited)
@@ -17,7 +17,7 @@ export default ListItem = observer(({ item, taskIndex, mainTaskId }) => {
   const closeMenu = () => setMenuVisible(false);
 
 
-  console.log('List item mainTaskId!!!!!!!!!! = ', mainTaskId)
+  console.log('List item taskListId!!!!!!!!!! = ', taskListId)
   console.log('List item taskIndex!!!!!!!!!! = ', taskIndex)
 
   const titleStyle = {
@@ -36,12 +36,12 @@ export default ListItem = observer(({ item, taskIndex, mainTaskId }) => {
   const onChange = () => {
     const complited = !checked
     setChecked(complited)
-    appStore.updateSubTask({
+    appStore.updateTask({
       taskIndex,
       title: item.title,
       comment: item.comment,
       complited: complited,
-      mainTaskId
+      taskListId
     })
 
   }
@@ -68,7 +68,7 @@ export default ListItem = observer(({ item, taskIndex, mainTaskId }) => {
               openMenu={openMenu}
               item={item}
               taskIndex={taskIndex}
-              mainTaskId={mainTaskId}
+              taskListId={taskListId}
             />}
         />
 

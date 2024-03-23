@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
-import { FAB } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import appStore from '../../store/appStore';
 import ListItem from './listItem';
 import InputDialog from './InputDialog';
 import { useInputDialog } from '../../hooks/useInputDialog';
 import { dialogActions } from '../../const/constants';
+import AddButton from '../../components/AddButton';
 
-export default MainTaskList = observer(({ navigation, route }) => {
+export default TaskList = observer(({ navigation, route }) => {
 
   const { user } = useAuth()
   const userId = user.uid
 
   const {
-    showDialog, 
-    hideDialog, 
-    onSubmit, 
-    visible, 
-    title, 
+    showDialog,
+    hideDialog,
+    onSubmit,
+    visible,
+    title,
     setTitle
-  } = useInputDialog({type: dialogActions.addTaskList})
-  
-  
- 
+  } = useInputDialog({ type: dialogActions.addTaskList })
+
+
+
   useEffect(() => {
     if (!userId) return
     appStore.fetchTasks(userId)
 
-    // console.log('mainTaskList user = ', user.uid)
-    // console.log('mainTaskList tasks = ', appStore.mainTaskList)
-    // console.log('mainTaskList ID = ', appStore.mainTaskList.mainTaskId)
+    // console.log('taskList user = ', user.uid)
+    // console.log('taskList tasks = ', appStore.taskList)
+    // console.log('taskList ID = ', appStore.taskList.taskListId)
 
   }, [userId])
 
@@ -41,23 +41,21 @@ export default MainTaskList = observer(({ navigation, route }) => {
   return (
     <>
       <View style={styles.container}>
-      <FlatList
-        data={appStore.mainTaskList}
-        renderItem={({ item }) => (
-          <ListItem
-            item={item}
-            navigation={navigation}
-            route={route}
-          />
-        )}
-      /> 
-    </View>
-    <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={showDialog}
+        <FlatList
+          data={appStore.taskList}
+          renderItem={({ item }) => (
+            <ListItem
+              item={item}
+              navigation={navigation}
+              route={route}
+            />
+          )}
+        />
+      </View>
+      <AddButton
+        showDialog={showDialog}
       />
-    <InputDialog
+      <InputDialog
         visible={visible}
         hideDialog={hideDialog}
         onSubmit={onSubmit}
@@ -65,7 +63,7 @@ export default MainTaskList = observer(({ navigation, route }) => {
         setTitle={setTitle}
       />
     </>
-    
+
   );
 })
 

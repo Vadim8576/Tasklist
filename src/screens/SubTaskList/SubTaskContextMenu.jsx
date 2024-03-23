@@ -1,16 +1,19 @@
 import { observer } from "mobx-react-lite";
 import { useTheme, IconButton, Menu } from 'react-native-paper';
 import { useState } from 'react';
-import { useInputDialog } from "../../hooks/useInputDialog";
 import { dialogActions } from "../../const/constants";
+import { useInputDialog } from "../../hooks/useInputDialog";
 import InputDialog from "./InputDialog";
 import appStore from "../../store/appStore";
 
-export default MainContextMenu = observer(({
+
+export default ContextMenu = observer(({
   menuVisible,
   closeMenu,
   openMenu,
-  item
+  item,
+  taskIndex,
+  taskListId
 }) => {
 
   const theme = useTheme();
@@ -21,24 +24,30 @@ export default MainContextMenu = observer(({
     onSubmit,
     visible,
     title,
+    comment,
+    setComment,
     setTitle
-  } = useInputDialog({ type: dialogActions.editTaskListTitle, mainTaskId: item.mainTaskId })
+  } = useInputDialog({ type: dialogActions.editTask, taskListId, taskIndex })
 
 
-  // console.log('context menu mainTaskId = ', item.mainTaskId)
- 
+
   const edit = () => {
-    console.log('context menu mainTaskId = ', item.mainTaskId)
+    console.log('context menu taskListId = ', taskListId)
+    console.log('context menu taskIndex = ', taskIndex)
     closeMenu()
     showDialog()
   }
 
   const remove = () => {
     console.log('remove')
-    closeMenu()
-    appStore.removeMainTask(item.mainTaskId)
-  }
 
+    console.log('context menu taskListId = ', taskListId)
+    console.log('context menu taskIndex = ', taskIndex)
+
+
+    closeMenu()
+    appStore.removeTask({ taskIndex, taskListId })
+  }
   return (
     <>
       <Menu
@@ -74,10 +83,11 @@ export default MainContextMenu = observer(({
         hideDialog={hideDialog}
         onSubmit={onSubmit}
         title={title}
+        comment={comment}
+        setComment={setComment}
         setTitle={setTitle}
       />
     </>
-
 
   )
 })

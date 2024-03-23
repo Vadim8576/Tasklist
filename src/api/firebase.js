@@ -1,20 +1,21 @@
-import { all } from "deepmerge";
-import { initializeApp } from "firebase/app";
-import { getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
-import { Timestamp,
-  collection, 
-  deleteDoc, 
-  doc, 
-  getDoc, 
+
+import { initializeApp } from 'firebase/app';
+
+import { getAuth, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  Timestamp,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
-  onSnapshot, 
-  query, 
-  setDoc, 
-  updateDoc, 
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
   where
-} from "firebase/firestore";
-
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -31,7 +32,19 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth()
 export const db = getFirestore(app)
 
+
+let setErrorMessage
+let setSuccessMessage
+
+export const setMessage = (init) => {
+  setErrorMessage = init.setErrorMessage
+  setSuccessMessage = init.setSuccessMessage
+  console.log('setErrorMessage = ', setErrorMessage)
+}
+
+
 export const fb = {
+  
   singIn: async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password)
   },
@@ -40,75 +53,10 @@ export const fb = {
     return signOut(auth)
   },
 
-  createNewDB: (userId) => {
-
-    // const data = {   
-    //   title: 'Список задач4',
-    //   createAt: 165654654654646,
-    //   creatorId: userId,
-    //   usersIDs: [],
-    //   subTasks: [
-    //     {
-    //       createAt: 165654654654646,
-    //       title: 'лом',
-    //       complited: false,
-    //       comments: 'Черный хлеб'
-    //     },
-    //     {
-    //       createAt: 1623454654654645,
-    //       title: 'топор',
-    //       complited: false,
-    //       comments: 'вологодское'
-    //     },
-    //     {
-    //       createAt: 1623454654654545,
-    //       title: 'дрель',
-    //       complited: false,
-    //       comments: 'вологодское'
-    //     }
-    //   ]
-    // }
-    const data = {   
-      title: 'Список задач4',
-      createAt: 165654654654646,
-      creatorId: userId,
-      usersIDs: [],
-      subTasks: []
-    }
-
-    const collectionRef = collection(db, DB_NAME)
-    const newDocRef = doc(collectionRef)
-       
-
-    setDoc(newDocRef, data)
-      .then(() => {
-        console.log('Документ успешно добавлен в коллекцию.');
-            
-        const docId = newDocRef.id;
-        console.log('docId = ', docId)
-        const updatedData = { ...data, mainTaskId: docId};
-    
-        setDoc(newDocRef, updatedData)
-          .then(() => {
-            console.log('ID успешно добавлен в данные документа.');
-          })
-          .catch((error) => {
-            console.error('Ошибка при добавлении ID в данные документа:', error);
-          })
-      })
-      .catch((error) => {
-        console.error('Ошибка при добавлении документа:', error);
-      })  
-  },
-
   taskSnapshot: function (payload) {
-    const {setMainTaskList, userId} = payload
+    const {setTaskList, userId} = payload
 
     if(!userId) return
-
-    // await this.deleteAllDocuments()
-    // this.createNewDB(userId)
-
     
     const q = query(collection(db, DB_NAME), where('creatorId', '==', userId));
 
@@ -116,16 +64,16 @@ export const fb = {
       const allDocs = []
       querySnapshot.forEach((doc) => {
         allDocs.push({
-          mainTaskId: doc.id,
+          taskListId: doc.id,
           title: doc.data().title,
           createdAt: doc.data().createdAt,
-          subTasks: doc.data().subTasks,
+          tasks: doc.data().tasks,
           creatorId: doc.data().creatorId
         })
       })
       
       // console.log('allDocs = ', allDocs)
-      setMainTaskList(allDocs)
+      setTaskList(allDocs)
     })
    
 
@@ -142,40 +90,56 @@ export const fb = {
       createdAt: Timestamp.now().seconds,
       creatorId: userId,
       usersIDs: [],
-      subTasks: []
+      tasks: []
     }
 
+    
     const collectionRef = collection(db, DB_NAME)
     const newDocRef = doc(collectionRef)
        
-
+    let firstDocAdded = false;
     setDoc(newDocRef, data)
-      .then(() => {
-        console.log('Документ успешно добавлен в коллекцию.');
+    .then(() => {
+      firstDocAdded = true;
+      console.log('Документ успешно добавлен в коллекцию.');
             
-        const docId = newDocRef.id;
-        console.log('docId = ', docId)
-        const updatedData = { ...data, mainTaskId: docId};
-    
-        setDoc(newDocRef, updatedData)
-          .then(() => {
-            console.log('ID успешно добавлен в данные документа.');
-          })
-          .catch((error) => {
-            console.error('Ошибка при добавлении ID в данные документа:', error);
-          })
+      // throw new Error
+      const docId = newDocRef.id;
+      const updatedData = { ...data, taskListId: docId};
+
+      setDoc(newDocRef, updatedData)
+      .then(() => {
+        console.log('ID успешно добавлен в данные документа.');
+        setSuccessMessage()
       })
       .catch((error) => {
-        console.error('Ошибка при добавлении документа:', error);
-      })  
+      
+        console.error('Ошибка при добавлении ID в данные документа:', error);
+
+        if (firstDocAdded) {
+          deleteDoc(newDocRef).then(() => {
+            console.log('Первый документ успешно удален.');
+          })
+          .catch((deleteError) => {
+              console.error('Ошибка при удалении первого документа:', deleteError);
+          })
+        }
+      })
+    })
+    .catch((error) => {
+          
+      // console.error('Ошибка при добавлении документа:', error);
+      setErrorMessage()
+    })  
+    
   },
 
   updateTaskList: (payload) => {
-    const { title, mainTaskId} = payload
-    if(!mainTaskId) return
+    const { title, taskListId} = payload
+    if(!taskListId) return
 
 
-    const docRef = doc(db, DB_NAME, mainTaskId);
+    const docRef = doc(db, DB_NAME, taskListId);
 
     updateDoc(docRef, {
       title: title
@@ -189,27 +153,27 @@ export const fb = {
 
   },
 
-  removeMainTask: async (mainTaskId) => {
-    await deleteDoc(doc(db, DB_NAME, mainTaskId))
+  removeTaskList: async (taskListId) => {
+    await deleteDoc(doc(db, DB_NAME, taskListId))
   },
   
 
 
-  addSubTask: (payload) => {
-    const {title, comment, mainTaskId} = payload
-    console.log(title, comment, mainTaskId)
+  addTask: (payload) => {
+    const {title, comment, taskListId} = payload
+    console.log(title, comment, taskListId)
 
-    if(!mainTaskId) return
+    if(!taskListId) return
 
-    const docRef = doc(db, DB_NAME, mainTaskId);
+    const docRef = doc(db, DB_NAME, taskListId);
 
     getDoc(docRef)
     .then((doc) => {
-      const subTasks = doc.data().subTasks
+      const tasks = doc.data().tasks
 
       updateDoc(docRef, {
-        subTasks: [
-          ...subTasks,
+        tasks: [
+          ...tasks,
           {
             title: title,
             comment: comment,
@@ -231,26 +195,26 @@ export const fb = {
   },
 
 
-  updateSubTask: (payload) => {
-    const {taskIndex, title, comment, complited = null, mainTaskId} = payload
-    if(!mainTaskId) return
+  updateTask: (payload) => {
+    const {taskIndex, title, comment, complited = null, taskListId} = payload
+    if(!taskListId) return
 
-    const docRef = doc(db, DB_NAME, mainTaskId);
+    const docRef = doc(db, DB_NAME, taskListId);
 
     getDoc(docRef)
     .then((doc) => {
-      const subTasks = doc.data().subTasks
+      const tasks = doc.data().tasks
 
-      subTasks[taskIndex] = {
-        ...subTasks[taskIndex],
-        complited: complited != null ? complited : subTasks[taskIndex].complited, 
+      tasks[taskIndex] = {
+        ...tasks[taskIndex],
+        complited: complited != null ? complited : tasks[taskIndex].complited, 
         title, 
         comment
       }
 
       updateDoc(docRef, { 
-        subTasks: [
-          ...subTasks
+        tasks: [
+          ...tasks
         ]
       })
       .then(() => {
@@ -266,26 +230,26 @@ export const fb = {
 
   },
 
-  removeSubTask: (payload) => {
-    const {taskIndex,  mainTaskId} = payload
+  removeTask: (payload) => {
+    const {taskIndex,  taskListId} = payload
 
-    console.log(taskIndex,  mainTaskId)
+    console.log(taskIndex,  taskListId)
 
-    if(!mainTaskId) return
+    if(!taskListId) return
 
 
 
-    const docRef = doc(db, DB_NAME, mainTaskId);
+    const docRef = doc(db, DB_NAME, taskListId);
 
     getDoc(docRef)
     .then((doc) => {
-      const subTasks = doc.data().subTasks
+      const tasks = doc.data().tasks
 
-      const newSubTasks = subTasks.filter((_, index) => index !== taskIndex)
+      const newTasks = tasks.filter((_, index) => index !== taskIndex)
 
       updateDoc(docRef, { 
-        subTasks: [
-          ...newSubTasks
+        tasks: [
+          ...newTasks
         ]
       })
       .then(() => {
@@ -319,24 +283,7 @@ export const fb = {
   },
 
 
-  // deleteAllTasks: async () => {
-
-  //   const collectionRef = collection(db, DB_NAME);
-  //   const docs = await getDocs(collectionRef);
   
-  //   docs.forEach((doc) => {
-  //     deleteDoc(doc.ref)
-  //       .then(() => {
-  //         console.log(`Документ ${doc.id} успешно удален`);
-  //       })
-  //       .catch((error) => {
-  //         console.error(`Ошибка при удалении документа ${doc.id}:`, error);
-  //       });
-  //   });
-  // }
-
-
-
 }
 
 // export const auth = getAuth();

@@ -1,19 +1,16 @@
 import { observer } from "mobx-react-lite";
 import { useTheme, IconButton, Menu } from 'react-native-paper';
 import { useState } from 'react';
-import { dialogActions } from "../../const/constants";
 import { useInputDialog } from "../../hooks/useInputDialog";
+import { dialogActions } from "../../const/constants";
 import InputDialog from "./InputDialog";
 import appStore from "../../store/appStore";
 
-
-export default ContextMenu = observer(({
+export default MainContextMenu = observer(({
   menuVisible,
   closeMenu,
   openMenu,
-  item,
-  taskIndex,
-  mainTaskId
+  item
 }) => {
 
   const theme = useTheme();
@@ -24,30 +21,24 @@ export default ContextMenu = observer(({
     onSubmit,
     visible,
     title,
-    comment,
-    setComment,
     setTitle
-  } = useInputDialog({ type: dialogActions.editTask, mainTaskId, taskIndex })
+  } = useInputDialog({ type: dialogActions.editTaskListTitle, taskListId: item.taskListId })
 
 
-
+  // console.log('context menu taskListId = ', item.taskListId)
+ 
   const edit = () => {
-    console.log('context menu mainTaskId = ', mainTaskId)
-    console.log('context menu taskIndex = ', taskIndex)
+    console.log('context menu taskListId = ', item.taskListId)
     closeMenu()
     showDialog()
   }
 
   const remove = () => {
     console.log('remove')
-
-    console.log('context menu mainTaskId = ', mainTaskId)
-    console.log('context menu taskIndex = ', taskIndex)
-
-
     closeMenu()
-    appStore.removeSubTask({ taskIndex, mainTaskId })
+    appStore.removeTaskList(item.taskListId)
   }
+
   return (
     <>
       <Menu
@@ -63,10 +54,12 @@ export default ContextMenu = observer(({
         anchorPosition='bottom'
       >
         <Menu.Item
+          leadingIcon="book-open"
           onPress={edit}
           title="Редактировать"
         />
         <Menu.Item
+          leadingIcon="delete-restore"
           onPress={remove}
           title="Удалить"
         />
@@ -83,11 +76,10 @@ export default ContextMenu = observer(({
         hideDialog={hideDialog}
         onSubmit={onSubmit}
         title={title}
-        comment={comment}
-        setComment={setComment}
         setTitle={setTitle}
       />
     </>
+
 
   )
 })

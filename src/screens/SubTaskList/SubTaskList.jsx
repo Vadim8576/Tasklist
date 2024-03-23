@@ -1,18 +1,18 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { FAB, List, Checkbox } from 'react-native-paper';
+import { FlatList, StyleSheet } from "react-native";
 import appStore from '../../store/appStore';
 import ListItem from "./listItem";
 import { useInputDialog } from "../../hooks/useInputDialog";
 import { dialogActions } from "../../const/constants";
 import InputDialog from "./InputDialog";
+import AddButton from "../../components/AddButton";
 
 
 
 export default SubTaskList = observer(({ route, navigation }) => {
   
-  const { mainTask } = route.params;
+  const { taskList } = route.params;
 
   const {
     showDialog, 
@@ -23,37 +23,37 @@ export default SubTaskList = observer(({ route, navigation }) => {
     setTitle,
     comment,
     setComment
-  } = useInputDialog({type: dialogActions.addTask, mainTaskId: mainTask.mainTaskId})
+  } = useInputDialog({
+    type: dialogActions.addTask, taskListId: taskList.taskListId
+  })
   
   // console.log('SubTaskList tasks: ', appStore?.tasks)
-  console.log('SubTaskList item: ', mainTask)
-  console.log('item.mainTaskId ', mainTask.mainTaskId)
-  console.log('item.mainTaskId ', mainTask.mainTaskId)
+  console.log('SubTaskList item: ', taskList)
+  console.log('item.taskListId ', taskList.taskListId)
+  console.log('item.taskListId ', taskList.taskListId)
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: mainTask.title,
-      subtitle: mainTask.createdAt
+      title: taskList.title,
+      subtitle: taskList.createdAt
     })
-  }, [navigation, mainTask.title])
+  }, [navigation, taskList.title])
 
 
   return (
     <>
       <FlatList
-        data={appStore?.subTasks[mainTask.mainTaskId]}
+        data={appStore?.tasks[taskList.taskListId]}
         renderItem={({ item, index }) => (
           <ListItem
             item={item}
             taskIndex={index}
-            mainTaskId={mainTask.mainTaskId}
+            taskListId={taskList.taskListId}
           />
         )}
       />
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={showDialog}
+     <AddButton
+        showDialog={showDialog}
       />
       <InputDialog
         visible={visible}
@@ -71,7 +71,6 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
 
 const styles = StyleSheet.create({
-
   container: {
     flexGrow: 1,
     paddingTop: 30,
