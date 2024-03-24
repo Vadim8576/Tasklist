@@ -18,7 +18,6 @@ export const useAuth = () => {
       
     })
   
-
     return unSub
   }, [])
 
@@ -27,5 +26,6 @@ export const useAuth = () => {
   }
 
 
-  return useMemo (() => values, [values])
+  // return useMemo (() => values, [values])
+  return values
 }

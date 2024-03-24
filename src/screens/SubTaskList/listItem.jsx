@@ -1,6 +1,6 @@
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
-import { useTheme, List, Checkbox } from 'react-native-paper';
+import { useTheme, List, Checkbox, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
 import appStore from '../../store/appStore';
 import TaskContextMenu from './SubTaskContextMenu';
@@ -48,14 +48,14 @@ export default ListItem = observer(({ item, taskIndex, taskListId }) => {
 
   return (
     <View style={styles.listItemWrapper}>
-      <TouchableOpacity
+      <TouchableRipple
         onPress={() => console.log(item.title)}
       >
         <List.Item
           title={item.title}
           description={item.comment}
           descriptionStyle={descriptionStyle}
-          titleStyle={titleStyle}
+          titleStyle={styles.title}
           left={props =>
             <Checkbox
               status={checked ? 'checked' : 'unchecked'}
@@ -72,7 +72,7 @@ export default ListItem = observer(({ item, taskIndex, taskListId }) => {
             />}
         />
 
-      </TouchableOpacity>
+      </TouchableRipple>
     </View>
   )
 })
@@ -83,10 +83,12 @@ export default ListItem = observer(({ item, taskIndex, taskListId }) => {
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    borderWidth: 1,
+    borderBottomWidth:1,
     borderColor: '#999',
     borderStyle: 'solid',
-    borderRadius: 3,
-    marginBottom: 5
+    paddingLeft: 20
   },
-});
+  title: {
+    fontSize: 14
+  },
+})

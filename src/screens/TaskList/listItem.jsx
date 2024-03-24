@@ -1,76 +1,50 @@
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
-import { useTheme, List } from 'react-native-paper';
-import { useEffect, useState } from 'react';
+import { useTheme, List, TouchableRipple } from 'react-native-paper';
+import { useState } from 'react';
 import MainContextMenu from './TaskListContextMenu';
-import { useInputDialog } from '../../hooks/useInputDialog';
-import InputDialog from './InputDialog';
-import { dialogActions } from '../../const/constants';
+import { dateConversion } from '../../helpers/dateСonversion';
+
 
 
 //TaskList
 export default ListItem = observer(({ item, navigation }) => {
 
-
   const theme = useTheme();
+  const [menuVisible, setMenuVisible] = useState(false)
 
   const taskList = item
-
-  // const {
-  //   showDialog,
-  //   hideDialog,
-  //   onSubmit,
-  //   visible,
-  //   title,
-  //   setTitle
-  // } = useInputDialog({ type: dialogActions.editTaskList, taskListId: item.taskListId })
-
-
-  // console.log('listItem taskListId = ', item.taskListId)
-
-
-  const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
 
-
-
-
-
-  // const openDialog = () => {
-  //   showDialog(item.title)
-  // }
-
-  // console.log('----------------')
-
   return (
-    <>
-      <View style={styles.listItemWrapper}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(
-            'SubTaskList', {
-            taskList,
-            name: 'SubTaskList'
-          })
+    <View style={styles.listItemWrapper}>
+      <TouchableRipple
+        onPress={() => navigation.navigate(
+          'SubTaskList', {
+          taskList,
+          name: 'SubTaskList'
+        })
+        }
+      >
+        <List.Item
+          titleStyle={styles.title}
+          title={item.title}
+          description={dateConversion(item.createdAt)}
+          descriptionStyle={styles.description}
+          right={props =>
+            <MainContextMenu
+              menuVisible={menuVisible}
+              closeMenu={closeMenu}
+              openMenu={openMenu}
+              item={item}
+            />
           }
-        >
-          <List.Item
-            title={item.title}
-            right={props =>
-              <MainContextMenu
-                menuVisible={menuVisible}
-                closeMenu={closeMenu}
-                openMenu={openMenu}
-                item={item}
-              />
-            }
-          />
-        </TouchableOpacity>
-
-      </View>
-    </>
+        />
+      </TouchableRipple>
+    </View>
   )
 })
 
@@ -78,10 +52,15 @@ export default ListItem = observer(({ item, navigation }) => {
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    borderWidth: 1,
+    borderBottomWidth:1,
     borderColor: '#999',
     borderStyle: 'solid',
-    borderRadius: 3,
-    marginBottom: 5
   },
-});
+  title: {
+    color: '#000',
+    fontSize: 14
+  },
+  description: {
+    fontSize: 9
+  }
+})

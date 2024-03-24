@@ -14,7 +14,8 @@ export default AddButton = observer(({ showDialog }) => {
 
   return (
       <FAB
-        icon="plus"
+        size='medium'
+        icon='plus'
         style={styles.fab}
         onPress={showDialog}
       /> 

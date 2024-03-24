@@ -44,23 +44,36 @@ export const setMessage = (init) => {
 
 
 export const fb = {
-  
-  singIn: async (email, password) => {
-    return await signInWithEmailAndPassword(auth, email, password)
+
+  singIn: (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      setSuccessMessage()
+    })
+    .catch((error) => {
+      setErrorMessage()
+    })
   },
 
   logOut: () => {
-    return signOut(auth)
+    signOut(auth)
+    .then(() => {
+      setSuccessMessage()
+    })
+    .catch((error) => {
+      setErrorMessage()
+    })
   },
 
   taskSnapshot: function (payload) {
-    const {setTaskList, userId} = payload
+    const { setTaskList, userId } = payload
 
-    if(!userId) return
-    
+    if (!userId) return
+
     const q = query(collection(db, DB_NAME), where('creatorId', '==', userId));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      
       const allDocs = []
       querySnapshot.forEach((doc) => {
         allDocs.push({
@@ -75,17 +88,17 @@ export const fb = {
       // console.log('allDocs = ', allDocs)
       setTaskList(allDocs)
     })
-   
 
-    return unsubscribe  
+
+    return unsubscribe
   },
 
 
   addTaskList: (payload) => {
-    const {userId, title} = payload
+    const { userId, title } = payload
     console.log('Press Add')
 
-    const data = {   
+    const data = {
       title: title,
       createdAt: Timestamp.now().seconds,
       creatorId: userId,
@@ -93,257 +106,201 @@ export const fb = {
       tasks: []
     }
 
-    
     const collectionRef = collection(db, DB_NAME)
     const newDocRef = doc(collectionRef)
-       
-    let firstDocAdded = false;
+
     setDoc(newDocRef, data)
-    .then(() => {
-      firstDocAdded = true;
-      console.log('Документ успешно добавлен в коллекцию.');
-            
-      // throw new Error
-      const docId = newDocRef.id;
-      const updatedData = { ...data, taskListId: docId};
-
-      setDoc(newDocRef, updatedData)
       .then(() => {
-        console.log('ID успешно добавлен в данные документа.');
-        setSuccessMessage()
-      })
-      .catch((error) => {
-      
-        console.error('Ошибка при добавлении ID в данные документа:', error);
+        firstDocAdded = true;
+        console.log('Документ успешно добавлен в коллекцию.');
 
-        if (firstDocAdded) {
-          deleteDoc(newDocRef).then(() => {
-            console.log('Первый документ успешно удален.');
+        const docId = newDocRef.id;
+        const updatedData = { ...data, taskListId: docId };
+
+        setDoc(newDocRef, updatedData)
+          .then(() => {
+            console.log('ID успешно добавлен в данные документа.');
+            setSuccessMessage()
           })
-          .catch((deleteError) => {
-              console.error('Ошибка при удалении первого документа:', deleteError);
+          .catch((error) => {
+            console.error('Ошибка при добавлении ID в данные документа:', error);
+            setErrorMessage()
+            if (firstDocAdded) {
+              deleteDoc(newDocRef).then(() => {
+                console.log('Первый документ успешно удален.');
+              })
+                .catch((deleteError) => {
+                  console.error('Ошибка при удалении первого документа:', deleteError);
+                })
+            }
           })
-        }
       })
-    })
-    .catch((error) => {
-          
-      // console.error('Ошибка при добавлении документа:', error);
-      setErrorMessage()
-    })  
-    
   },
 
   updateTaskList: (payload) => {
-    const { title, taskListId} = payload
-    if(!taskListId) return
-
+    const { title, taskListId } = payload
+    if (!taskListId) return
 
     const docRef = doc(db, DB_NAME, taskListId);
 
     updateDoc(docRef, {
       title: title
     })
-    .then((doc) => {
-      console.log('Список задач успешно обновлен')
-    })
-    .catch((error) => {
-      console.log('Ошибка обновления названия списка задач', error)
-    })
-
+      .then((doc) => {
+        console.log('Список задач успешно обновлен')
+        setSuccessMessage()
+      })
+      .catch((error) => {
+        console.log('Ошибка обновления названия списка задач', error)
+        setErrorMessage()
+      })
   },
 
-  removeTaskList: async (taskListId) => {
-    await deleteDoc(doc(db, DB_NAME, taskListId))
+  removeTaskList: (taskListId) => {
+    deleteDoc(doc(db, DB_NAME, taskListId))
+      .then(_ => {
+        setSuccessMessage()
+      })
+      .catch((error) => {
+        setErrorMessage()
+      })
   },
-  
-
 
   addTask: (payload) => {
-    const {title, comment, taskListId} = payload
+    const { title, comment, taskListId } = payload
     console.log(title, comment, taskListId)
 
-    if(!taskListId) return
+    if (!taskListId) return
 
     const docRef = doc(db, DB_NAME, taskListId);
 
     getDoc(docRef)
-    .then((doc) => {
-      const tasks = doc.data().tasks
+      .then((doc) => {
+        const tasks = doc.data().tasks
 
-      updateDoc(docRef, {
-        tasks: [
-          ...tasks,
-          {
-            title: title,
-            comment: comment,
-            complited: false
-          } 
-        ]
-      })
-      .then(() => {
-        console.log('Таска успешно добавлена')
+        updateDoc(docRef, {
+          tasks: [
+            ...tasks,
+            {
+              title: title,
+              comment: comment,
+              complited: false
+            }
+          ]
+        })
+          .then(() => {
+            console.log('Таска успешно добавлена')
+            setSuccessMessage()
+          })
+          .catch((error) => {
+            console.log('Ошибка добавления таски: ', error)
+            setErrorMessage()
+          })
       })
       .catch((error) => {
-        console.log('Ошибка добавления таски: ', error)
+        console.log('Ошибка получения документа для обновления', error)
+        setErrorMessage()
       })
-    })
-    .catch((error) => {
-      console.log('Ошибка получения документа для обновления', error)
-    })
 
   },
 
-
   updateTask: (payload) => {
-    const {taskIndex, title, comment, complited = null, taskListId} = payload
-    if(!taskListId) return
+    const { taskIndex, title, comment, complited = null, taskListId } = payload
+    if (!taskListId) return
 
     const docRef = doc(db, DB_NAME, taskListId);
 
     getDoc(docRef)
-    .then((doc) => {
-      const tasks = doc.data().tasks
+      .then((doc) => {
+        const tasks = doc.data().tasks
 
-      tasks[taskIndex] = {
-        ...tasks[taskIndex],
-        complited: complited != null ? complited : tasks[taskIndex].complited, 
-        title, 
-        comment
-      }
+        tasks[taskIndex] = {
+          ...tasks[taskIndex],
+          complited: complited != null ? complited : tasks[taskIndex].complited,
+          title,
+          comment
+        }
 
-      updateDoc(docRef, { 
-        tasks: [
-          ...tasks
-        ]
-      })
-      .then(() => {
-        console.log('Таска успешно обновлена')
+        updateDoc(docRef, {
+          tasks: [
+            ...tasks
+          ]
+        })
+          .then(() => {
+            console.log('Таска успешно обновлена')
+            setSuccessMessage()
+          })
+          .catch((error) => {
+            console.log('Ошибка обновления таски: ', error)
+            setErrorMessage()
+          })
       })
       .catch((error) => {
-        console.log('Ошибка обновления таски: ', error)
+        console.log('Ошибка получения документа для обновления', error)
+        setErrorMessage()
       })
-    })
-    .catch((error) => {
-      console.log('Ошибка получения документа для обновления', error)
-    })
 
   },
 
   removeTask: (payload) => {
-    const {taskIndex,  taskListId} = payload
+    const { taskIndex, taskListId } = payload
 
-    console.log(taskIndex,  taskListId)
+    // console.log(taskIndex, taskListId)
 
-    if(!taskListId) return
-
-
+    if (!taskListId) return
 
     const docRef = doc(db, DB_NAME, taskListId);
 
     getDoc(docRef)
-    .then((doc) => {
-      const tasks = doc.data().tasks
+      .then((doc) => {
+        const tasks = doc.data().tasks
 
-      const newTasks = tasks.filter((_, index) => index !== taskIndex)
+        const newTasks = tasks.filter((_, index) => index !== taskIndex)
 
-      updateDoc(docRef, { 
-        tasks: [
-          ...newTasks
-        ]
-      })
-      .then(() => {
-        console.log('Таска успешно обновлена')
+        updateDoc(docRef, {
+          tasks: [
+            ...newTasks
+          ]
+        })
+          .then(() => {
+            console.log('Таска успешно удалена')
+            setSuccessMessage()
+          })
+          .catch((error) => {
+            console.log('Ошибка удаления таски: ', error)
+            setErrorMessage()
+          })
       })
       .catch((error) => {
-        console.log('Ошибка обновления таски: ', error)
+        console.log('Ошибка получения документа для обновления', error)
+        setErrorMessage()
       })
-    })
-    .catch((error) => {
-      console.log('Ошибка получения документа для обновления', error)
-    })
 
   },
 
+  removeAllTaskList: () => {
 
-  removeAllTaskList: async () => {
-
-    const collectionRef = collection(db, DB_NAME);
-    const docs = await getDocs(collectionRef);
-  
-    docs.forEach((doc) => {
-      deleteDoc(doc.ref)
-        .then(() => {
-          console.log(`Документ ${doc.id} успешно удален`);
+    const collectionRef = collection(db, DB_NAME)
+    getDocs(collectionRef)
+      .then((docs) => {
+        docs.forEach((doc) => {
+          deleteDoc(doc.ref)
+            .then(() => {
+              console.log(`Документ ${doc.id} успешно удален`)
+            })
+            .catch((error) => {
+              console.error(`Ошибка при удалении документа ${doc.id}:`, error)
+              setErrorMessage()
+            })
         })
-        .catch((error) => {
-          console.error(`Ошибка при удалении документа ${doc.id}:`, error);
-        });
-    });
-  },
-
-
-  
+        setSuccessMessage()
+      })
+      .catch((error) => {
+        setErrorMessage()
+      })
+      
+  }
 }
-
-// export const auth = getAuth();
-// export const db = getFirestore(app);
-
-
-// export const singIn = (email, password) => {
-//   return signInWithEmailAndPassword(auth, email, password)
-// }
-
-// export const logout = () => {
-//   return signOut(auth)
-// }
-
-
-// export const snapshot = () =>{
-  
-// }
-
-
-// export const addTask = async (userId) => {
-
-//   console.log('Press Add')
-
-//   await setDoc(doc(db, userId, '6'), {
-//     'complite': false,
-//     'task': 'Следующая задача',
-//     'createdAt': Timestamp.now().seconds
-//   })
-
-
-
-// }
-
-
-
-
-// export const readData = () => {
-//   const db = getDatabase();
-//   const list = ref(db, 'todolist');
-//   return onValue(list, (snapshot) => {
-//     const data = snapshot.val();
-//     console.log('firebase.js', data)
-//     return data
-//   });
-// }
-
-
-
-
-// function writeUserData(userId, name, email, imageUrl) {
-//   const db = getDatabase();
-//   set(ref(db, 'users/' + userId), {
-//     username: name,
-//     email: email,
-//     profile_picture : imageUrl
-//   });
-// }
-
-
 
 
 

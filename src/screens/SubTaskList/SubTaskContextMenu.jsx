@@ -1,17 +1,17 @@
 import { observer } from "mobx-react-lite";
 import { useTheme, IconButton, Menu } from 'react-native-paper';
-import { useState } from 'react';
 import { dialogActions } from "../../const/constants";
 import { useInputDialog } from "../../hooks/useInputDialog";
 import InputDialog from "./InputDialog";
 import appStore from "../../store/appStore";
+import { StyleSheet } from "react-native";
+import ContextMenuItem from "../../components/ContextMenuItem";
 
 
 export default ContextMenu = observer(({
   menuVisible,
   closeMenu,
   openMenu,
-  item,
   taskIndex,
   taskListId
 }) => {
@@ -30,10 +30,7 @@ export default ContextMenu = observer(({
   } = useInputDialog({ type: dialogActions.editTask, taskListId, taskIndex })
 
 
-
   const edit = () => {
-    console.log('context menu taskListId = ', taskListId)
-    console.log('context menu taskIndex = ', taskIndex)
     closeMenu()
     showDialog()
   }
@@ -41,13 +38,25 @@ export default ContextMenu = observer(({
   const remove = () => {
     console.log('remove')
 
-    console.log('context menu taskListId = ', taskListId)
-    console.log('context menu taskIndex = ', taskIndex)
-
-
     closeMenu()
     appStore.removeTask({ taskIndex, taskListId })
   }
+
+  const items = [
+    {
+      title: 'Редактировать',
+      onPress: edit
+    },
+    {
+      title: 'Удалить',
+      onPress: remove
+    },
+    {
+      title: 'Option 3',
+      onPress: null
+    },
+  ]
+
   return (
     <>
       <Menu
@@ -62,21 +71,7 @@ export default ContextMenu = observer(({
         }
         anchorPosition='bottom'
       >
-        <Menu.Item
-          onPress={edit}
-          title="Редактировать"
-        />
-        <Menu.Item
-          onPress={remove}
-          title="Удалить"
-        />
-        <Menu.Item
-          onPress={() => {
-            console.log('Option 3 was pressed');
-          }}
-          title="Option 3"
-          disabled
-        />
+        <ContextMenuItem items={items} />
       </Menu>
       <InputDialog
         visible={visible}
@@ -88,9 +83,15 @@ export default ContextMenu = observer(({
         setTitle={setTitle}
       />
     </>
-
   )
 })
 
+
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 13
+  },
+})
 
 

@@ -40,8 +40,6 @@ class appStore {
     this.setTasks(task)
   }
 
-
-
   getTaskListTitle = (id) => {
     const title = this.taskList.filter((item) => item.taskListId === id)
     // console.log('appStore taskList = ',this.taskList)
@@ -50,8 +48,6 @@ class appStore {
   }
 
   getTaskTitleAndComment = (taskListId, taskIndex) => {
-
-
     const title = this.tasks[taskListId][taskIndex].title
     const comment = this.tasks[taskListId][taskIndex].comment
     // const title = this.tasks[taskListId][index].title
@@ -65,14 +61,13 @@ class appStore {
   }
 
 
-
-  fetchTasks = (userId) => {
-    const unsubscribeVoid = fb.taskSnapshot({
+  subscribeToTasks = (userId) => {
+    const unsubscribe = fb.taskSnapshot({
       setTaskList: this.setTaskList,
       userId
     })
 
-    this.setUnsubscribeVoid(unsubscribeVoid)
+    return unsubscribe
   }
 
 
@@ -81,18 +76,10 @@ class appStore {
   }
 
 
-
   addTaskList = (payload) => {
     const { userId, title } = payload
-    try{
-      fb.addTaskList({ userId, title })
-      // errorStore.setSuccessMessage()
-    }
-    catch(error) {
-      // errorStore.setErrorMessage()
-    }
 
-    
+    fb.addTaskList({ userId, title }) 
   }
 
   updateTaskList = (payload) => {
@@ -111,13 +98,6 @@ class appStore {
 
   removeTask = (payload) => {
     fb.removeTask(payload)
-  }
-
-
-
-
-  setUnsubscribeVoid = (unsubscribe) => {
-    this.unsubscribeVoid = unsubscribe
   }
 
   removeAllTaskList = () => {

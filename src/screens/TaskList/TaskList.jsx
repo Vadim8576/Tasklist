@@ -9,6 +9,7 @@ import { useInputDialog } from '../../hooks/useInputDialog';
 import { dialogActions } from '../../const/constants';
 import AddButton from '../../components/AddButton';
 
+
 export default TaskList = observer(({ navigation, route }) => {
 
   const { user } = useAuth()
@@ -27,12 +28,9 @@ export default TaskList = observer(({ navigation, route }) => {
 
   useEffect(() => {
     if (!userId) return
-    appStore.fetchTasks(userId)
+    const unsubscribe = appStore.subscribeToTasks(userId)
 
-    // console.log('taskList user = ', user.uid)
-    // console.log('taskList tasks = ', appStore.taskList)
-    // console.log('taskList ID = ', appStore.taskList.taskListId)
-
+    return unsubscribe
   }, [userId])
 
 
@@ -74,15 +72,9 @@ export default TaskList = observer(({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
+    // paddingTop: 10,
+    // paddingBottom: 50,
+    // paddingLeft: 10,
+    // paddingRight: 10,
   },
 });

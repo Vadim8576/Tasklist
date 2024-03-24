@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { RadioButton } from 'react-native-paper';
 import { colors } from "../const/constants"
 import authStore from '../store/authStore'
 
@@ -11,22 +12,36 @@ export default Auth = observer(({ navigation }) => {
   const [email, setEmail] = useState('123@gmail.com')
   const [password, setPassword] = useState('123456')
 
-  const {singIn} = authStore
+
+
+
+  const { singIn } = authStore
 
   const login = (email, password) => {
-    singIn(email, password)
-    navigation.navigate('TaskList', {name: 'TaskList'})
+
+    singIn(email.trim(), password.trim())
+    navigation.navigate('TaskList', { name: 'TaskList' })
   }
 
 
   // удалить
   useEffect(() => {
     login(email, password)
-  }, [])
+  }, [email])
 
+  // удалить
+  const changeHandler = (value) => {
+    setEmail(value)
+  }
 
   return (
     <View>
+
+      <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
+        <RadioButton.Item label="123@gmail.com" value="123@gmail.com" />
+        <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
+      </RadioButton.Group>
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}

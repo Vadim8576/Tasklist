@@ -36,15 +36,15 @@ export default AppBar = ({ navigation, route, options, back }) => {
             >
               {title}
             </Text>
-            <Text
-              style={{ color: theme.colors.secondaryContainer, fontSize: 10 }}
-            >
-              {dateConversion(options?.subtitle)}
-            </Text>
+            {options?.subtitle &&
+              <Text
+                style={{ color: theme.colors.secondaryContainer, fontSize: 10 }}
+              >
+                {dateConversion(options?.subtitle)}
+              </Text>
+            }
           </>
         }
-      // color={theme.colors.onPrimary}
-
       />
       {back ? (
         <Menu

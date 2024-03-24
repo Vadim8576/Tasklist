@@ -1,6 +1,4 @@
-import { useState } from "react";
-// import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Button, Dialog, Portal, TextInput, Text } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 

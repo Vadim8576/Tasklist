@@ -24,6 +24,7 @@ export default MessageSnackBar = ({
           backgroundColor: message.isError ? theme.colors.error : 'green'
         }}
         visible={visible}
+        duration={2000}
         onDismiss={onDismissSnackBar}
         action={{
           label: 'Close',

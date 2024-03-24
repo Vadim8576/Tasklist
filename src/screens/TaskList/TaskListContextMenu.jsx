@@ -1,10 +1,11 @@
 import { observer } from "mobx-react-lite";
 import { useTheme, IconButton, Menu } from 'react-native-paper';
-import { useState } from 'react';
 import { useInputDialog } from "../../hooks/useInputDialog";
 import { dialogActions } from "../../const/constants";
 import InputDialog from "./InputDialog";
 import appStore from "../../store/appStore";
+import { StyleSheet } from "react-native";
+import ContextMenuItem from "../../components/ContextMenuItem";
 
 export default MainContextMenu = observer(({
   menuVisible,
@@ -22,11 +23,14 @@ export default MainContextMenu = observer(({
     visible,
     title,
     setTitle
-  } = useInputDialog({ type: dialogActions.editTaskListTitle, taskListId: item.taskListId })
+  } = useInputDialog({
+    type: dialogActions.editTaskListTitle,
+    taskListId: item.taskListId
+  })
 
 
   // console.log('context menu taskListId = ', item.taskListId)
- 
+
   const edit = () => {
     console.log('context menu taskListId = ', item.taskListId)
     closeMenu()
@@ -39,11 +43,31 @@ export default MainContextMenu = observer(({
     appStore.removeTaskList(item.taskListId)
   }
 
+  const items = [
+    {
+      title: 'Редактировать',
+      // icon: 'book-open',
+      onPress: edit
+    },
+    {
+      title: 'Удалить',
+      // icon: 'delete-restore',
+      onPress: remove
+    },
+    {
+      title: 'Option 3',
+      icon: null,
+      onPress: null
+    },
+  ]
+
+
   return (
     <>
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
+        anchorPosition='bottom'
         anchor={
           <IconButton
             icon="dots-vertical"
@@ -51,26 +75,10 @@ export default MainContextMenu = observer(({
             onPress={openMenu}
           />
         }
-        anchorPosition='bottom'
-      >
-        <Menu.Item
-          leadingIcon="book-open"
-          onPress={edit}
-          title="Редактировать"
-        />
-        <Menu.Item
-          leadingIcon="delete-restore"
-          onPress={remove}
-          title="Удалить"
-        />
-        <Menu.Item
-          onPress={() => {
-            console.log('Option 3 was pressed');
-          }}
-          title="Option 3"
-          disabled
-        />
+      >      
+        <ContextMenuItem items={items} />
       </Menu>
+
       <InputDialog
         visible={visible}
         hideDialog={hideDialog}
@@ -79,10 +87,6 @@ export default MainContextMenu = observer(({
         setTitle={setTitle}
       />
     </>
-
-
   )
 })
-
-
 
