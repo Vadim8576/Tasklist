@@ -8,6 +8,7 @@ import TaskList from './TaskList';
 export default MyTabView = ({ navigation, route }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
+  const [numberOfTasks, setNumberOfTasks] = useState(0)
 
   const theme = useTheme();
 
@@ -17,7 +18,11 @@ export default MyTabView = ({ navigation, route }) => {
   ]);
 
   const FirstRoute = () => (
-    <TaskList navigation={navigation} route={route} />
+    <TaskList
+      navigation={navigation}
+      route={route}
+      setNumberOfTasks={setNumberOfTasks}
+      />
   );
 
   const SecondRoute = () => (
@@ -32,10 +37,11 @@ export default MyTabView = ({ navigation, route }) => {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
+   
       indicatorStyle={{ backgroundColor: 'white' }}
       style={{ backgroundColor: theme.colors.primary }}
-      renderBadge={() => <Badge>3</Badge> }
-      // getLabelText={({ route }) => route.title}
+      renderBadge={({route}) => route.key === 'first' && <Badge>{numberOfTasks}</Badge> }
+     
     />
   );
 

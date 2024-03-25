@@ -4,7 +4,6 @@ import {
   NavigationContainer
 } from '@react-navigation/native';
 
-import TaskList from './TaskList/TaskList';
 import MyTabView from './TaskList/MyTabView';
 import Auth from './Auth';
 import AppBar from '../components/AppBar';

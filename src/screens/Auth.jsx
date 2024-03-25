@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { RadioButton } from 'react-native-paper';
 import { colors } from "../const/constants"
 import authStore from '../store/authStore'
+import { useTheme, Button, TextInput } from 'react-native-paper';
 
 
 export default Auth = observer(({ navigation }) => {
@@ -12,7 +13,7 @@ export default Auth = observer(({ navigation }) => {
   const [email, setEmail] = useState('123@gmail.com')
   const [password, setPassword] = useState('123456')
 
-
+  const theme = useTheme();
 
 
   const { singIn } = authStore
@@ -26,7 +27,7 @@ export default Auth = observer(({ navigation }) => {
 
   // удалить
   useEffect(() => {
-    login(email, password)
+    // login(email, password)
   }, [email])
 
   // удалить
@@ -35,69 +36,88 @@ export default Auth = observer(({ navigation }) => {
   }
 
   return (
-    <View>
-
-      <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
+    <View style={
+      [
+        styles.wrapper,
+        { backgroundColor: theme.colors.primary },
+      ]}
+    >
+      {/* <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
         <RadioButton.Item label="123@gmail.com" value="123@gmail.com" />
         <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
-      </RadioButton.Group>
+      </RadioButton.Group> */}
+
 
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          theme={{ colors: { onSurfaceVariant: theme.colors.surfaceVariant } }}
+          textColor={theme.colors.surface}
+          cursorColor={theme.colors.background}
+          activeUnderlineColor={theme.colors.surface}
+          label="Login"
+          style={[
+            styles.input,
+            { backgroundColor: theme.colors.primary },
+          ]}
           onChangeText={setEmail}
           value={email}
           placeholder='Введите email'
         />
         <TextInput
-          style={styles.input}
+          theme={{ colors: { onSurfaceVariant: theme.colors.surfaceVariant } }}
+          textColor={theme.colors.surface}
+          cursorColor={theme.colors.background}
+          activeUnderlineColor={theme.colors.surface}
+          label="Password"
+          style={[
+            styles.input,
+            { backgroundColor: theme.colors.primary }
+          ]}
           onChangeText={setPassword}
           value={password}
           placeholder='Введите пароль'
           secureTextEntry={true}
         />
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <Pressable
-          style={styles.button}
+        <Button
+          style={styles.loginButton}
+          mode='contained'
           onPress={() => login(email, password)}
         >
-          <Text>Sign In</Text>
-        </Pressable>
+          Войти
+        </Button>
+        <Button
+          textColor={theme.colors.tertiaryContainer}
+          // mode='contained'
+          onPress={() => login(email, password)}
+        >
+          Регистрация
+        </Button>
       </View>
+
+
+
 
     </View>
   )
 })
 
 const styles = StyleSheet.create({
-  buttonContainer: {
+  wrapper: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   inputContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 30,
+    width: '80%',
   },
   input: {
-    width: '80%',
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
+    marginBottom: 10,
+    height: 70,
+    fontSize: 14,
   },
-  button: {
-    width: '30%',
+  loginButton: {
     marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: colors.ACCENT,
+    marginBottom: 10,
+    backgroundColor: 'rgba(255, 255, 255, .3)',
   }
 })

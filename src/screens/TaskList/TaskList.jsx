@@ -10,7 +10,7 @@ import { dialogActions } from '../../const/constants';
 import AddButton from '../../components/AddButton';
 
 
-export default TaskList = observer(({ navigation, route }) => {
+export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => {
 
   const { user } = useAuth()
   const userId = user.uid
@@ -34,6 +34,11 @@ export default TaskList = observer(({ navigation, route }) => {
   }, [userId])
 
 
+  useEffect(() => {
+    setNumberOfTasks(appStore.taskList.length)
+  }, [appStore.taskList.length])
+
+
   console.log('mAINtASKlIST render')
 
   return (
@@ -48,6 +53,7 @@ export default TaskList = observer(({ navigation, route }) => {
               route={route}
             />
           )}
+          ListFooterComponent={<View style={styles.footer} />}
         />
       </View>
       <AddButton
@@ -77,4 +83,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 10,
     // paddingRight: 10,
   },
+  footer: {
+    height: 90
+  }
 });

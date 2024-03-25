@@ -1,6 +1,6 @@
 import { useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import appStore from '../../store/appStore';
 import ListItem from "./listItem";
 import { useInputDialog } from "../../hooks/useInputDialog";
@@ -51,6 +51,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
             taskListId={taskList.taskListId}
           />
         )}
+        ListFooterComponent={<View style={styles.footer} />}
       />
      <AddButton
         showDialog={showDialog}
@@ -78,10 +79,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
+  footer: {
+    height: 90
   }
 })
