@@ -1,24 +1,36 @@
 
 import { observer } from "mobx-react-lite";
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 import { FAB } from 'react-native-paper';
 import errorStore from "../store/errorStore";
 
 
-export default AddButton = observer(({ showDialog }) => {
+export default AddButton = observer(({ navigation, route, type }) => {
 
   const visible = !errorStore.message.isError && !errorStore.message.isSuccess
 
 
-  if(!visible) return null
+  if (!visible) return null
 
+  // return (
+  //     <FAB
+  //       size='medium'
+  //       icon='plus'
+  //       style={styles.fab}
+  //       onPress={showDialog}
+  //     /> 
+  // );
   return (
-      <FAB
-        size='medium'
-        icon='plus'
-        style={styles.fab}
-        onPress={showDialog}
-      /> 
+    <FAB
+      size='medium'
+      icon='plus'
+      style={styles.fab}
+      onPress={() => navigation.navigate(
+        'DialogScreen', {
+        type,
+        name: 'DialogScreen'
+      })}
+    />
   );
 })
 

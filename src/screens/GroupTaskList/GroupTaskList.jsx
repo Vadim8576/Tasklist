@@ -49,13 +49,16 @@ export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTa
         />
       </View>
       <AddButton
-        showDialog={() => setVisible(true)}
+        // showDialog={() => setVisible(true)}
+        navigation={navigation}
+        route={route}
+        type={dialogActions.addTaskList}
       />
-      <InputDialog
+      {/* <InputDialog
         visible={visible}
         setVisible={setVisible}
         type={dialogActions.addTaskList}
-      />
+      /> */}
     </>
 
   );

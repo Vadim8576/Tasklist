@@ -21,9 +21,7 @@ export default AppBar = ({ navigation, route, options, back }) => {
 
 
   return (
-    <Appbar.Header
-      style={{ backgroundColor: theme.colors.primary }}
-    >
+    <Appbar.Header style={{ backgroundColor: theme.colors.primary }}>
       {back ? <Appbar.BackAction
         color={theme.colors.onPrimary}
         onPress={navigation.goBack} />
@@ -46,7 +44,14 @@ export default AppBar = ({ navigation, route, options, back }) => {
           </>
         }
       />
-      {back ? (
+      {options?.confirm &&
+        <Appbar.Action
+          color={theme.colors.surface}
+          icon="check"
+          onPress={() => { }}
+        />
+      }
+      {back && !options?.confirm ? (
         <Menu
           visible={visible}
           onDismiss={closeMenu}
