@@ -7,7 +7,7 @@ import appStore from "../../store/appStore";
 import { StyleSheet } from "react-native";
 import ContextMenuItem from "../../components/ContextMenuItem";
 
-export default MainContextMenu = observer(({
+export default TaskListContextMenu = observer(({
   menuVisible,
   closeMenu,
   openMenu,

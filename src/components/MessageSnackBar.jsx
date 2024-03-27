@@ -11,12 +11,6 @@ export default MessageSnackBar = ({
   const theme = useTheme()
   const visible = message.isError || message.isSuccess
 
-
-  console.log('visible = ', visible)
-  console.log('message = ', message)
-  console.log('message.isError = ', message.isError)
-  console.log('message.isSucces = ', message.isSuccess)
-
   return (
     <View>
       <Snackbar

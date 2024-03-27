@@ -42,10 +42,10 @@ export default Auth = observer(({ navigation }) => {
         { backgroundColor: theme.colors.primary },
       ]}
     >
-      {/* <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
+      <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
         <RadioButton.Item label="123@gmail.com" value="123@gmail.com" />
         <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
-      </RadioButton.Group> */}
+      </RadioButton.Group>
 
 
       <View style={styles.inputContainer}>

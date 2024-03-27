@@ -74,14 +74,20 @@ export const fb = {
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       
+      
+
+
       const allDocs = []
       querySnapshot.forEach((doc) => {
+        const data = doc.data()
+
         allDocs.push({
           taskListId: doc.id,
-          title: doc.data().title,
-          createdAt: doc.data().createdAt,
-          tasks: doc.data().tasks,
-          creatorId: doc.data().creatorId
+          title: data.title,
+          createdAt: data.createdAt,
+          tasks: data.tasks,
+          creatorId: data.creatorId,
+          groupUsersIds: data.groupUsersIds
         })
       })
       
@@ -102,7 +108,7 @@ export const fb = {
       title: title,
       createdAt: Timestamp.now().seconds,
       creatorId: userId,
-      usersIDs: [],
+      groupUsersIDs: [],
       tasks: []
     }
 

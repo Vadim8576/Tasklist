@@ -2,13 +2,17 @@ import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
-import TaskListContextMenu from './TaskListContextMenu';
+
 import { dateConversion } from '../../helpers/dateСonversion';
+import { useAuth } from '../../hooks/useAuth';
+import UsersList from './UsersList';
+import TaskListContextMenu from '../TaskList/TaskListContextMenu';
 
 
 
 //TaskList
 export default ListItem = observer(({ item, navigation }) => {
+
 
   const theme = useTheme();
   const [menuVisible, setMenuVisible] = useState(false)
@@ -18,6 +22,7 @@ export default ListItem = observer(({ item, navigation }) => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
+  // return
 
   return (
     <View style={styles.listItemWrapper}>
@@ -32,7 +37,8 @@ export default ListItem = observer(({ item, navigation }) => {
         <List.Item
           titleStyle={styles.title}
           title={item.title}
-          description={dateConversion(item.createdAt)}
+          description={(props) => <UsersList users={item.groupUsersIds} />
+          }
           descriptionStyle={styles.description}
           right={props =>
             <TaskListContextMenu

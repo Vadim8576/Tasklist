@@ -10,6 +10,7 @@ class appStore {
   user = null
   isLoggedIn = false
   taskList = []
+  groupTaskList = []
   tasks = {}
   unsubscribeVoid = null
 
@@ -23,22 +24,27 @@ class appStore {
 
 
   setTaskList = (data) => {
+
+
     if (!data) return
+
     this.taskList = data.map(d => ({
-      createdAt: d.createdAt,
-      creatorId: d.creatorId,
-      taskListId: d.taskListId,
-      title: d.title
+        createdAt: d.createdAt,
+        creatorId: d.creatorId,
+        taskListId: d.taskListId,
+        title: d.title,
+        groupUsersIds: d.groupUsersIds
     }))
 
-    // console.log('appStore taskList ', this.taskList)
     let task = {}
     data.forEach(taskList => {
       task = { ...task, [taskList.taskListId]: taskList.tasks }
     })
 
     this.setTasks(task)
+
   }
+
 
   getTaskListTitle = (id) => {
     const title = this.taskList.filter((item) => item.taskListId === id)
@@ -79,7 +85,7 @@ class appStore {
   addTaskList = (payload) => {
     const { userId, title } = payload
 
-    fb.addTaskList({ userId, title }) 
+    fb.addTaskList({ userId, title })
   }
 
   updateTaskList = (payload) => {

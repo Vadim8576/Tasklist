@@ -1,24 +1,27 @@
 import React, { useEffect } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
 import appStore from '../../store/appStore';
+import { useListFilter } from '../../hooks/useListFilter';
 import ListItem from './listItem';
-import InputDialog from './InputDialog';
 import { useInputDialog } from '../../hooks/useInputDialog';
 import { dialogActions } from '../../const/constants';
+import InputDialog from '../TaskList/InputDialog';
 import AddButton from '../../components/AddButton';
-import { useListFilter } from '../../hooks/useListFilter';
+
+// import { useInputDialog } from '../../hooks/useInputDialog';
+// import { dialogActions } from '../../const/constants';
 
 
-export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => {
 
+export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTasks }) => {
+
+  
   const { user } = useAuth()
   const userId = user.uid
 
-
-  const list = useListFilter(appStore.taskList, 'NOT_GROUP')
-
+  const list = useListFilter(appStore.taskList, 'GROUP')
 
   const {
     showDialog,
@@ -30,21 +33,13 @@ export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => 
   } = useInputDialog({ type: dialogActions.addTaskList })
 
 
-  useEffect(() => {
-    if (!userId) return
-    const unsubscribe = appStore.subscribeToTasks(userId)
-
-    return unsubscribe
-  }, [userId])
-
 
   useEffect(() => {
-    setNumberOfTasks(list.length)
+    setNumberOfGroupTasks(list.length)
   }, [list.length])
 
 
-
-  console.log('mAINtASKlIST render')
+  console.log('GroupTaskList render')
 
   return (
     <>
@@ -52,11 +47,13 @@ export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => 
         <FlatList
           data={list}
           renderItem={({ item }) => (
+
             <ListItem
               item={item}
               navigation={navigation}
               route={route}
             />
+
           )}
           ListFooterComponent={<View style={styles.footer} />}
         />
@@ -83,10 +80,7 @@ export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    // paddingTop: 10,
-    // paddingBottom: 50,
-    // paddingLeft: 10,
-    // paddingRight: 10,
+
   },
   footer: {
     height: 90
