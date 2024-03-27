@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { dateConversion } from '../../helpers/dateСonversion';
 import { useAuth } from '../../hooks/useAuth';
 import UsersList from './UsersList';
-import TaskListContextMenu from '../TaskList/TaskListContextMenu';
+import TaskListContextMenu from './TaskListContextMenu';
+import { useInputDialog } from '../../hooks/useInputDialog';
 
 
 
@@ -37,7 +38,8 @@ export default ListItem = observer(({ item, navigation }) => {
         <List.Item
           titleStyle={styles.title}
           title={item.title}
-          description={(props) => <UsersList users={item.groupUsersIds} />
+          description={
+            (_) => <UsersList users={item.groupUsersIds} />
           }
           descriptionStyle={styles.description}
           right={props =>

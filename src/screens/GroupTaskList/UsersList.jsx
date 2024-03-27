@@ -23,7 +23,7 @@ console.log('GroupUserList users = ', users)
         <FlatList
           horizontal={true}
           data={users.users}
-          renderItem={(user) => (
+          renderItem={(_) => (
             <View style={styles.avatar}>
               <Avatar.Text size={22} label="XD" />
             </View>    

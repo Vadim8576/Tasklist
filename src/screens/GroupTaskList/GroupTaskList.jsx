@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
@@ -6,31 +6,21 @@ import appStore from '../../store/appStore';
 import { useListFilter } from '../../hooks/useListFilter';
 import ListItem from './listItem';
 import { useInputDialog } from '../../hooks/useInputDialog';
-import { dialogActions } from '../../const/constants';
-import InputDialog from '../TaskList/InputDialog';
+import InputDialog from './InputDialog';
 import AddButton from '../../components/AddButton';
-
-// import { useInputDialog } from '../../hooks/useInputDialog';
-// import { dialogActions } from '../../const/constants';
+import { dialogActions } from '../../const/constants'
 
 
 
 export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTasks }) => {
 
-  
+  const [visible, setVisible] = useState(false)
   const { user } = useAuth()
   const userId = user.uid
 
   const list = useListFilter(appStore.taskList, 'GROUP')
 
-  const {
-    showDialog,
-    hideDialog,
-    onSubmit,
-    visible,
-    title,
-    setTitle
-  } = useInputDialog({ type: dialogActions.addTaskList })
+  
 
 
 
@@ -59,14 +49,12 @@ export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTa
         />
       </View>
       <AddButton
-        showDialog={showDialog}
+        showDialog={() => setVisible(true)}
       />
       <InputDialog
         visible={visible}
-        hideDialog={hideDialog}
-        onSubmit={onSubmit}
-        title={title}
-        setTitle={setTitle}
+        setVisible={setVisible}
+        type={dialogActions.addTaskList}
       />
     </>
 

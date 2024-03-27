@@ -40,7 +40,7 @@ export default AppBar = ({ navigation, route, options, back }) => {
               <Text
                 style={{ color: theme.colors.secondaryContainer, fontSize: 10 }}
               >
-                {dateConversion(options?.subtitle)}
+                {dateConversion(options?.description)}
               </Text>
             }
           </>

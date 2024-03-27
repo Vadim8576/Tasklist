@@ -2,6 +2,9 @@ import { useMemo } from "react"
 
 export const useListFilter = (list, type) => {
 
+
+  // console.log('useListFilter = ', list)
+
   let newList
 
   if (type === 'NOT_GROUP')

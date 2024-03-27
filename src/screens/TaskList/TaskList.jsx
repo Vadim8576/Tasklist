@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
@@ -13,21 +13,13 @@ import { useListFilter } from '../../hooks/useListFilter';
 
 export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => {
 
+  const [visible, setVisible] = useState(false)
   const { user } = useAuth()
   const userId = user.uid
 
 
+
   const list = useListFilter(appStore.taskList, 'NOT_GROUP')
-
-
-  const {
-    showDialog,
-    hideDialog,
-    onSubmit,
-    visible,
-    title,
-    setTitle
-  } = useInputDialog({ type: dialogActions.addTaskList })
 
 
   useEffect(() => {
@@ -62,14 +54,12 @@ export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => 
         />
       </View>
       <AddButton
-        showDialog={showDialog}
+        showDialog={() => setVisible(true)}
       />
       <InputDialog
         visible={visible}
-        hideDialog={hideDialog}
-        onSubmit={onSubmit}
-        title={title}
-        setTitle={setTitle}
+        setVisible={setVisible}
+        type={dialogActions.addTaskList}
       />
     </>
 

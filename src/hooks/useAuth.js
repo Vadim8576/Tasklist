@@ -26,6 +26,5 @@ export const useAuth = () => {
   }
 
 
-  // return useMemo (() => values, [values])
-  return values
+  return useMemo (() => values, [values])
 }

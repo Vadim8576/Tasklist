@@ -9,6 +9,7 @@ class appStore {
 
   user = null
   isLoggedIn = false
+  // isLoading = false
   taskList = []
   groupTaskList = []
   tasks = {}
@@ -22,11 +23,14 @@ class appStore {
     // makeAutoObservable(this, {}, { autoBind: true });
   }
 
+  // setIsLoading = (isLoading) => {
+  //   this.isLoggedIn = isLoading
+  // }
 
   setTaskList = (data) => {
-
-
     if (!data) return
+
+    // console.log('appStore data = ', data)
 
     this.taskList = data.map(d => ({
         createdAt: d.createdAt,
@@ -84,7 +88,6 @@ class appStore {
 
   addTaskList = (payload) => {
     const { userId, title } = payload
-
     fb.addTaskList({ userId, title })
   }
 

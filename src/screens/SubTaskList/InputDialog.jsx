@@ -3,12 +3,23 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Dialog, Portal, TextInput, Text } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
+import { useInputDialog } from "../../hooks/useInputDialog";
 
 
 export default InputDialog = observer(({
-  visible, hideDialog, onSubmit, title, setTitle, comment, setComment
+  visible, setVisible, taskListId, type
 }) => {
 
+  const {
+    hideDialog,
+    onSubmit,
+    title,
+    setTitle,
+    comment,
+    setComment
+  } = useInputDialog({
+    type, taskListId
+  })
 
   return (
     <Portal>
@@ -33,8 +44,14 @@ export default InputDialog = observer(({
           />
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={hideDialog}>Cancel</Button>
-          <Button onPress={onSubmit}>Ok</Button>
+          <Button onPress={() => {
+            hideDialog()
+            setVisible(false)
+          }}>Cancel</Button>
+          <Button onPress={() => {
+            onSubmit()
+            setVisible(false)
+          }}>Ok</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

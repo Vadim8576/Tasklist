@@ -4,6 +4,8 @@ import { Text, View, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import TaskList from './TaskList';
 import GroupTaskList from '../GroupTaskList/GroupTaskList';
+import appStore from '../../store/appStore';
+import Loading from '../../components/Loading';
 
 
 export default MyTabView = ({ navigation, route }) => {
@@ -12,6 +14,7 @@ export default MyTabView = ({ navigation, route }) => {
   const [numberOfTasks, setNumberOfTasks] = useState(0)
   const [numberOfGorupTasks, setNumberOfGroupTasks] = useState(0)
 
+
   const theme = useTheme();
 
   const [routes] = useState([
@@ -19,29 +22,56 @@ export default MyTabView = ({ navigation, route }) => {
     { key: 'second', title: 'Групповые' },
   ]);
 
-  const FirstRoute = () => (
-    <TaskList
-      navigation={navigation}
-      route={route}
-      setNumberOfTasks={setNumberOfTasks}
-      index={index}
-    />
-  );
 
-  const SecondRoute = () => (
-    <GroupTaskList
-      navigation={navigation}
-      route={route}
-      setNumberOfGroupTasks={setNumberOfGroupTasks}
-      index={index}
-    />
-  );
+  // const FirstRoute = () => (
+  //   <TaskList
+  //     navigation={navigation}
+  //     route={route}
+  //     setNumberOfTasks={setNumberOfTasks}
+  //   />
+  // )
 
-  const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-  });
 
+
+  // const SecondRoute = () => (
+  //   <GroupTaskList
+  //     navigation={navigation}
+  //     route={route}
+  //     setNumberOfGroupTasks={setNumberOfGroupTasks}
+  //   />
+  // );
+
+  // const SecondRoute = () => {
+  //   return null
+  // }
+
+  // const renderScene = SceneMap({
+  //   first: FirstRoute,
+  //   second: SecondRoute,
+  // });
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return (
+          <TaskList
+            navigation={navigation}
+            route={route}
+            setNumberOfTasks={setNumberOfTasks}
+          />
+        )
+      case 'second':
+        return (
+          <GroupTaskList
+            navigation={navigation}
+            route={route}
+            setNumberOfGroupTasks={setNumberOfGroupTasks}
+          />
+        )
+      default:
+        return null;
+    }
+  };
   const renderTabBar = (props) => (
     <TabBar
       {...props}
@@ -49,14 +79,15 @@ export default MyTabView = ({ navigation, route }) => {
       style={{ backgroundColor: theme.colors.primary }}
       renderBadge={
         ({ route }) => route.key === 'first'
-        ? <Badge>{numberOfTasks}</Badge>
-        : <Badge>{numberOfGorupTasks}</Badge>
+          ? <Badge>{numberOfTasks}</Badge>
+          : <Badge>{numberOfGorupTasks}</Badge>
       }
     />
   );
 
   return (
     <TabView
+      // lazy={({ route }) => route.key === 'second'}
       navigationState={{ index, routes }}
       renderTabBar={renderTabBar}
       renderScene={renderScene}

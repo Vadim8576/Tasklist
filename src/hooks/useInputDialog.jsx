@@ -19,8 +19,8 @@ import { dialogActions } from "../const/constants"
 
 export const useInputDialog = (props) => {
 
-  const { type, taskListId, taskIndex = null } = props
-  const [visible, setVisible] = useState(false)
+  const { type, taskListId = null, taskIndex = null } = props
+  // const [visible, setVisible] = useState(false)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
   const { user } = useAuth()
@@ -52,12 +52,12 @@ export const useInputDialog = (props) => {
       setComment(task.comment)
     }
  
-    setVisible(true)
+    // setVisible(true)
   }
 
   const hideDialog = () => {   
     console.log('Hide dialog')
-    setVisible(false)
+    // setVisible(false)
     setTitle('')
     setComment('')
   }
@@ -97,7 +97,7 @@ export const useInputDialog = (props) => {
     showDialog,
     hideDialog,
     onSubmit,
-    visible
+    // visible
   }
 
   return value

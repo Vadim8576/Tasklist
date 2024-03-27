@@ -108,7 +108,7 @@ export const fb = {
       title: title,
       createdAt: Timestamp.now().seconds,
       creatorId: userId,
-      groupUsersIDs: [],
+      groupUsersIds: [],
       tasks: []
     }
 

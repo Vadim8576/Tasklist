@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { FlatList, StyleSheet, View } from "react-native";
 import appStore from '../../store/appStore';
@@ -12,58 +12,46 @@ import AddButton from "../../components/AddButton";
 
 export default SubTaskList = observer(({ route, navigation }) => {
   
+  const [visible, setVisible] = useState(false)
   const { taskList } = route.params;
+  const { title, createdAt, taskListId  } = taskList
 
-  const {
-    showDialog, 
-    hideDialog, 
-    onSubmit, 
-    visible, 
-    title, 
-    setTitle,
-    comment,
-    setComment
-  } = useInputDialog({
-    type: dialogActions.addTask, taskListId: taskList.taskListId
-  })
+
   
   // console.log('SubTaskList tasks: ', appStore?.tasks)
   console.log('SubTaskList item: ', taskList)
-  console.log('item.taskListId ', taskList.taskListId)
-  console.log('item.taskListId ', taskList.taskListId)
+  console.log('item.taskListId ', taskListId)
+  console.log('item.taskListId ', createdAt)
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: taskList.title,
-      subtitle: taskList.createdAt
+      title,
+      description: createdAt
     })
-  }, [navigation, taskList.title])
+  }, [navigation, title])
 
 
   return (
     <>
       <FlatList
-        data={appStore?.tasks[taskList.taskListId]}
+        data={appStore?.tasks[taskListId]}
         renderItem={({ item, index }) => (
           <ListItem
             item={item}
             taskIndex={index}
-            taskListId={taskList.taskListId}
+            taskListId={taskListId}
           />
         )}
         ListFooterComponent={<View style={styles.footer} />}
       />
      <AddButton
-        showDialog={showDialog}
+        showDialog={() => setVisible(true)}
       />
       <InputDialog
         visible={visible}
-        hideDialog={hideDialog}
-        onSubmit={onSubmit}
-        title={title}
-        setTitle={setTitle}
-        comment={comment}
-        setComment={setComment}
+        setVisible={setVisible}
+        type={dialogActions.addTask}
+        taskListId={taskListId}
       />
     </>
   );
