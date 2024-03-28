@@ -6,13 +6,16 @@ import { onAuthStateChanged } from "firebase/auth";
 
 class Auth {
 
-  user = null;
+  user = {};
   isLoggedIn = false;
 
   constructor() {
     makeAutoObservable(this);
   }
 
+  setUser = (user) => {
+    this.user = user
+  }
 
 
   setError = (error) => {

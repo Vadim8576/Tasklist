@@ -32,7 +32,7 @@ export default AppBar = ({ navigation, route, options, back }) => {
             <Text
               style={{ color: theme.colors.surface, fontSize: 16 }}
             >
-              {title}
+              {title || ''}
             </Text>
             {options?.subtitle &&
               <Text
@@ -48,7 +48,7 @@ export default AppBar = ({ navigation, route, options, back }) => {
         <Appbar.Action
           color={theme.colors.surface}
           icon="check"
-          onPress={() => { }}
+          onPress={options?.onSubmitHandler}
         />
       }
       {back && !options?.confirm ? (

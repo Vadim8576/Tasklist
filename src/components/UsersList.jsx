@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { Avatar, useTheme } from 'react-native-paper';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { observer } from "mobx-react-lite";
-import appStore from '../../store/appStore';
-import { useListFilter } from '../../hooks/useListFilter';
-import ListItem from './listItem';
+import appStore from '../store/appStore';
+import { useListFilter } from '../hooks/useListFilter';
 
-// import { useInputDialog } from '../../hooks/useInputDialog';
+
 // import { dialogActions } from '../../const/constants';
 
 

@@ -4,8 +4,13 @@ import { Text, View, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import TaskList from './TaskList';
 import GroupTaskList from '../GroupTaskList/GroupTaskList';
-import appStore from '../../store/appStore';
-import Loading from '../../components/Loading';
+
+
+
+const tabName = {
+  taskList: 'TASK_LIST',
+  groupTaskList: 'GROUP_TASK_LIST'
+}
 
 
 export default MyTabView = ({ navigation, route }) => {
@@ -18,41 +23,15 @@ export default MyTabView = ({ navigation, route }) => {
   const theme = useTheme();
 
   const [routes] = useState([
-    { key: 'first', title: 'UserName' },
-    { key: 'second', title: 'Групповые' },
+    { key: tabName.taskList, title: 'UserName' },
+    { key: tabName.groupTaskList, title: 'Групповые' },
   ]);
 
 
-  // const FirstRoute = () => (
-  //   <TaskList
-  //     navigation={navigation}
-  //     route={route}
-  //     setNumberOfTasks={setNumberOfTasks}
-  //   />
-  // )
-
-
-
-  // const SecondRoute = () => (
-  //   <GroupTaskList
-  //     navigation={navigation}
-  //     route={route}
-  //     setNumberOfGroupTasks={setNumberOfGroupTasks}
-  //   />
-  // );
-
-  // const SecondRoute = () => {
-  //   return null
-  // }
-
-  // const renderScene = SceneMap({
-  //   first: FirstRoute,
-  //   second: SecondRoute,
-  // });
 
   const renderScene = ({ route }) => {
     switch (route.key) {
-      case 'first':
+      case tabName.taskList:
         return (
           <TaskList
             navigation={navigation}
@@ -60,7 +39,7 @@ export default MyTabView = ({ navigation, route }) => {
             setNumberOfTasks={setNumberOfTasks}
           />
         )
-      case 'second':
+      case tabName.groupTaskList:
         return (
           <GroupTaskList
             navigation={navigation}
@@ -78,7 +57,7 @@ export default MyTabView = ({ navigation, route }) => {
       indicatorStyle={{ backgroundColor: 'white' }}
       style={{ backgroundColor: theme.colors.primary }}
       renderBadge={
-        ({ route }) => route.key === 'first'
+        ({ route }) => route.key === tabName.taskList
           ? <Badge>{numberOfTasks}</Badge>
           : <Badge>{numberOfGorupTasks}</Badge>
       }

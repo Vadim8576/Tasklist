@@ -4,25 +4,19 @@ import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
 import appStore from '../../store/appStore';
 import { useListFilter } from '../../hooks/useListFilter';
-import ListItem from './listItem';
-import { useInputDialog } from '../../hooks/useInputDialog';
-import InputDialog from './InputDialog';
 import AddButton from '../../components/AddButton';
 import { dialogActions } from '../../const/constants'
+import ListItem from '../../components/ListItem';
 
 
 
 export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTasks }) => {
 
-  const [visible, setVisible] = useState(false)
   const { user } = useAuth()
-  const userId = user.uid
 
   const list = useListFilter(appStore.taskList, 'GROUP')
 
-  
-
-
+  // console.log('GroupTaskList = ', list)
 
   useEffect(() => {
     setNumberOfGroupTasks(list.length)
@@ -39,9 +33,9 @@ export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTa
           renderItem={({ item }) => (
 
             <ListItem
-              item={item}
-              navigation={navigation}
+              taskList={item}
               route={route}
+              navigation={navigation}
             />
 
           )}
@@ -49,18 +43,11 @@ export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTa
         />
       </View>
       <AddButton
-        // showDialog={() => setVisible(true)}
         navigation={navigation}
         route={route}
         type={dialogActions.addTaskList}
       />
-      {/* <InputDialog
-        visible={visible}
-        setVisible={setVisible}
-        type={dialogActions.addTaskList}
-      /> */}
     </>
-
   );
 })
 

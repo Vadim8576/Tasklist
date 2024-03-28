@@ -3,20 +3,18 @@ import { FlatList, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
 import appStore from '../../store/appStore';
-import ListItem from './listItem';
-import InputDialog from './InputDialog';
-import { useInputDialog } from '../../hooks/useInputDialog';
 import { dialogActions } from '../../const/constants';
 import AddButton from '../../components/AddButton';
 import { useListFilter } from '../../hooks/useListFilter';
+import { setUserId } from 'firebase/analytics';
+import authStore from '../../store/authStore';
+import ListItem from '../../components/ListItem';
 
 
 export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => {
 
-  const [visible, setVisible] = useState(false)
   const { user } = useAuth()
   const userId = user.uid
-
 
 
   const list = useListFilter(appStore.taskList, 'NOT_GROUP')
@@ -27,6 +25,12 @@ export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => 
     const unsubscribe = appStore.subscribeToTasks(userId)
 
     return unsubscribe
+  }, [userId])
+
+
+  useEffect(() => {
+    if(!userId) return
+    authStore.setUser(user)
   }, [userId])
 
 
@@ -45,20 +49,17 @@ export default TaskList = observer(({ navigation, route, setNumberOfTasks }) => 
           data={list}
           renderItem={({ item }) => (
             <ListItem
-              item={item}
-              navigation={navigation}
+              taskList={item}
               route={route}
+              navigation={navigation}
             />
           )}
           ListFooterComponent={<View style={styles.footer} />}
         />
       </View>
       <AddButton
-        showDialog={() => setVisible(true)}
-      />
-      <InputDialog
-        visible={visible}
-        setVisible={setVisible}
+        navigation={navigation}
+        route={route}
         type={dialogActions.addTaskList}
       />
     </>

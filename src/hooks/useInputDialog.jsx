@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from "./useAuth"
 import appStore from "../store/appStore"
 import { dialogActions } from "../const/constants"
+import authStore from "../store/authStore"
 
 
 
@@ -20,16 +21,17 @@ import { dialogActions } from "../const/constants"
 export const useInputDialog = (props) => {
 
   const { type, taskListId = null, taskIndex = null } = props
+
+  const {user} = useAuth()
+  const userId = user.uid
+
   // const [visible, setVisible] = useState(false)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
-  const { user } = useAuth()
-  const userId = user.uid
 
+  
 
-
-
-  const showDialog = () => {
+  const onShowDialog = () => {
     console.log('Show dialog')
    
     if(type === dialogActions.addTaskList) {
@@ -47,13 +49,18 @@ export const useInputDialog = (props) => {
 
     if(type === dialogActions.editTask) {   
       console.log('edit Task')
+      console.log('taskListId = ', taskListId)
+      console.log('taskIndex = ', taskIndex)
+
+
+
       const task = appStore.getTaskTitleAndComment(taskListId, taskIndex)
       setTitle(task.title)
       setComment(task.comment)
     }
- 
-    // setVisible(true)
   }
+
+  
 
   const hideDialog = () => {   
     console.log('Hide dialog')
@@ -66,10 +73,16 @@ export const useInputDialog = (props) => {
   const onSubmit = () => {
     console.log('onSubmit')
 
+    // const userId = authStore.user.uid
+    console.log('Title = ', title)
+    console.log('Comment = ', comment)
+  
     const trimTitle = title.trim()
     const trimComment = comment.trim()
 
     if (type === dialogActions.addTaskList) {
+      console.log('userId = ', userId)
+      console.log('trimTitle = ', trimTitle)
       appStore.addTaskList({ userId, title: trimTitle })
     }
     if (type === dialogActions.editTaskListTitle) {
@@ -84,9 +97,12 @@ export const useInputDialog = (props) => {
     if (type === dialogActions.editTask) {
       appStore.updateTask({ taskIndex, title: trimTitle, comment: trimComment, taskListId })
     }
-
-    hideDialog()
   }
+
+
+  useEffect(() => {
+    onShowDialog()
+  }, [type])
 
 
   const value = {
@@ -94,10 +110,8 @@ export const useInputDialog = (props) => {
     setTitle,
     comment,
     setComment,
-    showDialog,
     hideDialog,
-    onSubmit,
-    // visible
+    onSubmit
   }
 
   return value

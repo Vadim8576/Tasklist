@@ -3,11 +3,11 @@ import { observer } from "mobx-react-lite";
 import { useTheme, List, Checkbox, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
 import appStore from '../../store/appStore';
-import TaskContextMenu from './SubTaskContextMenu';
+import TaskListContextMenu from '../../components/ContextMenu';
 
 
 //SubTaskList
-export default ListItem = observer(({ item, taskIndex, taskListId }) => {
+export default ListItem = observer(({ item, taskIndex, taskListId, navigation }) => {
 
   const theme = useTheme();
   const [checked, setChecked] = useState(item.complited)
@@ -16,9 +16,6 @@ export default ListItem = observer(({ item, taskIndex, taskListId }) => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
-
-  console.log('List item taskListId!!!!!!!!!! = ', taskListId)
-  console.log('List item taskIndex!!!!!!!!!! = ', taskIndex)
 
   const titleStyle = {
     textDecorationLine: checked ? 'line-through' : 'none',
@@ -62,14 +59,15 @@ export default ListItem = observer(({ item, taskIndex, taskListId }) => {
               onPress={onChange}
             />}
           right={props =>
-            <TaskContextMenu
+            <TaskListContextMenu
+              navigation={navigation}
               menuVisible={menuVisible}
               closeMenu={closeMenu}
               openMenu={openMenu}
-              item={item}
-              taskIndex={taskIndex}
               taskListId={taskListId}
-            />}
+              taskIndex={taskIndex}
+            />
+          }
         />
 
       </TouchableRipple>
@@ -83,7 +81,7 @@ export default ListItem = observer(({ item, taskIndex, taskListId }) => {
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    borderBottomWidth:1,
+    borderBottomWidth: 1,
     borderColor: '#999',
     borderStyle: 'solid',
     paddingLeft: 20

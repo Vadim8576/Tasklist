@@ -7,7 +7,6 @@ import errorStore from "./errorStore";
 
 class appStore {
 
-  user = null
   isLoggedIn = false
   // isLoading = false
   taskList = []
@@ -26,6 +25,7 @@ class appStore {
   // setIsLoading = (isLoading) => {
   //   this.isLoggedIn = isLoading
   // }
+
 
   setTaskList = (data) => {
     if (!data) return
@@ -106,6 +106,7 @@ class appStore {
 
 
   removeTask = (payload) => {
+    console.log(payload)
     fb.removeTask(payload)
   }
 

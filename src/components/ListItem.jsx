@@ -2,18 +2,19 @@ import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
-import TaskListContextMenu from './TaskListContextMenu';
-import { dateConversion } from '../../helpers/dateСonversion';
+import { dateConversion } from '../helpers/dateСonversion';
+import TaskListContextMenu from './ContextMenu';
+import UsersList from './UsersList';
+
 
 
 
 //TaskList
-export default ListItem = observer(({ item, navigation }) => {
+export default ListItem = observer(({ taskList, navigation }) => {
 
   const theme = useTheme();
   const [menuVisible, setMenuVisible] = useState(false)
 
-  const taskList = item
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
@@ -24,22 +25,26 @@ export default ListItem = observer(({ item, navigation }) => {
       <TouchableRipple
         onPress={() => navigation.navigate(
           'SubTaskList', {
-          taskList,
-          name: 'SubTaskList'
+          taskList
         })
         }
       >
         <List.Item
           titleStyle={styles.title}
-          title={item.title}
-          description={dateConversion(item.createdAt)}
+          title={taskList.title}
+          description={
+            taskList.groupUsersIds.length === 0
+            ? dateConversion(taskList.createdAt)
+            : (_) => <UsersList  users={taskList.groupUsersIds} />
+          }
           descriptionStyle={styles.description}
           right={props =>
             <TaskListContextMenu
               menuVisible={menuVisible}
               closeMenu={closeMenu}
               openMenu={openMenu}
-              item={item}
+              taskListId={taskList.taskListId}
+              navigation={navigation}
             />
           }
         />

@@ -39,7 +39,6 @@ let setSuccessMessage
 export const setMessage = (init) => {
   setErrorMessage = init.setErrorMessage
   setSuccessMessage = init.setSuccessMessage
-  console.log('setErrorMessage = ', setErrorMessage)
 }
 
 
@@ -48,7 +47,7 @@ export const fb = {
   singIn: (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-      setSuccessMessage()
+      // setSuccessMessage()
     })
     .catch((error) => {
       setErrorMessage()
@@ -58,7 +57,7 @@ export const fb = {
   logOut: () => {
     signOut(auth)
     .then(() => {
-      setSuccessMessage()
+      // setSuccessMessage()
     })
     .catch((error) => {
       setErrorMessage()
@@ -251,7 +250,7 @@ export const fb = {
   removeTask: (payload) => {
     const { taskIndex, taskListId } = payload
 
-    // console.log(taskIndex, taskListId)
+    console.log(taskIndex, taskListId)
 
     if (!taskListId) return
 

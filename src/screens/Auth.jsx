@@ -10,7 +10,7 @@ import { useTheme, Button, TextInput } from 'react-native-paper';
 export default Auth = observer(({ navigation }) => {
 
   //удалить
-  const [email, setEmail] = useState('123@gmail.com')
+  const [email, setEmail] = useState('321@gmail.com')
   const [password, setPassword] = useState('123456')
 
   const theme = useTheme();
