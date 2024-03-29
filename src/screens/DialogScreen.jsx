@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Text } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import { useInputDialog } from '../hooks/useInputDialog'
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -17,8 +17,9 @@ import CustomInput from "../components/CustomInput";
 
 
 export default DialogScreen = observer(({ route, navigation }) => {
+  const theme = useTheme()
   const [commentVisible, setCommentVisible] = useState(false)
-  const {type, taskListId = null, taskIndex = null} = route.params
+  const {type, taskListId = null, taskIndex = null, currentListType} = route.params
 
   const {
     onSubmit,
@@ -29,7 +30,8 @@ export default DialogScreen = observer(({ route, navigation }) => {
   } = useInputDialog({ type, taskListId, taskIndex })
 
 
-  console.log('dialog type = ', type)
+  // console.log('dialog type = ', type)
+  console.log('currentListType = ', currentListType)
 
   const now = new Date()
 
@@ -41,7 +43,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
   // опции для AppBar
   useLayoutEffect(() => {
     navigation.setOptions({
-      confirm: true, //кнопка подтверждения действий на скрине в AppBar
+      onSubmitButton: true, //кнопка подтверждения действий на скрине в AppBar
       onSubmitHandler // действие по этой кнопке
     })
   }, [title, comment])

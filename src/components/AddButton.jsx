@@ -5,21 +5,18 @@ import { FAB } from 'react-native-paper';
 import errorStore from "../store/errorStore";
 
 
-export default AddButton = observer(({ navigation, route, type, taskListId = null }) => {
+export default AddButton = observer(({
+  navigation,
+  route,
+  type,
+  taskListId = null,
+  currentListType
+}) => {
 
   const visible = !errorStore.message.isError && !errorStore.message.isSuccess
 
-
   if (!visible) return null
 
-  // return (
-  //     <FAB
-  //       size='medium'
-  //       icon='plus'
-  //       style={styles.fab}
-  //       onPress={showDialog}
-  //     /> 
-  // );
   return (
     <FAB
       size='medium'
@@ -28,7 +25,8 @@ export default AddButton = observer(({ navigation, route, type, taskListId = nul
       onPress={() => navigation.navigate(
         'DialogScreen', {
         type,
-        taskListId
+        taskListId,
+        currentListType
       })}
     />
   );

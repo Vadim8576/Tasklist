@@ -1,17 +1,27 @@
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { tabType } from "../const/constants"
 
-export const useListFilter = (list, type) => {
+export const useListFilter = (list, currentListType) => {
 
+  const [newList, setNewList] = useState();
 
-  // console.log('useListFilter = ', list)
+  useEffect(() => {
+    if (currentListType === tabType.taskList) {
+      setNewList(
+        list.filter(
+          item => !item.groupUsersIds.length > 0 && item)
+      )
+    }
 
-  let newList
+    if (currentListType === tabType.groupTaskList) {
+      setNewList(
+        list.filter(
+          item => item.groupUsersIds.length > 0 && item)
+      )
+    }
 
-  if (type === 'NOT_GROUP')
-    newList = list.filter(item => !item.groupUsersIds.length > 0 && item)
+  }, [list, currentListType])
 
-  if (type === 'GROUP')
-    newList = list.filter(item => item.groupUsersIds.length > 0 && item)
 
   return newList
 }

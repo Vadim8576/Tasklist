@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
 import appStore from '../../store/appStore';
-import { useListFilter } from '../../hooks/useListFilter';
-import AddButton from '../../components/AddButton';
 import { dialogActions } from '../../const/constants'
+import AddButton from '../../components/AddButton';
+import { useListFilter } from '../../hooks/useListFilter';
 import ListItem from '../../components/ListItem';
 
 
 
-export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTasks }) => {
+export default GroupTaskList = observer(({
+  navigation,
+  route,
+  setNumberOfGroupTasks,
+  currentListType
+}) => {
 
-  const { user } = useAuth()
 
-  const list = useListFilter(appStore.taskList, 'GROUP')
+
+  const list = useListFilter(appStore.taskList, currentListType)
 
   // console.log('GroupTaskList = ', list)
 
+  console.log('currentListType = ', currentListType)
+
   useEffect(() => {
-    setNumberOfGroupTasks(list.length)
-  }, [list.length])
+    setNumberOfGroupTasks(list?.length)
+  }, [list?.length])
 
 
   console.log('GroupTaskList render')
@@ -46,6 +53,7 @@ export default GroupTaskList = observer(({ navigation, route, setNumberOfGroupTa
         navigation={navigation}
         route={route}
         type={dialogActions.addTaskList}
+        currentListType={currentListType}
       />
     </>
   );

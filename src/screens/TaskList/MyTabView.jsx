@@ -1,50 +1,95 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme, Badge } from 'react-native-paper';
-import { Text, View, useWindowDimensions } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { useWindowDimensions } from 'react-native';
+import { TabView, TabBar } from 'react-native-tab-view';
 import TaskList from './TaskList';
-import GroupTaskList from '../GroupTaskList/GroupTaskList';
+import { tabType } from '../../const/constants';
+import { useListFilter } from '../../hooks/useListFilter';
+import { observer } from "mobx-react-lite";
+import appStore from '../../store/appStore';
+import { useAuth } from '../../hooks/useAuth';
+import authStore from '../../store/authStore';
 
 
 
-const tabName = {
-  taskList: 'TASK_LIST',
-  groupTaskList: 'GROUP_TASK_LIST'
-}
 
+export default MyTabView = observer(({ navigation, route }) => {
+  const { user } = useAuth()
+  const userId = user.uid
+  const [routes] = useState([
+    { key: tabType.taskList, title: 'UserName' },
+    { key: tabType.groupTaskList, title: 'Групповые' },
+  ]);
 
-export default MyTabView = ({ navigation, route }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [numberOfTasks, setNumberOfTasks] = useState(0)
   const [numberOfGorupTasks, setNumberOfGroupTasks] = useState(0)
+  const [currentListType, setCurrentList] = useState(routes[0].key)
+  const theme = useTheme()
+
+  const taskList = appStore.taskList
+  const list = useListFilter(taskList, currentListType)
+
+  const taskListLength = useListFilter(taskList, tabType.taskList)?.length
+  const groupTaskListLength = useListFilter(taskList, tabType.groupTaskList)?.length
 
 
-  const theme = useTheme();
 
-  const [routes] = useState([
-    { key: tabName.taskList, title: 'UserName' },
-    { key: tabName.groupTaskList, title: 'Групповые' },
-  ]);
+  useEffect(() => {
+    setNumberOfTasks(taskListLength)
+  }, [taskListLength])
+
+  useEffect(() => {
+    setNumberOfGroupTasks(groupTaskListLength)
+  }, [groupTaskListLength])
 
 
+  useEffect(() => {
+    setCurrentList(routes[index].key)
+  }, [index])
+
+
+
+  useEffect(() => {
+    if(currentListType === tabType.groupTaskList) return
+    if (!userId) return
+    
+    const unsubscribe = appStore.subscribeToTasks(userId)
+
+    return unsubscribe
+  }, [userId])
+
+
+  useEffect(() => {
+    if(currentListType === tabType.groupTaskList) return
+    if(!userId) return
+    authStore.setUser(user)
+  }, [userId])
+
+
+
+
+  // попробовать добавить ключи к ListItem, чтобы не отображались страрые данные
 
   const renderScene = ({ route }) => {
     switch (route.key) {
-      case tabName.taskList:
+      case tabType.taskList:
         return (
           <TaskList
+            key={tabType.taskList}
             navigation={navigation}
             route={route}
-            setNumberOfTasks={setNumberOfTasks}
+            list={list}
           />
         )
-      case tabName.groupTaskList:
+      case tabType.groupTaskList:
         return (
-          <GroupTaskList
+          <TaskList
+            key={tabType.groupTaskList}
             navigation={navigation}
             route={route}
-            setNumberOfGroupTasks={setNumberOfGroupTasks}
+            list={list}
           />
         )
       default:
@@ -57,7 +102,7 @@ export default MyTabView = ({ navigation, route }) => {
       indicatorStyle={{ backgroundColor: 'white' }}
       style={{ backgroundColor: theme.colors.primary }}
       renderBadge={
-        ({ route }) => route.key === tabName.taskList
+        ({ route }) => route.key === tabType.taskList
           ? <Badge>{numberOfTasks}</Badge>
           : <Badge>{numberOfGorupTasks}</Badge>
       }
@@ -66,7 +111,7 @@ export default MyTabView = ({ navigation, route }) => {
 
   return (
     <TabView
-      // lazy={({ route }) => route.key === 'second'}
+      // lazy={({ route }) => route.key === tabType.groupTaskList}
       navigationState={{ index, routes }}
       renderTabBar={renderTabBar}
       renderScene={renderScene}
@@ -74,6 +119,6 @@ export default MyTabView = ({ navigation, route }) => {
       initialLayout={{ width: layout.width }}
     />
   );
-}
+})
 
 

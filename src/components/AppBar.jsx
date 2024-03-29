@@ -44,14 +44,15 @@ export default AppBar = ({ navigation, route, options, back }) => {
           </>
         }
       />
-      {options?.confirm &&
+      {options?.onSubmitButton &&
         <Appbar.Action
+          size={28}
           color={theme.colors.surface}
           icon="check"
           onPress={options?.onSubmitHandler}
         />
       }
-      {back && !options?.confirm ? (
+      {back && !options?.onSubmitHandler ? (
         <Menu
           visible={visible}
           onDismiss={closeMenu}
