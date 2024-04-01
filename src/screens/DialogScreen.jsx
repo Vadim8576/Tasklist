@@ -67,12 +67,14 @@ export default DialogScreen = observer(({ route, navigation }) => {
           placeholder='Введите наименование задачи'
           value={title}
           onChangeText={setTitle}
+          numberOfLines={5}
         />
         {commentVisible &&
           <CustomInput
             placeholder='Введите комментарий'
             value={comment}
             onChangeText={setComment}
+            numberOfLines={5}
           />
         }
       </View>

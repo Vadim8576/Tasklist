@@ -4,12 +4,12 @@ import { observer } from "mobx-react-lite";
 
 export default CustomInput = observer((props) => {
 
-  const {value, onChangeText, placeholder} = props
+  const {value, onChangeText, placeholder, numberOfLines} = props
 
   return (
       <TextInput
         multiline={true}
-        numberOfLines={5}
+        numberOfLines={numberOfLines}
         style={styles.input}
         placeholder={placeholder}
         value={value}

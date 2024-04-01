@@ -10,7 +10,8 @@ import { useTheme, Button, TextInput } from 'react-native-paper';
 export default Auth = observer(({ navigation }) => {
 
   //удалить
-  const [email, setEmail] = useState('321@gmail.com')
+  // const [email, setEmail] = useState('321@gmail.com')
+  const [email, setEmail] = useState('1@mail.ru')
   const [password, setPassword] = useState('123456')
 
   const theme = useTheme();
@@ -18,9 +19,9 @@ export default Auth = observer(({ navigation }) => {
 
   const { singIn } = authStore
 
-  const login = (email, password) => {
+  const login = async (email, password) => {
 
-    singIn(email.trim(), password.trim())
+    await singIn(email.trim(), password.trim())
     // navigation.navigate('TabNavigator', { name: 'TabNavigator' })
     navigation.navigate('FavoriteUsers', { name: 'FavoriteUsers' })
   }
@@ -44,7 +45,8 @@ export default Auth = observer(({ navigation }) => {
       ]}
     >
       <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
-        <RadioButton.Item label="123@gmail.com" value="123@gmail.com" />
+        <RadioButton.Item label="1@mail.ru" value="1@mail.ru" />
+        <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
         <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
       </RadioButton.Group>
 

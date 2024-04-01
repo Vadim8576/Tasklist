@@ -7,6 +7,7 @@ import { logOut } from '../api/firebase'
 class Auth {
 
   user = {};
+  friends = []
   isLoggedIn = false;
 
   constructor() {
@@ -21,8 +22,8 @@ class Auth {
     this.authError = error;
   }
 
-  singIn = (email, password) => {
-    fb.singIn(email, password)
+  singIn = async (email, password) => {
+    await fb.singIn(email, password)
   }
 
   logout = () => {
@@ -35,6 +36,22 @@ class Auth {
 
   createUser = () => {
     fb.createUser()
+  }
+
+  resetFriends = () => {
+    this.friends= []
+  }
+
+  getFriends = (userId) => {
+    this.resetFriends()
+    fb.getFriends({userId, setFriends: this.setFriends})
+  }
+
+  
+
+  setFriends = (friends) => {
+    console.log('authStore friends = ', friends)
+    this.friends = [...this.friends, friends]
   }
 
 }

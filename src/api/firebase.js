@@ -45,14 +45,14 @@ export const setMessage = (init) => {
 
 export const fb = {
 
-  singIn: (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // setSuccessMessage()
-      })
-      .catch((error) => {
-        setErrorMessage()
-      })
+  singIn: async (email, password) => {
+    const a = await signInWithEmailAndPassword(auth, email, password)
+    // .then(() => {
+    //   // setSuccessMessage()
+    // })
+    // .catch((error) => {
+    //   setErrorMessage()
+    // })
   },
 
   logOut: () => {
@@ -67,7 +67,7 @@ export const fb = {
 
   createUser: (newUserData) => {
 
-    const email = '7@mail.ru'
+    const email = '1@mail.ru'
     const nickName = ''
 
     createUserWithEmailAndPassword(auth, email, '123456')
@@ -78,7 +78,7 @@ export const fb = {
         const data = {
           email,
           nickName,
-          frends: [],
+          friends: ['X4hFQZ8eNwROulLW4BRY4b70gmA3', 'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1'],
           id: user.uid
         }
 
@@ -100,10 +100,36 @@ export const fb = {
         setErrorMessage()
       })
 
+  },
 
+  getFriends: (payload) => {
 
+    const { setFriends, userId } = payload
+    const q = query(collection(db, 'users'), where('id', '==', userId));
 
+    getDocs(q)
+      .then((doc) => {
+        const friendsIds = doc.docs[0].data().friends
 
+        friendsIds.forEach((id) => {
+          const q = query(collection(db, 'users'), where('id', '==', id));
+
+          getDocs(q)
+            .then((doc) => {
+              setFriends({
+                nickName: doc.docs[0].data().nickName,
+                id: doc.docs[0].data().id,
+              }) 
+            })
+            .catch((error) => {
+              console.error('Ошибка получения данных друзей', error)
+            })
+        })
+      })
+      .catch((error) => {
+        console.error('Ошибка получения друзей', error)
+        setErrorMessage()
+      })
   },
 
 
