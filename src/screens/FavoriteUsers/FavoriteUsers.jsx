@@ -15,7 +15,7 @@ export default FavoriteUsers = observer((props) => {
 
 
   useEffect(() => {
-    authStore.getUsers()
+    // authStore.createUser()
 
   }, [])
 

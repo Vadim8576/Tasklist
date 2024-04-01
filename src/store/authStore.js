@@ -33,8 +33,8 @@ class Auth {
     this.isLoggedIn = bool
   }
 
-  getUsers = () => {
-    fb.getUsers()
+  createUser = () => {
+    fb.createUser()
   }
 
 }

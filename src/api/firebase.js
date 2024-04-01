@@ -1,7 +1,7 @@
 
 import { initializeApp } from 'firebase/app';
 
-import { getAuth, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   Timestamp,
   collection,
@@ -25,6 +25,7 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
+
 
 const DB_NAME = 'list';
 
@@ -64,34 +65,49 @@ export const fb = {
       })
   },
 
-  getUsers: (usersIds) => {
-    const id = 'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1'
+  createUser: (newUserData) => {
 
-    getAuth()
-      .getUsers([
-        { uid: 'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1' },
-        // { email: 'user2@example.com' },
-      ])
-      .then((getUsersResult) => {
-        console.log('Successfully fetched user data:');
-        getUsersResult.users.forEach((userRecord) => {
-          console.log(userRecord);
-        });
+    const email = '7@mail.ru'
+    const nickName = ''
 
-        console.log('Unable to find users corresponding to these identifiers:');
-        getUsersResult.notFound.forEach((userIdentifier) => {
-          console.log(userIdentifier);
-        });
+    createUserWithEmailAndPassword(auth, email, '123456')
+      .then((userCredential) => {
+
+        const user = userCredential.user;
+
+        const data = {
+          email,
+          nickName,
+          frends: [],
+          id: user.uid
+        }
+
+        const collectionRef = collection(db, 'users')
+        const newDocRef = doc(collectionRef)
+
+        setDoc(newDocRef, data)
+          .then(() => {
+            console.log('Пользователь успешно добавлен.');
+
+          })
+          .catch((error) => {
+            console.log('Ошибка при добавлении данных пользователя', error)
+            setErrorMessage()
+          })
       })
       .catch((error) => {
-        console.log('Error fetching user data:', error);
-      });
+        console.log('Ошибка при добавлении пользователя', error)
+        setErrorMessage()
+      })
+
+
+
 
 
   },
 
 
-  taskSnapshot: function (payload) {
+  taskSnapshot: (payload) => {
     const { setTaskList, userId } = payload
 
     if (!userId) return
@@ -99,10 +115,6 @@ export const fb = {
     const q = query(collection(db, DB_NAME), where('creatorId', '==', userId));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-
-
-
-
       const allDocs = []
       querySnapshot.forEach((doc) => {
         const data = doc.data()
@@ -128,7 +140,6 @@ export const fb = {
 
   addTaskList: (payload) => {
     const { userId, title } = payload
-    console.log('Press Add')
 
     const data = {
       title: title,
