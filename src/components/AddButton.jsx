@@ -7,10 +7,9 @@ import errorStore from "../store/errorStore";
 
 export default AddButton = observer(({
   navigation,
-  route,
   type,
   taskListId = null,
-  currentListType
+  screenName
 }) => {
 
   const visible = !errorStore.message.isError && !errorStore.message.isSuccess
@@ -26,7 +25,7 @@ export default AddButton = observer(({
         'DialogScreen', {
         type,
         taskListId,
-        currentListType
+        screenName
       })}
     />
   );

@@ -7,12 +7,6 @@ export const dateOptions = {
 	second: 'numeric'
 }
 
-export const tabType = {
-  taskList: 'TASK_LIST',
-  groupTaskList: 'GROUP_TASK_LIST'
-}
-
-
 export const dialogActions = {
 	addTaskList: 'ADD_TASK_LIST',
 	editTaskListTitle: 'EDIT_TASK_LIST_TITLE',

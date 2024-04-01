@@ -1,28 +1,32 @@
 
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { dialogActions } from '../../const/constants';
 import AddButton from '../../components/AddButton';
 import ListItem from '../../components/ListItem';
-import { useListFilter } from '../../hooks/useListFilter';
+import { useEffect } from 'react';
+import authStore from '../../store/authStore';
+
+export default FavoriteUsers = observer((props) => {
 
 
-export default TaskList = observer((props) => {
+  console.log('Favorite Users render')
 
-  const {navigation, route, taskList} = props
 
-  const screenName = route.name
-  const filteredList = useListFilter(taskList, screenName)
 
-  console.log('mAINtASKlIST render')
-  // console.log('mAINtASKlIST navigation = ', navigation)
-  console.log('mAINtASKlIST screen name = ', route.name)
+  useEffect(() => {
+    authStore.getUsers()
+
+  }, [])
+
 
 
   return (
     <>
+
       <View style={styles.container}>
-        <FlatList
+        <Text>Мои друзья</Text>
+        {/* <FlatList
           data={filteredList}
           renderItem={({ item }) => (
             <ListItem
@@ -33,13 +37,13 @@ export default TaskList = observer((props) => {
             />
           )}
           ListFooterComponent={<View style={styles.footer} />}
-        />
+        /> */}
       </View>
-      <AddButton
+      {/* <AddButton
         navigation={navigation}
         type={dialogActions.addTaskList}
         screenName={screenName}
-      />
+      /> */}
     </>
 
   );
@@ -52,10 +56,8 @@ export default TaskList = observer((props) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    // paddingTop: 10,
-    // paddingBottom: 50,
-    // paddingLeft: 10,
-    // paddingRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   footer: {
     height: 90

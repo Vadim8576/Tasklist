@@ -3,14 +3,14 @@ import { observer } from "mobx-react-lite";
 import { useTheme, List, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
 import { dateConversion } from '../helpers/dateСonversion';
-import TaskListContextMenu from './ContextMenu';
+import ContextMenu from './ContextMenu/ContextMenu';
 import UsersList from './UsersList';
 
 
 
 
 //TaskList
-export default ListItem = observer(({ taskList, navigation }) => {
+export default ListItem = observer(({ taskList, navigation, screenName }) => {
 
   const theme = useTheme();
   const [menuVisible, setMenuVisible] = useState(false)
@@ -38,13 +38,14 @@ export default ListItem = observer(({ taskList, navigation }) => {
             : (_) => <UsersList  users={taskList.groupUsersIds} />
           }
           descriptionStyle={styles.description}
-          right={props =>
-            <TaskListContextMenu
+          right={_ =>
+            <ContextMenu
               menuVisible={menuVisible}
               closeMenu={closeMenu}
               openMenu={openMenu}
               taskListId={taskList.taskListId}
               navigation={navigation}
+              screenName={screenName}
             />
           }
         />

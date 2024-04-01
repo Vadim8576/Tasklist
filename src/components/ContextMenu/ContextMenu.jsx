@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useTheme, IconButton, Menu } from 'react-native-paper';
-import { dialogActions } from "../const/constants";
-import appStore from "../store/appStore";
+import { dialogActions } from "../../const/constants";
+import appStore from "../../store/appStore";
 import ContextMenuItem from "./ContextMenuItem";
 import { useEffect, useState } from "react";
 
@@ -12,15 +12,31 @@ export default TaskListContextMenu = observer(({
   closeMenu,
   openMenu,
   taskListId,
-  taskIndex = null
+  taskIndex = null,
+  screenName
 }) => {
 
   const [key, setKey] = useState()
-
   const theme = useTheme();
 
+  const options = {
+    'TASK_LIST': {
+      type: dialogActions.editTaskListTitle,
+      taskListId,
+
+      remove: () => appStore.removeTaskList(taskListId)
+    },
+    'TASK': {
+      type: dialogActions.editTask,
+      taskListId,
+      taskIndex,
+      remove: () => appStore.removeTask({taskListId, taskIndex})
+    },
+  }
+
+
   const edit = () => {
-    navigation.navigate('DialogScreen', options[key])
+    navigation.navigate('DialogScreen', {...options[key], screenName})
     closeMenu()
   }
 
@@ -44,19 +60,7 @@ export default TaskListContextMenu = observer(({
     }
   ]
 
-  const options = {
-    'TASK_LIST': {
-      type: dialogActions.editTaskListTitle,
-      taskListId,
-      remove: () => appStore.removeTaskList(taskListId)
-    },
-    'TASK': {
-      type: dialogActions.editTask,
-      taskListId,
-      taskIndex,
-      remove: () => appStore.removeTask({taskListId, taskIndex})
-    },
-  }
+ 
 
   useEffect(() => {
     // если сюда пришел taskIndex через пропсы, значит это SubTask,

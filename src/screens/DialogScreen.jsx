@@ -19,7 +19,7 @@ import CustomInput from "../components/CustomInput";
 export default DialogScreen = observer(({ route, navigation }) => {
   const theme = useTheme()
   const [commentVisible, setCommentVisible] = useState(false)
-  const {type, taskListId = null, taskIndex = null, currentListType} = route.params
+  const {type, taskListId = null, taskIndex = null, screenName} = route.params
 
   const {
     onSubmit,
@@ -31,7 +31,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
 
 
   // console.log('dialog type = ', type)
-  console.log('currentListType = ', currentListType)
+  console.log('DialogScreen screenName = ', screenName)
 
   const now = new Date()
 
@@ -44,7 +44,8 @@ export default DialogScreen = observer(({ route, navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       onSubmitButton: true, //кнопка подтверждения действий на скрине в AppBar
-      onSubmitHandler // действие по этой кнопке
+      onSubmitHandler, // действие по этой кнопке
+      title: 'Добавить список задач'
     })
   }, [title, comment])
 

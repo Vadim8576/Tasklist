@@ -46,23 +46,50 @@ export const fb = {
 
   singIn: (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      // setSuccessMessage()
-    })
-    .catch((error) => {
-      setErrorMessage()
-    })
+      .then(() => {
+        // setSuccessMessage()
+      })
+      .catch((error) => {
+        setErrorMessage()
+      })
   },
 
   logOut: () => {
     signOut(auth)
-    .then(() => {
-      // setSuccessMessage()
-    })
-    .catch((error) => {
-      setErrorMessage()
-    })
+      .then(() => {
+        // setSuccessMessage()
+      })
+      .catch((error) => {
+        setErrorMessage()
+      })
   },
+
+  getUsers: (usersIds) => {
+    const id = 'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1'
+
+    getAuth()
+      .getUsers([
+        { uid: 'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1' },
+        // { email: 'user2@example.com' },
+      ])
+      .then((getUsersResult) => {
+        console.log('Successfully fetched user data:');
+        getUsersResult.users.forEach((userRecord) => {
+          console.log(userRecord);
+        });
+
+        console.log('Unable to find users corresponding to these identifiers:');
+        getUsersResult.notFound.forEach((userIdentifier) => {
+          console.log(userIdentifier);
+        });
+      })
+      .catch((error) => {
+        console.log('Error fetching user data:', error);
+      });
+
+
+  },
+
 
   taskSnapshot: function (payload) {
     const { setTaskList, userId } = payload
@@ -72,8 +99,8 @@ export const fb = {
     const q = query(collection(db, DB_NAME), where('creatorId', '==', userId));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      
-      
+
+
 
 
       const allDocs = []
@@ -89,7 +116,7 @@ export const fb = {
           groupUsersIds: data.groupUsersIds
         })
       })
-      
+
       // console.log('allDocs = ', allDocs)
       setTaskList(allDocs)
     })
@@ -303,7 +330,7 @@ export const fb = {
       .catch((error) => {
         setErrorMessage()
       })
-      
+
   }
 }
 
