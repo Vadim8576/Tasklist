@@ -8,6 +8,7 @@ class Auth {
 
   user = {};
   friends = []
+  foundFriend = {}
   isLoggedIn = false;
 
   constructor() {
@@ -47,11 +48,24 @@ class Auth {
     fb.getFriends({userId, setFriends: this.setFriends})
   }
 
-  
+  setFriends = (friend) => {
+    console.log('authStore friend = ', friend)
+    this.friends = [...this.friends, friend]
+  }
 
-  setFriends = (friends) => {
-    console.log('authStore friends = ', friends)
-    this.friends = [...this.friends, friends]
+  getFriendById = async  (friendId) => {
+    this.setFoundFriend({})
+    this.setFoundFriend(await fb.getFriendById(friendId || {}))
+  }
+
+  setFoundFriend = (foundFriend) => {
+    this.foundFriend = foundFriend
+  }
+
+  addFriend = async (ids) => {
+    await fb.addFriend(ids)
+    this.getFriends(ids.userId)
+    this.setFoundFriend({})
   }
 
 }

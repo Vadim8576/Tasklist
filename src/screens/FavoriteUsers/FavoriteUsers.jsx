@@ -1,11 +1,14 @@
 
-import { FlatList, View, StyleSheet, Text } from 'react-native';
-import { List, Avatar, TouchableRipple } from 'react-native-paper';
+import { FlatList, View, StyleSheet, Text, Pressable } from 'react-native';
+import { List, Button, Avatar, TouchableRipple, useTheme } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import { useEffect, useLayoutEffect, useState } from 'react';
 import authStore from '../../store/authStore';
 import { useAuth } from '../../hooks/useAuth';
 import CustomInput from '../../components/CustomInput';
+import { RIGHT_BUTTON_SIZE } from '../../const/constants';
+import SeachFriends from './SeachFriends';
+import FriendsList from './FriendsList';
 
 export default FavoriteUsers = observer((props) => {
 
@@ -15,6 +18,7 @@ export default FavoriteUsers = observer((props) => {
 
   console.log('Favorite Users render')
 
+  const theme = useTheme()
 
   const { user } = useAuth()
   const userId = user.uid
@@ -43,64 +47,19 @@ export default FavoriteUsers = observer((props) => {
 
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.inputWrapper}>
-          <CustomInput
-            placeholder='Введите ID друга'
-            value={friendId}
-            onChangeText={setFriendId}
-            numberOfLines={1}
-          />
-          {/* <TouchableRipple
-            onPress={() => console.log('Pressed')}
-            rippleColor="rgba(0, 0, 0, .32)"
-          >
-            <Avatar.Icon size={32} icon="plus" />
-          </TouchableRipple> */}
-
-
-        </View>
-
-
-        <FlatList
-          data={authStore.friends}
-          renderItem={({ item }) => (
-            <List.Item
-              key={item.id}
-              title={item.nickName}
-              right={props => <List.Icon {...props} icon="delete-forever-outline" />
-              }
-            />
-          )}
-          ListFooterComponent={<View style={styles.footer} />}
-        />
-      </View>
-      {/* <AddButton
-        navigation={navigation}
-        type={dialogActions.addTaskList}
-        screenName={screenName}
-      /> */}
-    </>
-
+    <View style={styles.container}>
+      <SeachFriends />
+      <FriendsList />
+    </View>
   );
 })
 
 
-
-
-
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingTop: 30,
+    paddingLeft: 5,
+    paddingRight: 5,
 
   },
-  inputWrapper: {
-    // flexDirection: 'row'
-  },
-  footer: {
-    height: 90
-  }
 });

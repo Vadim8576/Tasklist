@@ -67,6 +67,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
           placeholder='Введите наименование задачи'
           value={title}
           onChangeText={setTitle}
+          multiline={true}
           numberOfLines={5}
         />
         {commentVisible &&
@@ -74,6 +75,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
             placeholder='Введите комментарий'
             value={comment}
             onChangeText={setComment}
+            multiline={true}
             numberOfLines={5}
           />
         }

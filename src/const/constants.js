@@ -1,3 +1,5 @@
+export const RIGHT_BUTTON_SIZE = 40
+
 export const dateOptions = {
 	day: 'numeric',
 	month: 'numeric',

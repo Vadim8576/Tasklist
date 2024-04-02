@@ -7,8 +7,8 @@ import {
 import Auth from './Auth';
 import AppBar from '../components/AppBar';
 import DialogScreen from './DialogScreen';
-import SubTaskList from './SubTaskList/SubTaskList';
 import TabNavigator from '../TabNavigator';
+import SubTaskList from './SubTaskList/SubTaskList';
 import FavoriteUsers from './FavoriteUsers/FavoriteUsers';
 
 

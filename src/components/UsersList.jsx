@@ -1,13 +1,6 @@
-import React, { useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { Avatar, useTheme } from 'react-native-paper';
-import { useAuth } from '../hooks/useAuth';
 import { observer } from "mobx-react-lite";
-import appStore from '../store/appStore';
-import { useListFilter } from '../hooks/useListFilter';
-
-
-// import { dialogActions } from '../../const/constants';
 
 
 
@@ -15,7 +8,7 @@ export default GroupUserList = observer((users) => {
 
   const theme = useTheme()
 
-console.log('GroupUserList users = ', users)
+  console.log('GroupUserList users = ', users)
   return (
     <>
       <View style={styles.container}>
@@ -25,14 +18,14 @@ console.log('GroupUserList users = ', users)
           renderItem={(_) => (
             <View style={styles.avatar}>
               <Avatar.Text size={22} label="XD" />
-            </View>    
+            </View>
           )}
           ListFooterComponent={
-          <Avatar.Icon
-            size={22}
-            icon="plus"
-            style={{backgroundColor: theme.colors.primaryContainer}}
-          />
+            <Avatar.Icon
+              size={22}
+              icon="plus"
+              style={{ backgroundColor: theme.colors.primaryContainer }}
+            />
           }
         />
       </View>
@@ -47,10 +40,10 @@ console.log('GroupUserList users = ', users)
 
 const styles = StyleSheet.create({
   container: {
-   marginTop: 10,
+    marginTop: 10,
   },
   avatar: {
-   marginRight: 10,
+    marginRight: 10,
   },
 
 });

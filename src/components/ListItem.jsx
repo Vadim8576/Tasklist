@@ -30,12 +30,15 @@ export default ListItem = observer(({ taskList, navigation, screenName }) => {
         }
       >
         <List.Item
+          style={{
+            paddingRight: 0
+          }}
           titleStyle={styles.title}
           title={taskList.title}
           description={
             taskList.groupUsersIds.length === 0
-            ? dateConversion(taskList.createdAt)
-            : (_) => <UsersList  users={taskList.groupUsersIds} />
+              ? dateConversion(taskList.createdAt)
+              : (_) => <UsersList users={taskList.groupUsersIds} />
           }
           descriptionStyle={styles.description}
           right={_ =>
@@ -58,7 +61,7 @@ export default ListItem = observer(({ taskList, navigation, screenName }) => {
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    borderBottomWidth:1,
+    borderBottomWidth: 1,
     borderColor: '#999',
     borderStyle: 'solid',
   },

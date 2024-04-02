@@ -107,6 +107,7 @@ export const fb = {
     const { setFriends, userId } = payload
     const q = query(collection(db, 'users'), where('id', '==', userId));
 
+
     getDocs(q)
       .then((doc) => {
         const friendsIds = doc.docs[0].data().friends
@@ -119,7 +120,7 @@ export const fb = {
               setFriends({
                 nickName: doc.docs[0].data().nickName,
                 id: doc.docs[0].data().id,
-              }) 
+              })
             })
             .catch((error) => {
               console.error('Ошибка получения данных друзей', error)
@@ -130,7 +131,67 @@ export const fb = {
         console.error('Ошибка получения друзей', error)
         setErrorMessage()
       })
+
   },
+
+
+
+
+
+  getFriendById: async (friendId) => {
+    const q = query(collection(db, 'users'), where('id', '==', friendId));
+
+    const friend = await getDocs(q)
+      .then((doc) => {
+        console.log('getFriendById = ', doc.docs[0].data())
+        return {
+          id: doc.docs[0].data().id,
+          nickName: doc.docs[0].data().nickName
+        }
+      })
+      .catch((error) => {
+        console.error('Ошибка получения друга', error)
+        setErrorMessage()
+      })
+    console.log('friend = ', friend)
+    return friend
+  },
+
+
+
+
+  addFriend: async (ids) => {
+    const { userId, friendId } = ids
+
+    if (!userId && !friendId) return
+
+    const q = query(collection(db, 'users'), where('id', '==', userId));
+
+    await getDocs(q)
+      .then((data) => {
+        const friends = [...data.docs[0].data().friends, friendId]
+        const docId = data.docs[0].id
+        const newDocRef = doc(db, 'users', docId);
+
+        updateDoc(newDocRef, {
+          friends
+        })
+          .then(() => {
+            console.log('Друг успешно добавлена')
+
+            setSuccessMessage()
+          })
+          .catch((error) => {
+            console.log('Ошибка при добавлении друга: ', error)
+            setErrorMessage()
+          })
+      })
+      .catch((error) => {
+        console.log('Ошибка получения документа для обновления', error)
+        setErrorMessage()
+      })
+  },
+
 
 
   taskSnapshot: (payload) => {
