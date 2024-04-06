@@ -5,11 +5,15 @@ import { dialogActions } from '../../const/constants';
 import AddButton from '../../components/AddButton';
 import ListItem from '../../components/ListItem';
 import { useListFilter } from '../../hooks/useListFilter';
+import appStore from '../../store/appStore';
 
 
 export default TaskList = observer((props) => {
 
-  const {navigation, route, taskList} = props
+  // console.log('props = ', props)
+  const {navigation, route} = props
+
+  const taskList = appStore.taskList
 
   const screenName = route.name
   const filteredList = useListFilter(taskList, screenName)
@@ -17,6 +21,7 @@ export default TaskList = observer((props) => {
   console.log('mAINtASKlIST render')
   // console.log('mAINtASKlIST navigation = ', navigation)
   console.log('mAINtASKlIST screen name = ', route.name)
+  // console.log('mAINtASKlIST screen name = ', route)
 
 
   return (

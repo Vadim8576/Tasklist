@@ -31,7 +31,7 @@ export default ListItem = observer(({ taskList, navigation, screenName }) => {
       >
         <List.Item
           style={{
-            paddingRight: 0
+            paddingRight: 0,
           }}
           titleStyle={styles.title}
           title={taskList.title}

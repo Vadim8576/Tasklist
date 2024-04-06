@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { useAuth } from "./useAuth"
 import appStore from "../store/appStore"
 import { dialogActions } from "../const/constants"
@@ -114,5 +114,5 @@ export const useInputDialog = (props) => {
     onSubmit
   }
 
-  return value
+  return useMemo (() => value, [value])
 }

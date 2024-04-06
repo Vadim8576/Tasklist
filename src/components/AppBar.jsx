@@ -5,6 +5,7 @@ import { dateConversion } from '../helpers/dateСonversion';
 import appStore from '../store/appStore';
 
 
+
 export default AppBar = ({ navigation, route, options, back }) => {
 
   const theme = useTheme();
@@ -12,12 +13,15 @@ export default AppBar = ({ navigation, route, options, back }) => {
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
-  const title = getHeaderTitle(options, route.name);
+  const title = route.name === 'TabNavigator' ? '' : getHeaderTitle(options, route.name);
 
   const removeAllTaskList = () => {
     appStore.removeAllTaskList()
     closeMenu()
   }
+
+  // console.log('BAR route = ', route)
+  // console.log('BAR back = ', back)
 
 
   return (

@@ -1,23 +1,33 @@
 
 import { View, StyleSheet, Text, Pressable } from 'react-native';
-import { List, useTheme, TextInput } from 'react-native-paper';
+import { List, useTheme, TextInput, HelperText } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import authStore from '../../store/authStore';
 import FoundFriend from './FoundFriend';
 import commonStyles from './commonStyles';
+import { useAuth } from '../../hooks/useAuth';
 
 
 export default SeachFriends = observer((props) => {
 
   const [friendId, setFriendId] = useState('')
+  const [errorText, setErrorText] = useState('')
+  const [timer, setTimer] = useState('')
   const theme = useTheme()
+
+  const { user } = useAuth()
 
   console.log('SeachFriends render')
 
   const onSubmit = () => {
+    if (friendId === user.uid) {
+      setErrorText('Это ваш ID!')
+      // setFriendId('')
+      return
+    }
 
     authStore.getFriendById(friendId)
   }
@@ -26,10 +36,23 @@ export default SeachFriends = observer((props) => {
     setFriendId('')
   }
 
+  // useEffect(() => {
+  //   if(errorText !== '') setTimer(new Date)
+
+  //   const interval = setInterval(() => {
+  //     const newDate = new Date - timer
+  //     console.log(newDate)
+  //     // if(newDate >= )
+  //   }, 1000);
+
+
+  //   return clearInterval(interval)
+
+  // }, [errorText])
 
 
   // y4Q2IaI2TSSAhPEmJGC1SvhnCnz1
-
+  // 17dNpCh4kDX5dhQBPyiOaVEBBxs1
 
 
 
@@ -54,7 +77,7 @@ export default SeachFriends = observer((props) => {
         </View>
         <View style={styles.submit}>
           <Pressable
-            disabled={friendId === '' ? true: false}
+            disabled={friendId === '' ? true : false}
             // disabled={true}
             onPress={onSubmit}
             style={({ pressed }) => [
@@ -70,7 +93,13 @@ export default SeachFriends = observer((props) => {
         </View>
       </View>
 
-      <FoundFriend clearInput={clearInput} />
+      <HelperText type="error" visible={errorText !== ''}>
+        {errorText}
+      </HelperText>
+
+      {errorText === '' && <FoundFriend clearInput={clearInput} />}
+
+
     </>
   );
 })

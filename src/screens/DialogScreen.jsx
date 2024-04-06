@@ -45,11 +45,11 @@ export default DialogScreen = observer(({ route, navigation }) => {
     navigation.setOptions({
       onSubmitButton: true, //кнопка подтверждения действий на скрине в AppBar
       onSubmitHandler, // действие по этой кнопке
-      title: 'Добавить список задач'
+      title: commentVisible ? 'Добавить задачу' : 'Добавить список задач'
     })
-  }, [title, comment])
+  }, [title, comment, commentVisible])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const visible = type === dialogActions.addTask || type === dialogActions.editTask
     console.log('comment is visible = ',  visible)
     setCommentVisible(visible)

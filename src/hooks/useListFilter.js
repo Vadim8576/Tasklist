@@ -23,5 +23,7 @@ export const useListFilter = (list, screenName) => {
   }, [list, screenName])
 
 
-  return newList
+  const values = { list, screenName }
+
+  return useMemo(() => newList, [values])
 }

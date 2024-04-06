@@ -5,12 +5,13 @@ import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Screen, Text, BottomNavigation, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import TaskList from './screens/TaskList/TaskList';
-import { useAuth } from "./hooks/useAuth";
+import TaskList from './TaskList/TaskList';
+import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
-import appStore from "./store/appStore";
-import authStore from "./store/authStore";
-import FavoriteUsers from "./screens/FavoriteUsers/FavoriteUsers";
+import appStore from "../store/appStore";
+import authStore from "../store/authStore";
+import FavoriteUsers from "./FavoriteUsers/FavoriteUsers";
+import AppBar from "../components/AppBar";
 
 
 
@@ -26,9 +27,9 @@ export default TabNavigator = observer(() => {
 
   const theme = useTheme()
 
-  const taskList = appStore.taskList
+ 
 
-
+  // console.log('props tabNav = ', props)
 
   // useEffect(() => {
   //   setNumberOfTasks(taskListLength)
@@ -39,7 +40,6 @@ export default TabNavigator = observer(() => {
   // }, [groupTaskListLength])
 
 
-  
 
   useEffect(() => {
     if (!userId) return
@@ -56,18 +56,19 @@ export default TabNavigator = observer(() => {
   }, [userId])
 
 
-
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({route}) => ({
         headerShown: false,
-      }}
+        // header: (props) => <AppBar {...props} />,
+      })}
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
           // shifting={true}
           // getBadge={(props) => {
           //   return props.route.name === 'TaskList' ? '1' : ''
           // }}
+          
           navigationState={state}
           safeAreaInsets={insets}
           onTabPress={({ route, preventDefault }) => {
@@ -76,6 +77,7 @@ export default TabNavigator = observer(() => {
               target: route.key,
               canPreventDefault: true,
             });
+
             if (event.defaultPrevented) {
               preventDefault();
             } else {
@@ -106,71 +108,38 @@ export default TabNavigator = observer(() => {
         />
       )}
     >
-      {/* <Tab.Screen
-        name="Main"
-        options={{
-          tabBarLabel: 'Главная',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="home" size={size} color={color} />;
-          },
-        }}
-      >
-        {(props) => (
-          <TaskList
-            {...props}
-            taskList={taskList}
-          />
-        )}  
-      </Tab.Screen> */}
       <Tab.Screen
         name="TaskList"
+        component={TaskList}
         options={{
           tabBarLabel: 'Мои задачи',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="format-list-bulleted" size={size} color={color} />;
-            // return <Icon name="home" size={size} color={color} />;
           },
         }}
-      >
-        {(props) => (
-          <TaskList
-            {...props}
-            taskList={taskList}
-          />
-        )}  
-      </Tab.Screen>
+      />
       <Tab.Screen
         name="GroupTaskList"
+        component={TaskList}
         options={{
           tabBarLabel: 'Групповые задачи',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="format-list-bulleted" size={size} color={color} />;
-            // return <Icon name="cog" size={size} color={color} />;
           },
         }}
-      >
-        {(props) => (
-          <TaskList
-            {...props}
-            taskList={taskList}
-          />
-        )}
-      </Tab.Screen>
+      />
+        
       <Tab.Screen
         name="FavoriteUsers"
+        component={FavoriteUsers}
         options={{
           tabBarLabel: 'Мои друзья',
           tabBarIcon: ({ color, size }) => {
             return <Icon name="account-multiple" size={size} color={color} />;
           },
         }}
-      >
-        {(props) => (
-          <FavoriteUsers
-            {...props}
-          />
-        )}
-      </Tab.Screen>
+      />
+       
       <Tab.Screen
         name="Setting"
         options={{

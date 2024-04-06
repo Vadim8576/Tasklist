@@ -1,27 +1,28 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List, Checkbox, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
 import appStore from '../../store/appStore';
 import ContextMenu from '../../components/ContextMenu/ContextMenu';
+import { _Text } from 'react-native';
 
 
 //SubTaskList
 export default ListItem = observer(({ item, taskIndex, taskListId, navigation }) => {
 
   const theme = useTheme();
-  const [checked, setChecked] = useState(item.complited)
   const [menuVisible, setMenuVisible] = useState(false);
+
+  console.log('SubTaskList= ', item, item.complited)
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
 
   const titleStyle = {
-    textDecorationLine: checked ? 'line-through' : 'none',
+    textDecorationLine: item.complited ? 'line-through' : 'none',
     textDecorationColor: theme.colors.primary,
-    color: checked ? theme.colors.primary : '#000',
-    fontSize: 14
+    color: item.complited ? theme.colors.primary : '#000',
   }
 
   const descriptionStyle = {
@@ -31,16 +32,13 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
   }
 
   const onChange = () => {
-    const complited = !checked
-    setChecked(complited)
     appStore.updateTask({
       taskIndex,
       title: item.title,
       comment: item.comment,
-      complited: complited,
+      complited: !item.complited,
       taskListId
     })
-
   }
 
   return (
@@ -52,13 +50,16 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
           title={item.title}
           description={item.comment}
           descriptionStyle={descriptionStyle}
-          titleStyle={styles.title}
-          left={props =>
+          titleStyle={[
+            titleStyle,
+            styles.title
+          ]}
+          left={_ =>
             <Checkbox
-              status={checked ? 'checked' : 'unchecked'}
+              status={item.complited ? 'checked' : 'unchecked'}
               onPress={onChange}
             />}
-          right={props =>
+          right={_ =>
             <ContextMenu
               navigation={navigation}
               menuVisible={menuVisible}

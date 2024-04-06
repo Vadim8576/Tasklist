@@ -25,11 +25,12 @@ export default FavoriteUsers = observer((props) => {
 
 
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Мои друзья'
-    })
-  }, [])
+
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     title: 'Мои друзья'
+  //   })
+  // }, [])
 
 
 

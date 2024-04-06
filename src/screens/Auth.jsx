@@ -22,8 +22,8 @@ export default Auth = observer(({ navigation }) => {
   const login = async (email, password) => {
 
     await singIn(email.trim(), password.trim())
-    // navigation.navigate('TabNavigator', { name: 'TabNavigator' })
-    navigation.navigate('FavoriteUsers', { name: 'FavoriteUsers' })
+    navigation.navigate('TabNavigator', { name: 'TabNavigator' })
+    // navigation.navigate('FavoriteUsers', { name: 'FavoriteUsers' })
   }
 
 
@@ -46,7 +46,7 @@ export default Auth = observer(({ navigation }) => {
     >
       <RadioButton.Group onValueChange={value => changeHandler(value)} value={email}>
         <RadioButton.Item label="1@mail.ru" value="1@mail.ru" />
-        <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
+        <RadioButton.Item label="123@gmail.com" value="123@gmail.com" />
         <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
       </RadioButton.Group>
 

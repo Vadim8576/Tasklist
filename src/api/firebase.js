@@ -179,7 +179,7 @@ export const fb = {
           .then(() => {
             console.log('Друг успешно добавлена')
 
-            setSuccessMessage()
+            // setSuccessMessage()
           })
           .catch((error) => {
             console.log('Ошибка при добавлении друга: ', error)
@@ -250,7 +250,7 @@ export const fb = {
         setDoc(newDocRef, updatedData)
           .then(() => {
             console.log('ID успешно добавлен в данные документа.');
-            setSuccessMessage()
+            // setSuccessMessage()
           })
           .catch((error) => {
             console.error('Ошибка при добавлении ID в данные документа:', error);
@@ -278,7 +278,7 @@ export const fb = {
     })
       .then((doc) => {
         console.log('Список задач успешно обновлен')
-        setSuccessMessage()
+        // setSuccessMessage()
       })
       .catch((error) => {
         console.log('Ошибка обновления названия списка задач', error)
@@ -289,7 +289,7 @@ export const fb = {
   removeTaskList: (taskListId) => {
     deleteDoc(doc(db, DB_NAME, taskListId))
       .then(_ => {
-        setSuccessMessage()
+        // setSuccessMessage()
       })
       .catch((error) => {
         setErrorMessage()
@@ -320,7 +320,7 @@ export const fb = {
         })
           .then(() => {
             console.log('Таска успешно добавлена')
-            setSuccessMessage()
+            // setSuccessMessage()
           })
           .catch((error) => {
             console.log('Ошибка добавления таски: ', error)
@@ -358,7 +358,7 @@ export const fb = {
         })
           .then(() => {
             console.log('Таска успешно обновлена')
-            setSuccessMessage()
+            // setSuccessMessage()
           })
           .catch((error) => {
             console.log('Ошибка обновления таски: ', error)
@@ -394,7 +394,7 @@ export const fb = {
         })
           .then(() => {
             console.log('Таска успешно удалена')
-            setSuccessMessage()
+            // setSuccessMessage()
           })
           .catch((error) => {
             console.log('Ошибка удаления таски: ', error)
@@ -423,7 +423,7 @@ export const fb = {
               setErrorMessage()
             })
         })
-        setSuccessMessage()
+        // setSuccessMessage()
       })
       .catch((error) => {
         setErrorMessage()
