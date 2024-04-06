@@ -67,10 +67,12 @@ export const fb = {
 
   createUser: (newUserData) => {
 
-    const email = '1@mail.ru'
-    const nickName = ''
+    const {email, password, nickName, setNewUserCreated} = newUserData
 
-    createUserWithEmailAndPassword(auth, email, '123456')
+    // const email = '1@mail.ru'
+    // const nickName = ''
+
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
 
         const user = userCredential.user;
@@ -78,7 +80,7 @@ export const fb = {
         const data = {
           email,
           nickName,
-          friends: ['X4hFQZ8eNwROulLW4BRY4b70gmA3', 'y4Q2IaI2TSSAhPEmJGC1SvhnCnz1'],
+          friends: [],
           id: user.uid
         }
 
@@ -88,16 +90,18 @@ export const fb = {
         setDoc(newDocRef, data)
           .then(() => {
             console.log('Пользователь успешно добавлен.');
-
+            setNewUserCreated('yes')
           })
           .catch((error) => {
             console.log('Ошибка при добавлении данных пользователя', error)
             setErrorMessage()
+            setNewUserCreated('error')
           })
       })
       .catch((error) => {
         console.log('Ошибка при добавлении пользователя', error)
         setErrorMessage()
+        setNewUserCreated('error')
       })
 
   },

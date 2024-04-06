@@ -5,11 +5,13 @@ import MessageSnackBar from './MessageSnackBar';
 
 export default AppError = observer(() => {
 
+  if(!errorStore.message.isError && !errorStore.message.isSuccess) return null
+
+  
   const onDismissSnackBar = () => {
     errorStore.resetMessage() 
   }
 
-  if(!errorStore.message.isError && !errorStore.message.isSuccess) return null
 
   return (
     <MessageSnackBar   

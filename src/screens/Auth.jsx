@@ -5,6 +5,7 @@ import { RadioButton } from 'react-native-paper';
 import { colors } from "../const/constants"
 import authStore from '../store/authStore'
 import { useTheme, Button, TextInput } from 'react-native-paper';
+import Input from "../UI/Input";
 
 
 export default Auth = observer(({ navigation }) => {
@@ -19,7 +20,7 @@ export default Auth = observer(({ navigation }) => {
 
   const { singIn } = authStore
 
-  const login = async (email, password) => {
+  const onSubmit = async () => {
 
     await singIn(email.trim(), password.trim())
     navigation.navigate('TabNavigator', { name: 'TabNavigator' })
@@ -37,6 +38,11 @@ export default Auth = observer(({ navigation }) => {
     setEmail(value)
   }
 
+
+  const goToRegistration = () => {
+    navigation.navigate('Registration')
+  }
+
   return (
     <View style={
       [
@@ -52,54 +58,35 @@ export default Auth = observer(({ navigation }) => {
 
 
       <View style={styles.inputContainer}>
-        <TextInput
-          theme={{ colors: { onSurfaceVariant: theme.colors.surfaceVariant } }}
-          textColor={theme.colors.surface}
-          cursorColor={theme.colors.background}
-          activeUnderlineColor={theme.colors.surface}
-          label="Login"
-          style={[
-            styles.input,
-            { backgroundColor: theme.colors.primary },
-          ]}
-          onChangeText={setEmail}
-          value={email}
-          placeholder='Введите email'
+        <Input
+          labelText='Login'
+          placeholderText='Введите email'
+          secure={false}
+          valueText={email}
+          onChange={setEmail}
         />
-        <TextInput
-          theme={{ colors: { onSurfaceVariant: theme.colors.surfaceVariant } }}
-          textColor={theme.colors.surface}
-          cursorColor={theme.colors.background}
-          activeUnderlineColor={theme.colors.surface}
-          label="Password"
-          style={[
-            styles.input,
-            { backgroundColor: theme.colors.primary }
-          ]}
-          onChangeText={setPassword}
-          value={password}
-          placeholder='Введите пароль'
-          secureTextEntry={true}
+        <Input
+          labelText='Password'
+          placeholderText='Введите пароль'
+          secure={true}
+          valueText={password}
+          onChange={setPassword}
         />
         <Button
           style={styles.loginButton}
           mode='contained'
-          onPress={() => login(email, password)}
+          onPress={onSubmit}
         >
           Войти
         </Button>
         <Button
           textColor={theme.colors.tertiaryContainer}
           // mode='contained'
-          onPress={() => login(email, password)}
+          onPress={goToRegistration}
         >
           Регистрация
         </Button>
       </View>
-
-
-
-
     </View>
   )
 })
@@ -111,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    width: '80%',
+    width: '70%',
   },
   input: {
     marginBottom: 10,

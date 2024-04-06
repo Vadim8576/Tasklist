@@ -9,10 +9,17 @@ export default AddButton = observer(({
   navigation,
   type,
   taskListId = null,
-  screenName
 }) => {
 
   const visible = !errorStore.message.isError && !errorStore.message.isSuccess
+
+  onPressHandler = () => {
+    navigation.navigate(
+      'DialogScreen', {
+      type,
+      taskListId
+    })
+  }
 
   if (!visible) return null
 
@@ -21,12 +28,7 @@ export default AddButton = observer(({
       size='medium'
       icon='plus'
       style={styles.fab}
-      onPress={() => navigation.navigate(
-        'DialogScreen', {
-        type,
-        taskListId,
-        screenName
-      })}
+      onPress={onPressHandler}
     />
   );
 })

@@ -19,7 +19,7 @@ import CustomInput from "../components/CustomInput";
 export default DialogScreen = observer(({ route, navigation }) => {
   const theme = useTheme()
   const [commentVisible, setCommentVisible] = useState(false)
-  const {type, taskListId = null, taskIndex = null, screenName} = route.params
+  const {type, taskListId = null, taskIndex = null} = route.params
 
   const {
     onSubmit,
@@ -31,7 +31,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
 
 
   // console.log('dialog type = ', type)
-  console.log('DialogScreen screenName = ', screenName)
+  // console.log('DialogScreen screenName = ', screenName)
 
   const now = new Date()
 

@@ -1,23 +1,14 @@
 import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List, Checkbox, TouchableRipple } from 'react-native-paper';
-import { useState } from 'react';
 import appStore from '../../store/appStore';
-import ContextMenu from '../../components/ContextMenu/ContextMenu';
-import { _Text } from 'react-native';
+import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 
 
 //SubTaskList
 export default ListItem = observer(({ item, taskIndex, taskListId, navigation }) => {
 
   const theme = useTheme();
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  console.log('SubTaskList= ', item, item.complited)
-
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
-
 
   const titleStyle = {
     textDecorationLine: item.complited ? 'line-through' : 'none',
@@ -62,15 +53,11 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
           right={_ =>
             <ContextMenu
               navigation={navigation}
-              menuVisible={menuVisible}
-              closeMenu={closeMenu}
-              openMenu={openMenu}
               taskListId={taskListId}
               taskIndex={taskIndex}
             />
           }
         />
-
       </TouchableRipple>
     </View>
   )

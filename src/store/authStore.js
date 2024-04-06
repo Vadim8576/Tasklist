@@ -7,16 +7,22 @@ import { logOut } from '../api/firebase'
 class Auth {
 
   user = {};
+  
+  newUserCreated = 'no' // 'yes', 'no' или 'error'
   friends = []
   foundFriend = {}
-  isLoggedIn = false;
+  isLoggedIn = false
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 
   setUser = (user) => {
     this.user = user
+  }
+
+  setNewUserCreated = (created) => {
+    this.newUserCreated = created
   }
 
   setError = (error) => {
@@ -35,8 +41,8 @@ class Auth {
     this.isLoggedIn = bool
   }
 
-  createUser = () => {
-    fb.createUser()
+  createUser = ({email, password, nickName}) => {
+    fb.createUser({email, password, nickName, setNewUserCreated: this.setNewUserCreated})
   }
 
   resetFriends = () => {

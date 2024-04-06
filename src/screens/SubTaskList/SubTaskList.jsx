@@ -14,12 +14,6 @@ export default SubTaskList = observer(({ route, navigation }) => {
   const { title, createdAt, taskListId } = taskList
 
 
-
-  // console.log('SubTaskList tasks: ', appStore?.tasks)
-  // console.log('SubTaskList item: ', taskList)
-  // console.log('item.taskListId ', taskListId)
-  // console.log('item.taskListId ', createdAt)
-
   useLayoutEffect(() => {
     navigation.setOptions({
       title,
@@ -55,13 +49,6 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    paddingTop: 30,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
   footer: {
     height: 90
   }

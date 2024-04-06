@@ -1,6 +1,6 @@
 import React from 'react';
 import { PaperProvider } from 'react-native-paper';
-import Navigation from './src/screens/Navigations';
+import Navigation from './src/Navigations/Navigations';
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,

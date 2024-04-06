@@ -1,17 +1,15 @@
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { View, StyleSheet } from 'react-native';
-
+import { StyleSheet } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Screen, Text, BottomNavigation, useTheme } from 'react-native-paper';
+import { BottomNavigation, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import TaskList from './TaskList/TaskList';
 import { useAuth } from "../hooks/useAuth";
-import { useEffect, useState } from "react";
 import appStore from "../store/appStore";
 import authStore from "../store/authStore";
-import FavoriteUsers from "./FavoriteUsers/FavoriteUsers";
-import AppBar from "../components/AppBar";
+import TaskList from '../screens/TaskList/TaskList';
+import FavoriteUsers from "../screens/FavoriteUsers/FavoriteUsers";
 
 
 
@@ -60,11 +58,9 @@ export default TabNavigator = observer(() => {
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
-        // header: (props) => <AppBar {...props} />,
       })}
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
-          // shifting={true}
           // getBadge={(props) => {
           //   return props.route.name === 'TaskList' ? '1' : ''
           // }}

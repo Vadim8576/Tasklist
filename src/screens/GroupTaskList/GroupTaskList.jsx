@@ -6,7 +6,7 @@ import appStore from '../../store/appStore';
 import { dialogActions } from '../../const/constants'
 import AddButton from '../../components/AddButton';
 import { useListFilter } from '../../hooks/useListFilter';
-import ListItem from '../../components/ListItem';
+import ListItem from '../TaskList/ListItem';
 
 
 

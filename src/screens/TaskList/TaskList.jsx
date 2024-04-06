@@ -3,25 +3,18 @@ import { FlatList, View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { dialogActions } from '../../const/constants';
 import AddButton from '../../components/AddButton';
-import ListItem from '../../components/ListItem';
+import ListItem from './ListItem';
 import { useListFilter } from '../../hooks/useListFilter';
 import appStore from '../../store/appStore';
 
 
-export default TaskList = observer((props) => {
-
-  // console.log('props = ', props)
-  const {navigation, route} = props
+export default TaskList = observer(({navigation, route}) => {
 
   const taskList = appStore.taskList
-
   const screenName = route.name
   const filteredList = useListFilter(taskList, screenName)
 
   console.log('mAINtASKlIST render')
-  // console.log('mAINtASKlIST navigation = ', navigation)
-  console.log('mAINtASKlIST screen name = ', route.name)
-  // console.log('mAINtASKlIST screen name = ', route)
 
 
   return (
@@ -34,7 +27,6 @@ export default TaskList = observer((props) => {
               key={item.taskListId}
               taskList={item}
               navigation={navigation}
-              screenName={screenName}
             />
           )}
           ListFooterComponent={<View style={styles.footer} />}
@@ -43,7 +35,6 @@ export default TaskList = observer((props) => {
       <AddButton
         navigation={navigation}
         type={dialogActions.addTaskList}
-        screenName={screenName}
       />
     </>
 

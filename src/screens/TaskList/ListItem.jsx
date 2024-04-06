@@ -1,24 +1,17 @@
 import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List, TouchableRipple } from 'react-native-paper';
-import { useState } from 'react';
-import { dateConversion } from '../helpers/dateСonversion';
-import ContextMenu from './ContextMenu/ContextMenu';
-import UsersList from './UsersList';
+import { dateConversion } from '../../helpers/dateСonversion';
+import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
+import UsersList from '../../components/UsersList';
 
 
 
 
 //TaskList
-export default ListItem = observer(({ taskList, navigation, screenName }) => {
+export default ListItem = observer(({ taskList, navigation }) => {
 
   const theme = useTheme();
-  const [menuVisible, setMenuVisible] = useState(false)
-
-
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
-
 
   return (
     <View style={styles.listItemWrapper}>
@@ -30,25 +23,21 @@ export default ListItem = observer(({ taskList, navigation, screenName }) => {
         }
       >
         <List.Item
+            title={taskList.title}
           style={{
             paddingRight: 0,
           }}
           titleStyle={styles.title}
-          title={taskList.title}
           description={
             taskList.groupUsersIds.length === 0
               ? dateConversion(taskList.createdAt)
-              : (_) => <UsersList users={taskList.groupUsersIds} />
+              : () => <UsersList users={taskList.groupUsersIds} />
           }
           descriptionStyle={styles.description}
-          right={_ =>
+          right={() =>
             <ContextMenu
-              menuVisible={menuVisible}
-              closeMenu={closeMenu}
-              openMenu={openMenu}
-              taskListId={taskList.taskListId}
               navigation={navigation}
-              screenName={screenName}
+              taskListId={taskList.taskListId}
             />
           }
         />

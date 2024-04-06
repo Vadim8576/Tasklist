@@ -4,34 +4,12 @@ import {
   NavigationContainer
 } from '@react-navigation/native';
 
-import Auth from './Auth';
+import Auth from '../screens/Auth';
 import AppBar from '../components/AppBar';
-import DialogScreen from './DialogScreen';
+import DialogScreen from '../screens/DialogScreen';
 import TabNavigator from './TabNavigator';
-import SubTaskList from './SubTaskList/SubTaskList';
-import FavoriteUsers from './FavoriteUsers/FavoriteUsers';
-
-
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { useState } from 'react';
-
-
-
-function getHeaderTitle(route) {
-  // If the focused route is not found, we need to assume it's the initial screen
-  // This can happen during if there hasn't been any navigation inside the screen
-  // In our case, it's "Feed" as that's the first screen inside the navigator
-  const routeName =
-    getFocusedRouteNameFromRoute(route) ?? 'FavoriteUsers';
-
-  switch (routeName) {
-    case 'FavoriteUsers':
-      return 'Мои друзья';
-  }
-}
-
-
-
+import SubTaskList from '../screens/SubTaskList/SubTaskList';
+import Registration from '../screens/Registration';
 
 
 const Stack = createNativeStackNavigator();
@@ -49,6 +27,7 @@ export default Navigation = ({ combinedTheme }) => {
         }}
       >
         <Stack.Screen name='Auth' component={Auth} options={{ title: 'Авторизация' }} />
+        <Stack.Screen name='Registration' component={Registration} options={{ title: 'Регистрация' }} />
         <Stack.Screen name='TabNavigator'>
           {(props) => <TabNavigator {...props} />}
         </Stack.Screen>
