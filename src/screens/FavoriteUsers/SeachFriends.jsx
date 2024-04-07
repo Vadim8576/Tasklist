@@ -11,30 +11,45 @@ import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
 
 
-export default SeachFriends = observer((props) => {
+export default SeachFriends = observer(() => {
+  const theme = useTheme()
+  const { user } = useAuth()
 
+  const [foundFriend, setFoundFriend] = useState(null)
   const [friendId, setFriendId] = useState('')
   const [errorText, setErrorText] = useState('')
-  const [timer, setTimer] = useState('')
-  const theme = useTheme()
-
-  const { user } = useAuth()
+  
 
   console.log('SeachFriends render')
 
-  const onSubmit = () => {
+
+  const onSubmit = async () => {
     if (friendId === user.uid) {
       setErrorText('Это ваш ID!')
-      // setFriendId('')
       return
     }
 
-    authStore.getFriendById(friendId)
+    const found = await authStore.getFriendById(friendId)
+    setFoundFriend(found)
+
+    if (found === null) {
+      setErrorText('Пользователь с таким ID не существует!')
+    }
   }
 
+
+  
   const clearInput = () => {
     setFriendId('')
+    setErrorText('')
+    setFoundFriend(null)
   }
+
+  useEffect(() => {
+    if(friendId.length === 0) clearInput()
+  }, [friendId])
+
+
 
   // useEffect(() => {
   //   if(errorText !== '') setTimer(new Date)
@@ -72,7 +87,16 @@ export default SeachFriends = observer((props) => {
             onChangeText={setFriendId}
             multiline={false}
             numberOfLines={1}
-            right={<TextInput.Icon name="lock-outline" />}
+            right={
+              friendId.length && (
+                <TextInput.Icon
+                  size={20}
+                  color={theme.colors.outline}
+                  icon="close"
+                  onPress={clearInput}
+                />
+              )
+            }
           />
         </View>
         <View style={styles.submit}>
@@ -93,11 +117,11 @@ export default SeachFriends = observer((props) => {
         </View>
       </View>
 
-      <HelperText type="error" visible={errorText !== ''}>
+      <HelperText style={styles.HelperText} type="error" visible={errorText !== ''}>
         {errorText}
       </HelperText>
 
-      {errorText === '' && <FoundFriend clearInput={clearInput} />}
+      {(errorText === '' && foundFriend) && <FoundFriend foundFriend={foundFriend} clearInput={clearInput} />}
 
 
     </>
@@ -117,7 +141,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     flexGrow: 0,
-    flexBasis: 40,
+    flexBasis: RIGHT_BUTTON_SIZE,
     flexShrink: 0,
   },
   text: {
@@ -135,5 +159,9 @@ const styles = StyleSheet.create({
   },
 
   pressable: commonStyles.pressable,
+  HelperText : {
+    paddingBottom: 30,
+    paddingLeft: RIGHT_BUTTON_SIZE
+  }
 
 });

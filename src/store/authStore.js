@@ -10,7 +10,7 @@ class Auth {
   
   newUserCreated = 'no' // 'yes', 'no' или 'error'
   friends = []
-  foundFriend = {}
+  foundFriend = null
   isLoggedIn = false
 
   constructor() {
@@ -49,19 +49,21 @@ class Auth {
     this.friends= []
   }
 
-  getFriends = (userId) => {
-    this.resetFriends()
-    fb.getFriends({userId, setFriends: this.setFriends})
+  getFriends = async (userId) => {
+    // this.resetFriends()
+    this.setFriends(await fb.getFriends(userId))
   }
 
   setFriends = (friend) => {
     console.log('authStore friend = ', friend)
-    this.friends = [...this.friends, friend]
+    this.friends = friend
+    // this.friends = [...this.friends, friend]
   }
 
   getFriendById = async  (friendId) => {
-    this.setFoundFriend({})
-    this.setFoundFriend(await fb.getFriendById(friendId || {}))
+    // this.setFoundFriend({})
+    this.setFoundFriend(await fb.getFriendById(friendId))
+    return this.foundFriend
   }
 
   setFoundFriend = (foundFriend) => {
@@ -70,8 +72,14 @@ class Auth {
 
   addFriend = async (ids) => {
     await fb.addFriend(ids)
+    console.log('после firebase addFriend')
     this.getFriends(ids.userId)
-    this.setFoundFriend({})
+    this.setFoundFriend(null)
+  }
+
+  removeFriend = async (ids) => {
+    await fb.removeFriend(ids)
+    this.getFriends(ids.userId)
   }
 
 }

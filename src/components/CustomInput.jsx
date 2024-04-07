@@ -29,7 +29,6 @@ export default CustomInput = observer(({
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
-    
     />
   )
 })

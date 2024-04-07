@@ -8,13 +8,14 @@ import { useAuth } from '../../hooks/useAuth';
 
 
 
-export default FoundFriends = observer(({clearInput}) => {
+export default FoundFriends = observer(({foundFriend, clearInput}) => {
 
   const theme = useTheme()
 
   const {user} = useAuth()
 
   console.log('FoundFriends render')
+  console.log('foundFriend = ', foundFriend)
 
 
 
@@ -23,7 +24,8 @@ export default FoundFriends = observer(({clearInput}) => {
     clearInput()
   }
 
-  if(!authStore.foundFriend?.nickName && !authStore.foundFriend?.id) return null
+  // if(!authStore.foundFriend?.nickName && !authStore.foundFriend?.id) return null
+  // if(authStore.foundFriend = {}) return null
 
 
     // y4Q2IaI2TSSAhPEmJGC1SvhnCnz1
@@ -38,11 +40,11 @@ export default FoundFriends = observer(({clearInput}) => {
         style={{
           paddingRight: 10,
         }}
-        title={authStore.foundFriend?.nickName}
-        description={`ID: ${authStore.foundFriend?.id}`}
+        title={foundFriend.nickName}
+        description={`ID: ${foundFriend.id}`}
         descriptionStyle={{ fontSize: 12 }}
         left={() => (
-          <Avatar.Text size={30} label={authStore.foundFriend?.nickName.substring(0, 1)} />
+          <Avatar.Text size={30} label={foundFriend.nickName.substring(0, 1)} />
         )}
         right={() => (
           <Pressable

@@ -67,7 +67,7 @@ export const fb = {
 
   createUser: (newUserData) => {
 
-    const {email, password, nickName, setNewUserCreated} = newUserData
+    const { email, password, nickName, setNewUserCreated } = newUserData
 
     // const email = '1@mail.ru'
     // const nickName = ''
@@ -106,35 +106,29 @@ export const fb = {
 
   },
 
-  getFriends: (payload) => {
-
-    const { setFriends, userId } = payload
+  getFriends: async (userId) => {
     const q = query(collection(db, 'users'), where('id', '==', userId));
 
+    const docs = await getDocs(q)
+    const friendsIds = docs.docs[0].data().friends
 
-    getDocs(q)
-      .then((doc) => {
-        const friendsIds = doc.docs[0].data().friends
+    if (friendsIds.length === 0) return []
 
-        friendsIds.forEach((id) => {
-          const q = query(collection(db, 'users'), where('id', '==', id));
+    const friendsPromises = friendsIds.map(async (id) => {
+      const q = query(collection(db, 'users'), where('id', '==', id));
+      const friend = await getDocs(q)
 
-          getDocs(q)
-            .then((doc) => {
-              setFriends({
-                nickName: doc.docs[0].data().nickName,
-                id: doc.docs[0].data().id,
-              })
-            })
-            .catch((error) => {
-              console.error('Ошибка получения данных друзей', error)
-            })
-        })
-      })
-      .catch((error) => {
-        console.error('Ошибка получения друзей', error)
-        setErrorMessage()
-      })
+      if (!friend) return null
+      return {
+        nickName: friend.docs[0].data().nickName,
+        id: friend.docs[0].data().id,
+      }
+    })
+
+    const friends = await Promise.all(friendsPromises);
+    console.log('friends = ', friends)
+
+    return friends
 
   },
 
@@ -143,22 +137,23 @@ export const fb = {
 
 
   getFriendById: async (friendId) => {
-    const q = query(collection(db, 'users'), where('id', '==', friendId));
 
-    const friend = await getDocs(q)
-      .then((doc) => {
-        console.log('getFriendById = ', doc.docs[0].data())
-        return {
-          id: doc.docs[0].data().id,
-          nickName: doc.docs[0].data().nickName
-        }
-      })
-      .catch((error) => {
-        console.error('Ошибка получения друга', error)
-        setErrorMessage()
-      })
-    console.log('friend = ', friend)
-    return friend
+
+    try {
+      const q = query(collection(db, 'users'), where('id', '==', friendId));
+
+      const friend = await getDocs(q)
+
+      if (!friend.docs[0]) return null
+
+      const id = friend.docs[0].data().id
+      const nickName = friend.docs[0].data().nickName
+
+      return { id, nickName }
+    } catch (error) {
+      console.error('Ошибка получения друга', error)
+      setErrorMessage()
+    }
   },
 
 
@@ -169,32 +164,84 @@ export const fb = {
 
     if (!userId && !friendId) return
 
+
+    console.log('firebase addFriend')
+    try {
+      const q = query(collection(db, 'users'), where('id', '==', userId));
+
+      const user = await getDocs(q)
+
+      if (user) {
+        const friends = [...user.docs[0].data().friends, friendId]
+        const docId = user.docs[0].id
+
+        console.log('friends = ', user.docs[0].data())
+        const newDocRef = doc(db, 'users', docId);
+
+        await updateDoc(newDocRef, {
+          friends
+        })
+
+      }
+    } catch (error) {
+      console.log('Ошибка получения документа для обновления', error)
+      setErrorMessage()
+    }
+
+  },
+
+
+
+  removeFriend: async (ids) => {
+
+    const { userId, friendId } = ids
+
+    console.log('friendId = ', friendId)
+    console.log('userId = ', userId)
+
+    if (!userId && !friendId) return
+
     const q = query(collection(db, 'users'), where('id', '==', userId));
+
 
     await getDocs(q)
       .then((data) => {
-        const friends = [...data.docs[0].data().friends, friendId]
+        const friends = data.docs[0].data().friends.filter(id => id !== friendId)
+
         const docId = data.docs[0].id
+
+
+        console.log('updateFriends = ', friends)
+
+
+
         const newDocRef = doc(db, 'users', docId);
+
 
         updateDoc(newDocRef, {
           friends
         })
           .then(() => {
-            console.log('Друг успешно добавлена')
+            console.log('Друг успешно удален')
 
             // setSuccessMessage()
           })
           .catch((error) => {
-            console.log('Ошибка при добавлении друга: ', error)
+            console.log('Ошибка при удалении друга: ', error)
             setErrorMessage()
           })
+
       })
       .catch((error) => {
-        console.log('Ошибка получения документа для обновления', error)
+        console.log('Ошибка получения документа для удаления', error)
         setErrorMessage()
       })
+
   },
+
+
+
+
 
 
 

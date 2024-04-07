@@ -5,14 +5,23 @@ import { observer } from "mobx-react-lite";
 import authStore from '../../store/authStore';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import commonStyles from './commonStyles';
+import { useAuth } from '../../hooks/useAuth';
 
 
 
-export default FavoriteUsers = observer((props) => {
+export default FavoriteUsers = observer(() => {
   const theme = useTheme()
 
+  const {user} = useAuth()
   console.log('FriensLisrt render')
   console.log('FriensLisrt friend List = ', authStore.friends)
+
+
+
+  const removeFriend = (friendId) => {
+    
+    authStore.removeFriend({friendId, userId: user.uid})
+  }
 
 
   return (
@@ -37,7 +46,7 @@ export default FavoriteUsers = observer((props) => {
             )}
             right={() => (
               <Pressable
-                onPress={() => console.log('Delete press')}
+                onPress={() => removeFriend(item.id)}
                 style={({ pressed }) => [
                   { backgroundColor: pressed ? theme.colors.primaryContainer : theme.colors.background },
 
@@ -47,7 +56,7 @@ export default FavoriteUsers = observer((props) => {
                 <List.Icon
                   color={theme.colors.secondary}
                   style={styles.rightIcon}
-                  icon="delete-forever-outline"
+                  icon="close"
                 />
               </Pressable>
             )}

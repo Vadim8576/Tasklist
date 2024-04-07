@@ -8,25 +8,29 @@ import { useTheme, Button, TextInput } from 'react-native-paper';
 import Input from "../UI/Input";
 
 
-export default Auth = observer(({ navigation }) => {
-
-  //удалить
-  // const [email, setEmail] = useState('321@gmail.com')
-  const [email, setEmail] = useState('1@mail.ru')
-  const [password, setPassword] = useState('123456')
-
+export default Auth = observer(({ navigation, route }) => {
   const theme = useTheme();
-
-
   const { singIn } = authStore
 
-  const onSubmit = async () => {
+  const [email, setEmail] = useState('1@mail.ru')
+  const [password, setPassword] = useState('123456')
+  
+  const newEmail = route.params?.email || null
+  const newPassword = route.params?.password || null
 
+  const onSubmit = async () => {
     await singIn(email.trim(), password.trim())
     navigation.navigate('TabNavigator', { name: 'TabNavigator' })
     // navigation.navigate('FavoriteUsers', { name: 'FavoriteUsers' })
   }
 
+
+  useEffect(() => {
+    if(newEmail && newPassword) {
+      setEmail(newEmail)
+      setPassword(newPassword)
+    }
+  }, [newEmail, newPassword])
 
   // удалить
   useEffect(() => {
@@ -55,7 +59,6 @@ export default Auth = observer(({ navigation }) => {
         <RadioButton.Item label="123@gmail.com" value="123@gmail.com" />
         <RadioButton.Item label="321@gmail.com" value="321@gmail.com" />
       </RadioButton.Group>
-
 
       <View style={styles.inputContainer}>
         <Input

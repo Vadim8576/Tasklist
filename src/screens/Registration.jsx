@@ -22,17 +22,12 @@ export default Registration = observer(({ navigation }) => {
   onContinue = () => {
     authStore.setNewUserCreated('no')
 
-    navigation.goBack()
+    navigation.navigate('Auth', {email, password})
   }
 
   onError = () => {
     authStore.setNewUserCreated('no')
   }
-
-
-  useEffect(() => {
-    authStore.newUserCreated ? setShowMessage(true) : setShowMessage(false)
-  }, [authStore.newUserCreated])
 
 
 
@@ -118,7 +113,7 @@ export default Registration = observer(({ navigation }) => {
                 textColor={theme.colors.tertiaryContainer}
                 style={styles.button}
                 mode='contained'
-                onPress={onError}>Попробовать</Button>
+                onPress={onError}>Повторить</Button>
             </>
           )
         }[authStore.newUserCreated]
