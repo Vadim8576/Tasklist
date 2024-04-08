@@ -14,6 +14,8 @@ export default AppBar = ({ navigation, route, options, back }) => {
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
   const title = route.name === 'TabNavigator' ? '' : getHeaderTitle(options, route.name);
+  const description = options?.description || ''
+  
 
   const removeAllTaskList = () => {
     appStore.removeAllTaskList()
@@ -38,11 +40,11 @@ export default AppBar = ({ navigation, route, options, back }) => {
             >
               {title || ''}
             </Text>
-            {options?.subtitle &&
+            {description &&
               <Text
                 style={{ color: theme.colors.secondaryContainer, fontSize: 10 }}
               >
-                {dateConversion(options?.description)}
+                {dateConversion(description)}
               </Text>
             }
           </>

@@ -12,15 +12,15 @@ import { useAuth } from '../../hooks/useAuth';
 export default FavoriteUsers = observer(() => {
   const theme = useTheme()
 
-  const {user} = useAuth()
+  const { user } = useAuth()
   console.log('FriensLisrt render')
   console.log('FriensLisrt friend List = ', authStore.friends)
 
 
 
   const removeFriend = (friendId) => {
-    
-    authStore.removeFriend({friendId, userId: user.uid})
+
+    authStore.removeFriend({ friendId, userId: user.uid })
   }
 
 
@@ -42,7 +42,14 @@ export default FavoriteUsers = observer(() => {
             description={`ID: ${item.id}`}
             descriptionStyle={styles.description}
             left={() => (
-              <Avatar.Text size={30} label={item.nickName.substring(0, 1)} />
+              <View style={{ justifyContent: 'center' }}>
+                <Avatar.Text
+                  color="white"
+                  style={{ backgroundColor: theme.colors.tertiary }}
+                  size={28}
+                  label={item.nickName.substring(0, 1)}
+                />
+              </View>
             )}
             right={() => (
               <Pressable

@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useTheme, List, Checkbox, TouchableRipple } from 'react-native-paper';
 import appStore from '../../store/appStore';
 import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
@@ -19,7 +20,7 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
   const descriptionStyle = {
     ...titleStyle,
     fontSize: 12,
-    color: theme.colors.secondary
+    color: item.complited ? theme.colors.primaryContainer : theme.colors.secondary,
   }
 
   const onChange = () => {
@@ -35,6 +36,7 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
   return (
     <View style={styles.listItemWrapper}>
       <TouchableRipple
+        background={theme.colors.surfaceVariant}
         onPress={() => console.log(item.title)}
       >
         <List.Item
@@ -45,12 +47,22 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
             titleStyle,
             styles.title
           ]}
-          left={_ =>
-            <Checkbox
-              status={item.complited ? 'checked' : 'unchecked'}
+          style={[
+            styles.listItem,
+            { backgroundColor: theme.colors.background }
+          ]}
+          left={() =>
+            <BouncyCheckbox
+              size={24}
+              fillColor={theme.colors.primary}
+              unFillColor={theme.colors.background}
+              // iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 2 }}
               onPress={onChange}
-            />}
-          right={_ =>
+              isChecked={item.complited}
+            />
+          }
+          right={() =>
             <ContextMenu
               navigation={navigation}
               taskListId={taskListId}
@@ -69,12 +81,24 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    borderBottomWidth: 1,
-    borderColor: '#999',
-    borderStyle: 'solid',
-    paddingLeft: 20
+    marginBottom: 5,
+  },
+  listItem: {
+    // paddingLeft: 10,
+    // paddingRight: 5,
+    // borderRadius: 10,
+    
+    paddingLeft: 15,
+    paddingRight: 5,
+    borderRadius: 10,
+    paddingTop: 2,
+    paddingBottom: 2
   },
   title: {
+    // color: '#000',
     fontSize: 14
   },
+  description: {
+    fontSize: 9
+  }
 })

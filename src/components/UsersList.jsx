@@ -17,7 +17,11 @@ export default GroupUserList = observer((users) => {
           data={users.users}
           renderItem={(_) => (
             <View style={styles.avatar}>
-              <Avatar.Text size={22} label="XD" />
+              <Avatar.Text
+                style={{ backgroundColor: theme.colors.tertiary } }
+                size={22}
+                label="XD"
+              />
             </View>
           )}
           ListFooterComponent={

@@ -6,10 +6,12 @@ import AddButton from '../../components/AddButton';
 import ListItem from './ListItem';
 import { useListFilter } from '../../hooks/useListFilter';
 import appStore from '../../store/appStore';
+import { useTheme } from 'react-native-paper';
 
 
 export default TaskList = observer(({navigation, route}) => {
 
+  const theme = useTheme()
   const taskList = appStore.taskList
   const screenName = route.name
   const filteredList = useListFilter(taskList, screenName)
@@ -19,7 +21,11 @@ export default TaskList = observer(({navigation, route}) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={[
+        styles.container,
+        {backgroundColor: theme.colors.surfaceVariant}
+      ]}
+      >
         <FlatList
           data={filteredList}
           renderItem={({ item }) => (
@@ -29,7 +35,10 @@ export default TaskList = observer(({navigation, route}) => {
               navigation={navigation}
             />
           )}
-          ListFooterComponent={<View style={styles.footer} />}
+          ListFooterComponent={<View style={[
+            styles.footer,
+          ]} />}
+          // ListEmptyComponent={}
         />
       </View>
       <AddButton
@@ -48,12 +57,11 @@ export default TaskList = observer(({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    // paddingTop: 10,
-    // paddingBottom: 50,
-    // paddingLeft: 10,
-    // paddingRight: 10,
+    paddingTop: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   footer: {
-    height: 90
+    height: 85,
   }
 });

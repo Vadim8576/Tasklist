@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
-import { useTheme, List, TouchableRipple } from 'react-native-paper';
+import { useTheme, List, TouchableRipple, Icon, Avatar } from 'react-native-paper';
 import { dateConversion } from '../../helpers/dateСonversion';
 import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 import UsersList from '../../components/UsersList';
@@ -16,6 +16,8 @@ export default ListItem = observer(({ taskList, navigation }) => {
   return (
     <View style={styles.listItemWrapper}>
       <TouchableRipple
+        // borderless={false}
+        background={theme.colors.surfaceVariant}
         onPress={() => navigation.navigate(
           'SubTaskList', {
           taskList
@@ -23,10 +25,11 @@ export default ListItem = observer(({ taskList, navigation }) => {
         }
       >
         <List.Item
-            title={taskList.title}
-          style={{
-            paddingRight: 0,
-          }}
+          title={taskList.title}
+          style={[
+            styles.listItem,
+            { backgroundColor: theme.colors.background }
+          ]}
           titleStyle={styles.title}
           description={
             taskList.groupUsersIds.length === 0
@@ -34,6 +37,13 @@ export default ListItem = observer(({ taskList, navigation }) => {
               : () => <UsersList users={taskList.groupUsersIds} />
           }
           descriptionStyle={styles.description}
+          left={() =>
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+             
+              <Avatar.Text size={20} label={taskList?.title?.substring(0, 1)} />
+            </View>
+
+          }
           right={() =>
             <ContextMenu
               navigation={navigation}
@@ -50,9 +60,14 @@ export default ListItem = observer(({ taskList, navigation }) => {
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    borderBottomWidth: 1,
-    borderColor: '#999',
-    borderStyle: 'solid',
+    marginBottom: 5,
+  },
+  listItem: {
+    paddingLeft: 15,
+    paddingRight: 5,
+    borderRadius: 10,
+    paddingTop: 2,
+    paddingBottom: 2
   },
   title: {
     color: '#000',

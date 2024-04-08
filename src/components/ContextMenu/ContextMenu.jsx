@@ -18,8 +18,9 @@ export default ContextMenu = observer(({
       anchorPosition='bottom'
       anchor={
         <IconButton
-          icon="dots-vertical"
-          size={15}
+          icon="menu-down-outline"
+          // icon="dots-vertical"
+          size={18}
           onPress={openMenu}
         />
       }
