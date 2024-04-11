@@ -11,7 +11,7 @@ class appStore {
   // isLoading = false
   taskList = []
   groupTaskList = []
-  tasks = {}
+  subTaskList = []
   unsubscribeVoid = null
 
   message = {}
@@ -40,39 +40,35 @@ class appStore {
         groupUsersIds: d.groupUsersIds
     }))
 
-    let task = {}
-    data.forEach(taskList => {
-      task = { ...task, [taskList.taskListId]: taskList.tasks }
-    })
+    // let task = {}
+    // data.forEach(taskList => {
+    //   task = { ...task, [taskList.taskListId]: taskList.tasks }
+    // })
 
-    this.setTasks(task)
+    // this.setTasks(task)
 
   }
 
 
   getTaskListTitle = (id) => {
-    const title = this.taskList.filter((item) => item.taskListId === id)
+    const task = this.taskList.filter((item) => item.taskListId === id)
     // console.log('appStore taskList = ',this.taskList)
-    // console.log('appStore title = ',title)
-    return title[0]
+    // console.log('appStore title = ',title[0])
+    return task[0]?.title
   }
 
-  getTaskTitleAndComment = (taskListId, taskIndex) => {
-    const title = this.tasks[taskListId][taskIndex].title
-    const comment = this.tasks[taskListId][taskIndex].comment
-    // const title = this.tasks[taskListId][index].title
-    // const comment = this.tasks[taskListId][index].comment
+  getTaskTitleAndComment = (id) => {
 
-
-    console.log('appStore title = ', title)
-    console.log('appStore comment = ', comment)
-    console.log('appStore index = ', taskIndex)
-    return { title, comment }
+    const subTasks = this.subTaskList.filter(task => task.subTaskListId === id)
+    const title = subTasks[0]?.title
+    const comment = subTasks[0]?.comment
+    
+    return { title , comment }
   }
 
 
-  subscribeToTasks = (userId) => {
-    const unsubscribe = fb.taskSnapshot({
+  subscribeToTaskList = (userId) => {
+    const unsubscribe = fb.taskListSnapshot({
       setTaskList: this.setTaskList,
       userId
     })
@@ -80,10 +76,6 @@ class appStore {
     return unsubscribe
   }
 
-
-  setTasks = (data) => {
-    this.tasks = data
-  }
 
 
   addTaskList = (payload) => {
@@ -95,20 +87,6 @@ class appStore {
     fb.updateTaskList(payload)
   }
 
-  addTask = (payload) => {
-    fb.addTask(payload)
-  }
-
-
-  updateTask = (payload) => {
-    fb.updateTask(payload)
-  }
-
-
-  removeTask = (payload) => {
-    console.log(payload)
-    fb.removeTask(payload)
-  }
 
   removeAllTaskList = () => {
     fb.removeAllTaskList()
@@ -119,6 +97,46 @@ class appStore {
   removeTaskList = (taskListId) => {
     fb.removeTaskList(taskListId)
   }
+
+
+
+
+
+
+    
+  setSubTaskList = (data) => {
+    this.subTaskList = data
+
+    console.log('subTaskList.subTaskListId = ', this.subTaskList.subTaskListId)
+  }
+
+
+  subscribeToSubTaskList = (taskListId) => {
+    const unsubscribe = fb.subTaskListSnapshot({
+      setSubTaskList: this.setSubTaskList,
+      taskListId
+    })
+
+    return unsubscribe
+  }
+
+
+  addTask = (payload) => {
+    fb.addTask(payload)
+  }
+
+
+  updateTask = (payload) => {
+    fb.updateTask(payload)
+  }
+
+
+  removeTask = (listId) => {
+    console.log('appStore listId = ', listId)
+    fb.removeTask(listId)
+  }
+
+
 
 
 

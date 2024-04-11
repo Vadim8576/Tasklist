@@ -9,6 +9,7 @@ import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import SeachFriends from './SeachFriends';
 import FriendsList from './FriendsList';
+import friendsStore from '../../store/friendsStore';
 
 export default FavoriteUsers = observer((props) => {
 
@@ -40,7 +41,7 @@ export default FavoriteUsers = observer((props) => {
     // authStore.createUser()
     if (!userId) return
 
-    authStore.getFriends(userId)
+    friendsStore.getFriends(userId)
 
   }, [userId])
 
@@ -49,8 +50,8 @@ export default FavoriteUsers = observer((props) => {
 
   return (
     <View style={styles.container}>
-      <SeachFriends />
-      <FriendsList />
+      <SeachFriends friends={friendsStore.friends} />
+      <FriendsList friends={friendsStore.friends} />
     </View>
   );
 })

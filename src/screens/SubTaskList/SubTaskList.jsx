@@ -11,9 +11,22 @@ import { useTheme } from "react-native-paper";
 
 export default SubTaskList = observer(({ route, navigation }) => {
 
+
+
   const theme = useTheme()
   const { taskList } = route.params;
-  const { title, createdAt, taskListId } = taskList
+  const { title, taskListId, createdAt } = taskList
+
+  console.log('SubTaskList appStore?.subTaskList.subTaskListId = ', appStore?.subTaskList.subTaskListId)
+
+
+  useLayoutEffect(() => {
+    if (!taskListId) return
+
+    const unsubscribe = appStore.subscribeToSubTaskList(taskListId)
+
+    return unsubscribe
+  }, [taskListId])
 
 
   useLayoutEffect(() => {
@@ -24,6 +37,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
   }, [title])
 
 
+
   return (
     <>
       <View style={[
@@ -32,12 +46,13 @@ export default SubTaskList = observer(({ route, navigation }) => {
       ]}
       >
         <FlatList
-          data={appStore?.tasks[taskListId]}
-          renderItem={({ item, index }) => (
+          data={appStore?.subTaskList}
+          renderItem={({ item }) => (
             <ListItem
+              key={item.subTaskListId}
               item={item}
-              taskIndex={index}
               taskListId={taskListId}
+              subTaskListId={item.subTaskListId}
               navigation={navigation}
             />
           )}

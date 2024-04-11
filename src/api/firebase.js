@@ -245,7 +245,7 @@ export const fb = {
 
 
 
-  taskSnapshot: (payload) => {
+  taskListSnapshot: (payload) => {
     const { setTaskList, userId } = payload
 
     if (!userId) return
@@ -283,8 +283,7 @@ export const fb = {
       title: title,
       createdAt: Timestamp.now().seconds,
       creatorId: userId,
-      groupUsersIds: [],
-      tasks: []
+      groupUsersIds: []
     }
 
     const collectionRef = collection(db, DB_NAME)
@@ -319,10 +318,10 @@ export const fb = {
   },
 
   updateTaskList: (payload) => {
-    const { title, taskListId } = payload
-    if (!taskListId) return
+    const { title, listId } = payload
+    if (!listId) return
 
-    const docRef = doc(db, DB_NAME, taskListId);
+    const docRef = doc(db, DB_NAME, listId);
 
     updateDoc(docRef, {
       title: title
@@ -337,9 +336,9 @@ export const fb = {
       })
   },
 
-  removeTaskList: (taskListId) => {
-    deleteDoc(doc(db, DB_NAME, taskListId))
-      .then(_ => {
+  removeTaskList: (listId) => {
+    deleteDoc(doc(db, DB_NAME, listId))
+      .then(() => {
         // setSuccessMessage()
       })
       .catch((error) => {
@@ -347,117 +346,230 @@ export const fb = {
       })
   },
 
-  addTask: (payload) => {
-    const { title, comment, taskListId } = payload
-    console.log(title, comment, taskListId)
+
+
+
+
+  subTaskListSnapshot: (payload) => {
+    const { setSubTaskList, taskListId } = payload
 
     if (!taskListId) return
 
-    const docRef = doc(db, DB_NAME, taskListId);
+    const q = query(collection(db, 'subtasklist'), where('taskListId', '==', taskListId));
 
-    getDoc(docRef)
-      .then((doc) => {
-        const tasks = doc.data().tasks
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const allDocs = []
+      querySnapshot.forEach((doc) => {
+        const data = doc.data()
 
-        updateDoc(docRef, {
-          tasks: [
-            ...tasks,
-            {
-              title: title,
-              comment: comment,
-              complited: false
-            }
-          ]
+        allDocs.push({
+          title: data.title,
+          comment: data.comment,
+          subTaskListId: data.subTaskListId,
+          complited: data.complited
         })
+      })
+
+      console.log('allDocs = ', allDocs)
+      setSubTaskList(allDocs)
+    })
+
+
+    return unsubscribe
+  },
+
+
+  addTask: (payload) => {
+    const { title, comment, listId } = payload
+
+    if (!listId) return
+
+    const data = {
+      title,
+      comment,
+      complited: false,
+      taskListId: listId
+    }
+
+    const collectionRef = collection(db, 'subtasklist')
+    const newDocRef = doc(collectionRef)
+
+    setDoc(newDocRef, data)
+      .then(() => {
+        // console.log('Задача успешно добавлена.');
+
+        firstDocAdded = true;      
+
+        const docId = newDocRef.id;
+        const updatedData = { ...data, subTaskListId: docId };
+
+        setDoc(newDocRef, updatedData)
           .then(() => {
-            console.log('Таска успешно добавлена')
+            console.log('ID успешно добавлен в данные документа.');
             // setSuccessMessage()
           })
           .catch((error) => {
-            console.log('Ошибка добавления таски: ', error)
+            console.error('Ошибка при добавлении ID в данные документа:', error);
             setErrorMessage()
+            if (firstDocAdded) {
+              deleteDoc(newDocRef).then(() => {
+                console.log('Документ удален, так как взникла ошибка.');
+              })
+                .catch((deleteError) => {
+                  console.error('Ошибка при удалении первого документа:', deleteError);
+                })
+            }
           })
       })
-      .catch((error) => {
-        console.log('Ошибка получения документа для обновления', error)
+      .catch((deleteError) => {
+        console.error('Ошибка при добавлении задачи:', deleteError);
         setErrorMessage()
       })
 
   },
+  // addTask: (payload) => {
+  //   const { title, comment, taskListId } = payload
+  //   console.log(title, comment, taskListId)
+
+  //   if (!taskListId) return
+
+  //   const docRef = doc(db, DB_NAME, taskListId);
+
+  //   getDoc(docRef)
+  //     .then((doc) => {
+  //       const tasks = doc.data().tasks
+
+  //       updateDoc(docRef, {
+  //         tasks: [
+  //           ...tasks,
+  //           {
+  //             title: title,
+  //             comment: comment,
+  //             complited: false
+  //           }
+  //         ]
+  //       })
+  //         .then(() => {
+  //           console.log('Таска успешно добавлена')
+  //         })
+  //         .catch((error) => {
+  //           console.log('Ошибка добавления таски: ', error)
+  //           setErrorMessage()
+  //         })
+  //     })
+  //     .catch((error) => {
+  //       console.log('Ошибка получения документа для обновления', error)
+  //       setErrorMessage()
+  //     })
+
+  // },
 
   updateTask: (payload) => {
-    const { taskIndex, title, comment, complited = null, taskListId } = payload
-    if (!taskListId) return
 
-    const docRef = doc(db, DB_NAME, taskListId);
+    const { listId, ...updateData } = payload
+    console.log('listId ', listId)
+    if (!listId) return
 
-    getDoc(docRef)
-      .then((doc) => {
-        const tasks = doc.data().tasks
+    // console.log('updateData ', updateData)
 
-        tasks[taskIndex] = {
-          ...tasks[taskIndex],
-          complited: complited != null ? complited : tasks[taskIndex].complited,
-          title,
-          comment
-        }
+    const docRef = doc(db, 'subtasklist', listId);
 
-        updateDoc(docRef, {
-          tasks: [
-            ...tasks
-          ]
-        })
-          .then(() => {
-            console.log('Таска успешно обновлена')
-            // setSuccessMessage()
-          })
-          .catch((error) => {
-            console.log('Ошибка обновления таски: ', error)
-            setErrorMessage()
-          })
+    updateDoc(docRef, 
+      updateData
+    )
+      .then(() => {
+        console.log('Таска успешно обновлена')
       })
       .catch((error) => {
-        console.log('Ошибка получения документа для обновления', error)
+        console.log('Ошибка обновления таски: ', error)
         setErrorMessage()
       })
 
+
   },
+  // updateTask: (payload) => {
+  //   const { taskIndex, title, comment, complited = null, taskListId } = payload
+  //   if (!taskListId) return
 
-  removeTask: (payload) => {
-    const { taskIndex, taskListId } = payload
+  //   const docRef = doc(db, DB_NAME, taskListId);
 
-    console.log(taskIndex, taskListId)
+  //   getDoc(docRef)
+  //     .then((doc) => {
+  //       const tasks = doc.data().tasks
 
-    if (!taskListId) return
+  //       tasks[taskIndex] = {
+  //         ...tasks[taskIndex],
+  //         complited: complited != null ? complited : tasks[taskIndex].complited,
+  //         title,
+  //         comment
+  //       }
 
-    const docRef = doc(db, DB_NAME, taskListId);
+  //       updateDoc(docRef, {
+  //         tasks: [
+  //           ...tasks
+  //         ]
+  //       })
+  //         .then(() => {
+  //           console.log('Таска успешно обновлена')
+  //         })
+  //         .catch((error) => {
+  //           console.log('Ошибка обновления таски: ', error)
+  //           setErrorMessage()
+  //         })
+  //     })
+  //     .catch((error) => {
+  //       console.log('Ошибка получения документа для обновления', error)
+  //       setErrorMessage()
+  //     })
 
-    getDoc(docRef)
-      .then((doc) => {
-        const tasks = doc.data().tasks
+  // },
 
-        const newTasks = tasks.filter((_, index) => index !== taskIndex)
+  removeTask: (listId) => {
 
-        updateDoc(docRef, {
-          tasks: [
-            ...newTasks
-          ]
-        })
-          .then(() => {
-            console.log('Таска успешно удалена')
-            // setSuccessMessage()
-          })
-          .catch((error) => {
-            console.log('Ошибка удаления таски: ', error)
-            setErrorMessage()
-          })
+  
+
+    if (!listId) return
+
+
+    deleteDoc(doc(db, 'subtasklist', listId))
+      .then(() => {
+        // setSuccessMessage()
       })
       .catch((error) => {
-        console.log('Ошибка получения документа для обновления', error)
         setErrorMessage()
       })
 
+    // const docRef = doc(db, 'subtasklist', listId);
+
+    // getDoc(docRef)
+    //   .then((doc) => {
+    //     const tasks = doc.data().tasks
+
+    //     const newTasks = tasks.filter((_, index) => index !== taskIndex)
+
+    //     updateDoc(docRef, {
+    //       tasks: [
+    //         ...newTasks
+    //       ]
+    //     })
+    //       .then(() => {
+    //         console.log('Таска успешно удалена')
+    //         // setSuccessMessage()
+    //       })
+    //       .catch((error) => {
+    //         console.log('Ошибка удаления таски: ', error)
+    //         setErrorMessage()
+    //       })
+    //   })
+    //   .catch((error) => {
+    //     console.log('Ошибка получения документа для обновления', error)
+    //     setErrorMessage()
+    //   })
+
   },
+
+
+
 
   removeAllTaskList: () => {
 

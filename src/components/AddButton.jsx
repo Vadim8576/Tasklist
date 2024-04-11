@@ -17,7 +17,7 @@ export default AddButton = observer(({
     navigation.navigate(
       'DialogScreen', {
       type,
-      taskListId
+      listId: taskListId
     })
   }
 

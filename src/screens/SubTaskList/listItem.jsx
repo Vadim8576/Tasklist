@@ -7,8 +7,11 @@ import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 
 
 //SubTaskList
-export default ListItem = observer(({ item, taskIndex, taskListId, navigation }) => {
+export default ListItem = observer(({ item, taskListId, subTaskListId, navigation }) => {
 
+
+  console.log('List Item taskListId = ', taskListId)
+  console.log('List Item subTaskListId = ', subTaskListId)
   const theme = useTheme();
 
   const titleStyle = {
@@ -25,11 +28,11 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
 
   const onChange = () => {
     appStore.updateTask({
-      taskIndex,
+      listId: subTaskListId,
+      taskListId,
       title: item.title,
       comment: item.comment,
       complited: !item.complited,
-      taskListId
     })
   }
 
@@ -65,8 +68,8 @@ export default ListItem = observer(({ item, taskIndex, taskListId, navigation })
           right={() =>
             <ContextMenu
               navigation={navigation}
-              taskListId={taskListId}
-              taskIndex={taskIndex}
+              listId={subTaskListId}
+              currentList='SUB_TASK'
             />
           }
         />

@@ -19,7 +19,7 @@ import CustomInput from "../components/CustomInput";
 export default DialogScreen = observer(({ route, navigation }) => {
   const theme = useTheme()
   const [commentVisible, setCommentVisible] = useState(false)
-  const {type, taskListId = null, taskIndex = null} = route.params
+  const {type, listId = null} = route.params
 
   const {
     onSubmit,
@@ -27,7 +27,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
     setTitle,
     comment,
     setComment
-  } = useInputDialog({ type, taskListId, taskIndex })
+  } = useInputDialog({ type, listId })
 
 
   // console.log('dialog type = ', type)

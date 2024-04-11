@@ -5,70 +5,42 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from 'react';
 import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
-import authStore from '../../store/authStore';
 import FoundFriend from './FoundFriend';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
+import friendsStore from '../../store/friendsStore';
+import { useSeachFriend } from '../../hooks/useSeachFriend';
 
 
-export default SeachFriends = observer(() => {
+export default SeachFriends = observer(({ friends }) => {
+  console.log('SeachFriends render')
+
   const theme = useTheme()
   const { user } = useAuth()
 
   const [foundFriend, setFoundFriend] = useState(null)
   const [friendId, setFriendId] = useState('')
-  const [errorText, setErrorText] = useState('')
-  
+  const [error, setError] = useState('')
 
-  console.log('SeachFriends render')
+  const { getFriend } = useSeachFriend(friends)
 
 
   const onSubmit = async () => {
-    if (friendId === user.uid) {
-      setErrorText('Это ваш ID!')
-      return
-    }
-
-    const found = await authStore.getFriendById(friendId)
-    setFoundFriend(found)
-
-    if (found === null) {
-      setErrorText('Пользователь с таким ID не существует!')
-    }
+    const [friend, error] = await getFriend({friendId, userId: user.uid})
+    setError(error)
+    setFoundFriend(friend)
   }
 
-
-  
   const clearInput = () => {
     setFriendId('')
-    setErrorText('')
+    setError('')
     setFoundFriend(null)
   }
 
-  useEffect(() => {
-    if(friendId.length === 0) clearInput()
-  }, [friendId])
-
-
-
-  // useEffect(() => {
-  //   if(errorText !== '') setTimer(new Date)
-
-  //   const interval = setInterval(() => {
-  //     const newDate = new Date - timer
-  //     console.log(newDate)
-  //     // if(newDate >= )
-  //   }, 1000);
-
-
-  //   return clearInterval(interval)
-
-  // }, [errorText])
-
-
-  // y4Q2IaI2TSSAhPEmJGC1SvhnCnz1
-  // 17dNpCh4kDX5dhQBPyiOaVEBBxs1
-
+  const friendIdInputHandler = (value) => {
+    if (friendId === '') clearInput()
+    setFriendId(value)
+  }
 
 
   return (
@@ -84,11 +56,11 @@ export default SeachFriends = observer(() => {
           <CustomInput
             placeholder='Введите ID друга'
             value={friendId}
-            onChangeText={setFriendId}
+            onChangeText={friendIdInputHandler}
             multiline={false}
             numberOfLines={1}
             right={
-              friendId.length && (
+              friendId !== '' && (
                 <TextInput.Icon
                   size={20}
                   color={theme.colors.outline}
@@ -117,11 +89,13 @@ export default SeachFriends = observer(() => {
         </View>
       </View>
 
-      <HelperText style={styles.HelperText} type="error" visible={errorText !== ''}>
-        {errorText}
+      <HelperText style={styles.HelperText} type="error" visible={error !== ''}>
+        {error}
       </HelperText>
 
-      {(errorText === '' && foundFriend) && <FoundFriend foundFriend={foundFriend} clearInput={clearInput} />}
+      {(error === '' && foundFriend) && (
+        <FoundFriend foundFriend={foundFriend} clearInput={clearInput} />
+      )}
 
 
     </>
@@ -159,7 +133,7 @@ const styles = StyleSheet.create({
   },
 
   pressable: commonStyles.pressable,
-  HelperText : {
+  HelperText: {
     paddingBottom: 30,
     paddingLeft: RIGHT_BUTTON_SIZE
   }

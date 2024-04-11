@@ -2,25 +2,26 @@
 import { FlatList, View, StyleSheet, Text, Pressable } from 'react-native';
 import { List, Avatar, useTheme } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
-import authStore from '../../store/authStore';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
+import friendsStore from '../../store/friendsStore';
+// import friendsStore from '../../store/friendsStore';
 
 
 
-export default FavoriteUsers = observer(() => {
+export default FavoriteUsers = observer(({friends}) => {
   const theme = useTheme()
 
   const { user } = useAuth()
   console.log('FriensLisrt render')
-  console.log('FriensLisrt friend List = ', authStore.friends)
+  console.log('FriensLisrt friend List = ', friends)
 
 
 
   const removeFriend = (friendId) => {
 
-    authStore.removeFriend({ friendId, userId: user.uid })
+    friendsStore.removeFriend({ friendId, userId: user.uid })
   }
 
 
@@ -31,7 +32,7 @@ export default FavoriteUsers = observer(() => {
     ]}>
       <Text>Мои друзья:</Text>
       <FlatList
-        data={authStore.friends}
+        data={friends}
         renderItem={({ item }) => (
           <List.Item
             style={{

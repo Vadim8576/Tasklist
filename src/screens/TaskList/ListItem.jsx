@@ -20,7 +20,7 @@ export default ListItem = observer(({ taskList, navigation }) => {
         background={theme.colors.surfaceVariant}
         onPress={() => navigation.navigate(
           'SubTaskList', {
-          taskList
+            taskList
         })
         }
       >
@@ -47,7 +47,8 @@ export default ListItem = observer(({ taskList, navigation }) => {
           right={() =>
             <ContextMenu
               navigation={navigation}
-              taskListId={taskList.taskListId}
+              listId={taskList.taskListId}
+              currentList='TASK_LIST'
             />
           }
         />

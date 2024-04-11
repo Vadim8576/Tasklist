@@ -20,7 +20,7 @@ import authStore from "../store/authStore"
 
 export const useInputDialog = (props) => {
 
-  const { type, taskListId = null, taskIndex = null } = props
+  const { type, listId = null} = props
 
   const {user} = useAuth()
   const userId = user.uid
@@ -39,7 +39,7 @@ export const useInputDialog = (props) => {
     }
 
     if(type === dialogActions.editTaskListTitle) {
-      setTitle(taskListId ? appStore.getTaskListTitle(taskListId).title : '')
+      setTitle(listId ? appStore.getTaskListTitle(listId) : '')
     }
 
     if(type === dialogActions.addTask) {
@@ -49,12 +49,9 @@ export const useInputDialog = (props) => {
 
     if(type === dialogActions.editTask) {   
       console.log('edit Task')
-      console.log('taskListId = ', taskListId)
-      console.log('taskIndex = ', taskIndex)
+      console.log('listId = ', listId)
 
-
-
-      const task = appStore.getTaskTitleAndComment(taskListId, taskIndex)
+      const task = appStore.getTaskTitleAndComment(listId)
       setTitle(task.title)
       setComment(task.comment)
     }
@@ -86,18 +83,20 @@ export const useInputDialog = (props) => {
       appStore.addTaskList({ userId, title: trimTitle })
     }
     if (type === dialogActions.editTaskListTitle) {
-      appStore.updateTaskList({ taskListId, title: trimTitle })
+      appStore.updateTaskList({ listId, title: trimTitle })
     }
 
     if (type === dialogActions.addTask) {
-      console.log(title, comment, taskListId)
+      console.log(title, comment, listId)
       
-      appStore.addTask({ title: trimTitle, comment: trimComment, taskListId })
+      appStore.addTask({ title: trimTitle, comment: trimComment, listId })
     }
     if (type === dialogActions.editTask) {
-      appStore.updateTask({ taskIndex, title: trimTitle, comment: trimComment, taskListId })
+      appStore.updateTask({ title: trimTitle, comment: trimComment, listId })
     }
   }
+
+
 
 
   useEffect(() => {

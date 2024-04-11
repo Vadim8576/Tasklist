@@ -39,13 +39,13 @@ export default TabNavigator = observer(() => {
 
 
 
-  useEffect(() => {
-    if (!userId) return
+  // useEffect(() => {
+  //   if (!userId) return
 
-    const unsubscribe = appStore.subscribeToTasks(userId)
+  //   const unsubscribe = appStore.subscribeToTaskList(userId)
 
-    return unsubscribe
-  }, [userId])
+  //   return unsubscribe
+  // }, [userId])
 
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default TabNavigator = observer(() => {
           renderIcon={({ route, focused, color }) => {
             const { options } = descriptors[route.key];
             if (options.tabBarIcon) {
-              return options.tabBarIcon({ focused, color, size: 24 });
+              return options.tabBarIcon({ focused, color, size: 22 });
             }
             return null;
           }}

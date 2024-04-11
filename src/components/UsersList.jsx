@@ -4,11 +4,11 @@ import { observer } from "mobx-react-lite";
 
 
 
-export default GroupUserList = observer((users) => {
+export default UserList = observer((users) => {
 
   const theme = useTheme()
 
-  console.log('GroupUserList users = ', users)
+  console.log('UserList users = ', users)
   return (
     <>
       <View style={styles.container}>

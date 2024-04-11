@@ -7,12 +7,11 @@ import ContextMenu from "./ContextMenu";
 
 export default ContextMenuContainer = observer(({
   navigation,
-  taskListId,
-  taskIndex = null
+  listId,
+  currentList
 }) => {
 
   const [menuVisible, setMenuVisible] = useState(false)
-  const [key, setKey] = useState()
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
@@ -21,27 +20,27 @@ export default ContextMenuContainer = observer(({
   const options = {
     'TASK_LIST': {
       type: dialogActions.editTaskListTitle,
-      taskListId,
-      remove: () => appStore.removeTaskList(taskListId)
+      listId,
+      remove: () => appStore.removeTaskList(listId)
     },
-    'TASK': {
+    'SUB_TASK': {
       type: dialogActions.editTask,
-      taskListId,
-      taskIndex,
-      remove: () => appStore.removeTask({taskListId, taskIndex})
+      listId,
+      remove: () => appStore.removeTask(listId)
     },
   }
 
 
   const edit = () => {
-    navigation.navigate('DialogScreen', {...options[key]})
+    const {remove, ...otherOptions} = options[currentList]
+    navigation.navigate('DialogScreen', otherOptions)
     closeMenu()
   }
 
   const remove = () => {
     console.log('remove')
     closeMenu()
-    options[key].remove()
+    options[currentList].remove()
   }
 
   const items = [
@@ -57,11 +56,9 @@ export default ContextMenuContainer = observer(({
     }
   ]
 
-  useEffect(() => {
-    // если сюда пришел taskIndex через пропсы, значит это SubTask,
-    // если  null - это TaskList
-    setKey(taskIndex === null ? 'TASK_LIST' : 'TASK')
-  }, [taskIndex])
+  // useEffect(() => {
+  //   setKey(taskIndex === null ? 'TASK_LIST' : 'TASK')
+  // }, [taskIndex])
 
 
   return (
@@ -70,8 +67,6 @@ export default ContextMenuContainer = observer(({
       menuVisible={menuVisible}
       closeMenu={closeMenu}
       openMenu={openMenu}
-      taskListId={taskListId}
-      taskIndex={taskIndex}
     />
   )
 })

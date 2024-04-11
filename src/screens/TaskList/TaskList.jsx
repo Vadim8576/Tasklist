@@ -7,16 +7,31 @@ import ListItem from './ListItem';
 import { useListFilter } from '../../hooks/useListFilter';
 import appStore from '../../store/appStore';
 import { useTheme } from 'react-native-paper';
+import { useEffect } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 
 
 export default TaskList = observer(({navigation, route}) => {
 
   const theme = useTheme()
+
+  const { user } = useAuth()
+  const userId = user.uid
+
   const taskList = appStore.taskList
   const screenName = route.name
   const filteredList = useListFilter(taskList, screenName)
 
   console.log('mAINtASKlIST render')
+
+
+  useEffect(() => {
+    if (!userId) return
+
+    const unsubscribe = appStore.subscribeToTaskList(userId)
+
+    return unsubscribe
+  }, [userId])
 
 
   return (
