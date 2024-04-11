@@ -28,6 +28,7 @@ export const useInputDialog = (props) => {
   // const [visible, setVisible] = useState(false)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
+  const [createdAt, setCreatedAt] = useState(null)
 
   
 
@@ -80,7 +81,8 @@ export const useInputDialog = (props) => {
     if (type === dialogActions.addTaskList) {
       console.log('userId = ', userId)
       console.log('trimTitle = ', trimTitle)
-      appStore.addTaskList({ userId, title: trimTitle })
+      if(trimTitle === '') return
+      appStore.addTaskList({ userId, title: trimTitle, createdAt })
     }
     if (type === dialogActions.editTaskListTitle) {
       appStore.updateTaskList({ listId, title: trimTitle })
@@ -89,6 +91,7 @@ export const useInputDialog = (props) => {
     if (type === dialogActions.addTask) {
       console.log(title, comment, listId)
       
+      if(trimTitle === '') return
       appStore.addTask({ title: trimTitle, comment: trimComment, listId })
     }
     if (type === dialogActions.editTask) {
@@ -110,7 +113,9 @@ export const useInputDialog = (props) => {
     comment,
     setComment,
     hideDialog,
-    onSubmit
+    onSubmit,
+    createdAt,
+    setCreatedAt
   }
 
   return useMemo (() => value, [value])

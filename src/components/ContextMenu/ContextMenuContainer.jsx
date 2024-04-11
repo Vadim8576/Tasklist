@@ -56,10 +56,6 @@ export default ContextMenuContainer = observer(({
     }
   ]
 
-  // useEffect(() => {
-  //   setKey(taskIndex === null ? 'TASK_LIST' : 'TASK')
-  // }, [taskIndex])
-
 
   return (
     <ContextMenu

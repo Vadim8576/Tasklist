@@ -35,7 +35,6 @@ export default CustomInput = observer(({
 
 const styles = StyleSheet.create({
   input: {
-   
   },
 });
 

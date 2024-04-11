@@ -79,8 +79,7 @@ class appStore {
 
 
   addTaskList = (payload) => {
-    const { userId, title } = payload
-    fb.addTaskList({ userId, title })
+    fb.addTaskList(payload)
   }
 
   updateTaskList = (payload) => {

@@ -277,11 +277,13 @@ export const fb = {
 
 
   addTaskList: (payload) => {
-    const { userId, title } = payload
+    const { userId, title, createdAt } = payload
+
+    if(title === '') return
 
     const data = {
       title: title,
-      createdAt: Timestamp.now().seconds,
+      createdAt,
       creatorId: userId,
       groupUsersIds: []
     }
@@ -382,7 +384,7 @@ export const fb = {
   addTask: (payload) => {
     const { title, comment, listId } = payload
 
-    if (!listId) return
+    if (!listId && title === '') return
 
     const data = {
       title,
