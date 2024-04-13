@@ -5,7 +5,7 @@ import { RadioButton } from 'react-native-paper';
 import { colors } from "../const/constants"
 import authStore from '../store/authStore'
 import { useTheme, Button, TextInput } from 'react-native-paper';
-import Input from "../UI/Input";
+import Input from "../components/UI/Input";
 
 
 export default Auth = observer(({ navigation, route }) => {

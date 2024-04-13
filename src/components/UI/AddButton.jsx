@@ -2,33 +2,22 @@
 import { observer } from "mobx-react-lite";
 import { StyleSheet } from "react-native";
 import { FAB } from 'react-native-paper';
-import errorStore from "../store/errorStore";
 
 
 export default AddButton = observer(({
-  navigation,
-  type,
-  taskListId = null,
+  addButtonVisible,
+  addButtonOnPress
 }) => {
 
-  const visible = !errorStore.message.isError && !errorStore.message.isSuccess
 
-  onPressHandler = () => {
-    navigation.navigate(
-      'DialogScreen', {
-      type,
-      listId: taskListId
-    })
-  }
-
-  if (!visible) return null
+  if (!addButtonVisible) return null
 
   return (
     <FAB
       size='medium'
       icon='plus'
       style={styles.fab}
-      onPress={onPressHandler}
+      onPress={addButtonOnPress}
     />
   );
 })

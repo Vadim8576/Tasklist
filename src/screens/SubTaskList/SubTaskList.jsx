@@ -4,20 +4,25 @@ import { FlatList, StyleSheet, View } from "react-native";
 import appStore from '../../store/appStore';
 import ListItem from "./listItem";
 import { dialogActions } from "../../const/constants";
-import AddButton from "../../components/AddButton";
 import { useTheme } from "react-native-paper";
+import { useGroupButton } from "../../hooks/useGroupButton";
+import AddButton from "../../components/UI/AddButton";
 
 
 
 export default SubTaskList = observer(({ route, navigation }) => {
 
-
-
   const theme = useTheme()
   const { taskList } = route.params;
   const { title, taskListId, createdAt } = taskList
 
+  const {
+    addButtonVisible,
+    addButtonOnPress
+  } = useGroupButton({ navigation, type: dialogActions.addTask, listId: taskListId })
+
   console.log('SubTaskList appStore?.subTaskList.subTaskListId = ', appStore?.subTaskList.subTaskListId)
+
 
 
   useLayoutEffect(() => {
@@ -59,10 +64,8 @@ export default SubTaskList = observer(({ route, navigation }) => {
           ListFooterComponent={<View style={styles.footer} />}
         />
         <AddButton
-          navigation={navigation}
-          route={route}
-          type={dialogActions.addTask}
-          taskListId={taskListId}
+          addButtonVisible={addButtonVisible}
+          addButtonOnPress={addButtonOnPress}
         />
       </View>
 

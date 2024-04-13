@@ -1,58 +1,61 @@
 import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
-import { useTheme, List, TouchableRipple, Icon, Avatar } from 'react-native-paper';
+import { useTheme, List, Icon, Avatar } from 'react-native-paper';
 import { dateConversion } from '../../helpers/dateСonversion';
-import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 import UsersList from '../../components/UsersList';
 
 
 
-
 //TaskList
-export default ListItem = observer(({ taskList, navigation }) => {
+export default ListItem = observer(({ taskList }) => {
 
   const theme = useTheme();
 
   return (
     <View style={styles.listItemWrapper}>
-      <TouchableRipple
-        // borderless={false}
-        background={theme.colors.surfaceVariant}
-        onPress={() => navigation.navigate(
-          'SubTaskList', {
-            taskList
-        })
+      <List.Item
+        title={taskList.title}
+        style={[
+          styles.listItem,
+          { backgroundColor: theme.colors.background }
+        ]}
+        titleStyle={styles.title}
+        description={
+          taskList.groupUsersIds.length === 0
+            ? dateConversion(taskList.createdAt)
+            : () => <UsersList users={taskList.groupUsersIds} />
         }
-      >
-        <List.Item
-          title={taskList.title}
-          style={[
-            styles.listItem,
-            { backgroundColor: theme.colors.background }
-          ]}
-          titleStyle={styles.title}
-          description={
-            taskList.groupUsersIds.length === 0
-              ? dateConversion(taskList.createdAt)
-              : () => <UsersList users={taskList.groupUsersIds} />
-          }
-          descriptionStyle={styles.description}
-          left={() =>
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-             
-              <Avatar.Text size={20} label={taskList?.title?.substring(0, 1)} />
-            </View>
+        descriptionStyle={styles.description}
+        left={() =>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
 
-          }
-          right={() =>
-            <ContextMenu
-              navigation={navigation}
-              listId={taskList.taskListId}
-              currentList='TASK_LIST'
+            <Avatar.Text
+              style={{backgroundColor: theme.colors.tertiary}}
+              size={30}
+              label={taskList?.title?.substring(0, 1)}
             />
-          }
-        />
-      </TouchableRipple>
+          </View>
+        }
+
+        right={() => (
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Icon
+              source="chevron-right"
+              size={22}
+              color={theme.colors.surfaceVariant}
+            />
+          </View>
+
+        )}
+
+      // right={() =>
+      //   <ContextMenu
+      //     navigation={navigation}
+      //     listId={taskList.taskListId}
+      //     currentList='TASK_LIST'
+      //   />
+      // }
+      />
     </View>
   )
 })
@@ -65,10 +68,10 @@ const styles = StyleSheet.create({
   },
   listItem: {
     paddingLeft: 15,
-    paddingRight: 5,
+    paddingRight: 10,
     borderRadius: 10,
-    paddingTop: 2,
-    paddingBottom: 2
+    paddingTop: 5,
+    paddingBottom: 5
   },
   title: {
     color: '#000',

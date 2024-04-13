@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { StyleSheet, View } from "react-native"
 import { useTheme, Button, Text } from 'react-native-paper';
 import authStore from '../store/authStore'
-import Input from "../UI/Input";
+import Input from "../components/UI/Input";
 
 
 export default Registration = observer(({ navigation }) => {

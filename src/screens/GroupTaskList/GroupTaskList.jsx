@@ -4,9 +4,10 @@ import { useAuth } from '../../hooks/useAuth';
 import { observer } from "mobx-react-lite";
 import appStore from '../../store/appStore';
 import { dialogActions } from '../../const/constants'
-import AddButton from '../../components/AddButton';
+import AddButton from '../../components/UI/AddButton';
 import { useListFilter } from '../../hooks/useListFilter';
 import ListItem from '../TaskList/ListItem';
+import { useAddButton } from '../../hooks/useGroupButton';
 
 
 
@@ -20,6 +21,11 @@ export default GroupTaskList = observer(({
 
 
   const list = useListFilter(appStore.taskList, currentListType)
+
+  const {
+    addButtonVisible,
+    addButtonOnPress
+  } = useAddButton({ navigation, type: dialogActions.addTaskList })
 
   // console.log('GroupTaskList = ', list)
 
@@ -50,11 +56,17 @@ export default GroupTaskList = observer(({
         />
       </View>
       <AddButton
+        addButtonVisible={addButtonVisible}
+        addButtonOnPress={addButtonOnPress}
+
+      // ? currentListType={currentListType}
+      />
+      {/* <AddButton
         navigation={navigation}
         route={route}
         type={dialogActions.addTaskList}
         currentListType={currentListType}
-      />
+      /> */}
     </>
   );
 })
