@@ -362,10 +362,8 @@ export const fb = {
       return id
     })
 
-
     const removeIds = await Promise.all(removePromise);
 
-    console.log(removeIds)
   },
 
 

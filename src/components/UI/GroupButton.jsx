@@ -16,7 +16,7 @@ export default GroupButton = ({ buttonGroup }) => {
     clearSelection,
     edit,
     remove,
-    removeSelected,
+    removeSelectedTaskList,
     buttonGroupIsOpen,
     hide,
     show
@@ -85,7 +85,7 @@ export default GroupButton = ({ buttonGroup }) => {
         //console.log('if not open')
 
         if(idOfSelectedItems.length > 1) {
-          removeSelected()
+          removeSelectedTaskList()
           clearSelection()
         }
         if(idOfSelectedItems.length === 0) addTask()

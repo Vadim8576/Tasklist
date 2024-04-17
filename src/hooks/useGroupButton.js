@@ -21,7 +21,7 @@ export const useGroupButton = (payload) => {
       type: dialogActions.editTaskListTitle,
       listId,
       remove: () => appStore.removeTaskList(listId),
-      removeSelected: () => appStore.removeSelectedTaskList(idOfSelectedItems)
+      removeSelectedTaskList: () => appStore.removeSelectedTaskList(idOfSelectedItems)
     },
     'SUB_TASK_LIST': {
       type: dialogActions.editTask,
@@ -88,7 +88,7 @@ export const useGroupButton = (payload) => {
 
     edit: () => {
       console.log('edit currentList.id = ', currentList.id)
-      const { remove, removeSelected, ...otherOptions } = getOptions(currentList.id)[currentList.name]
+      const { remove, removeSelectedTaskList, ...otherOptions } = getOptions(currentList.id)[currentList.name]
       navigation.navigate('DialogScreen', otherOptions)
     },
 
@@ -99,9 +99,9 @@ export const useGroupButton = (payload) => {
     },
     
 
-    removeSelected: () => {
+    removeSelectedTaskList: () => {
       console.log('Удалить: ', idOfSelectedItems)
-      getOptions(currentList.id)[currentList.name].removeSelected()
+      getOptions(currentList.id)[currentList.name].removeSelectedTaskList()
     },
 
 
