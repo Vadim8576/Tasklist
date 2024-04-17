@@ -4,7 +4,11 @@ import { setMessage } from "../api/firebase";
 
 class errorStore {
 
-  message = {}
+  message = {
+    isError: false,
+    isSuccess: false,
+    text: ''
+  }
 
   constructor() {
     makeAutoObservable(this);

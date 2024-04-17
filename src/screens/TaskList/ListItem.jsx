@@ -7,32 +7,40 @@ import UsersList from '../../components/UsersList';
 
 
 //TaskList
-export default ListItem = observer(({ taskList }) => {
+export default ListItem = observer(({ item, isSelected }) => {
 
   const theme = useTheme();
+
+
 
   return (
     <View style={styles.listItemWrapper}>
       <List.Item
-        title={taskList.title}
+        title={item.title}
         style={[
-          styles.listItem,
-          { backgroundColor: theme.colors.background }
+          styles.item,
+          {
+            backgroundColor:
+              isSelected
+                ? theme.colors.tertiaryContainer
+                : theme.colors.background
+          }
         ]}
         titleStyle={styles.title}
         description={
-          taskList.groupUsersIds.length === 0
-            ? dateConversion(taskList.createdAt)
-            : () => <UsersList users={taskList.groupUsersIds} />
+          item.groupUsersIds.length === 0
+            ? dateConversion(item.createdAt)
+            : () => <UsersList users={item.groupUsersIds} />
         }
         descriptionStyle={styles.description}
         left={() =>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
 
             <Avatar.Text
-              style={{backgroundColor: theme.colors.tertiary}}
+              style={{ backgroundColor: theme.colors.tertiary }}
+              color={theme.colors.onTertiary}
               size={30}
-              label={taskList?.title?.substring(0, 1)}
+              label={item?.title?.substring(0, 1)}
             />
           </View>
         }
@@ -42,7 +50,7 @@ export default ListItem = observer(({ taskList }) => {
             <Icon
               source="chevron-right"
               size={22}
-              color={theme.colors.surfaceVariant}
+              color={theme.colors.outline}
             />
           </View>
 
@@ -64,12 +72,12 @@ export default ListItem = observer(({ taskList }) => {
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    marginBottom: 5,
+    // marginBottom: 5,
   },
-  listItem: {
-    paddingLeft: 15,
-    paddingRight: 10,
-    borderRadius: 10,
+  item: {
+    paddingLeft: 20,
+    paddingRight: 15,
+    // borderRadius: 10,
     paddingTop: 5,
     paddingBottom: 5
   },

@@ -18,17 +18,18 @@ export default UserList = observer((users) => {
           renderItem={(_) => (
             <View style={styles.avatar}>
               <Avatar.Text
-                style={{ backgroundColor: theme.colors.tertiary } }
-                size={22}
+                style={{ backgroundColor: theme.colors.primaryContainer } }
+                size={24}
                 label="XD"
               />
             </View>
           )}
           ListFooterComponent={
             <Avatar.Icon
-              size={22}
+              size={24}
               icon="plus"
-              style={{ backgroundColor: theme.colors.primaryContainer }}
+              style={{ backgroundColor: theme.colors.primary }}
+              color={theme.colors.surface}
             />
           }
         />

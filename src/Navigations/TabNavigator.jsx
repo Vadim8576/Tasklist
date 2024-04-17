@@ -39,13 +39,12 @@ export default TabNavigator = observer(() => {
 
 
 
-  // useEffect(() => {
-  //   if (!userId) return
 
-  //   const unsubscribe = appStore.subscribeToTaskList(userId)
-
-  //   return unsubscribe
-  // }, [userId])
+  useEffect(() => {
+    if (!userId) return
+    const unsubscribe = appStore.subscribeToTaskList(userId)
+    return unsubscribe
+  }, [userId])
 
 
   useEffect(() => {

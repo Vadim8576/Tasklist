@@ -7,7 +7,7 @@ import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 
 
 //SubTaskList
-export default ListItem = observer(({ item, taskListId, subTaskListId, navigation }) => {
+export default ListItem = observer(({ item, taskListId, subTaskListId, currentListId }) => {
 
 
   console.log('List Item taskListId = ', taskListId)
@@ -34,46 +34,41 @@ export default ListItem = observer(({ item, taskListId, subTaskListId, navigatio
       comment: item.comment,
       complited: !item.complited,
     })
+
+    
   }
 
   return (
     <View style={styles.listItemWrapper}>
-      <TouchableRipple
-        background={theme.colors.surfaceVariant}
-        onPress={() => console.log(item.title)}
-      >
-        <List.Item
-          title={item.title}
-          description={item.comment}
-          descriptionStyle={descriptionStyle}
-          titleStyle={[
-            titleStyle,
-            styles.title
-          ]}
-          style={[
-            styles.listItem,
-            { backgroundColor: theme.colors.background }
-          ]}
-          left={() =>
-            <BouncyCheckbox
-              size={24}
-              fillColor={theme.colors.primary}
-              unFillColor={theme.colors.background}
-              // iconStyle={{ borderColor: "red" }}
-              innerIconStyle={{ borderWidth: 2 }}
-              onPress={onChange}
-              isChecked={item.complited}
-            />
+      <List.Item
+        title={item.title}
+        description={item.comment}
+        descriptionStyle={descriptionStyle}
+        titleStyle={[
+          titleStyle,
+          styles.title
+        ]}
+        style={[
+          styles.listItem,
+          {
+            backgroundColor:
+              currentListId === item.subTaskListId
+                ? theme.colors.tertiaryContainer
+                : theme.colors.background
           }
-          right={() =>
-            <ContextMenu
-              navigation={navigation}
-              listId={subTaskListId}
-              currentList='SUB_TASK'
-            />
-          }
-        />
-      </TouchableRipple>
+        ]}
+        left={() =>
+          <BouncyCheckbox
+            size={24}
+            fillColor={theme.colors.primary}
+            unFillColor={theme.colors.background}
+            // iconStyle={{ borderColor: "red" }}
+            innerIconStyle={{ borderWidth: 2 }}
+            onPress={onChange}
+            isChecked={item.complited}
+          />
+        }
+      />
     </View>
   )
 })
@@ -84,18 +79,18 @@ export default ListItem = observer(({ item, taskListId, subTaskListId, navigatio
 
 const styles = StyleSheet.create({
   listItemWrapper: {
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   listItem: {
     // paddingLeft: 10,
     // paddingRight: 5,
     // borderRadius: 10,
-    
-    paddingLeft: 15,
-    paddingRight: 5,
-    borderRadius: 10,
-    paddingTop: 2,
-    paddingBottom: 2
+
+    paddingLeft: 20,
+    paddingRight: 15,
+    // borderRadius: 10,
+    paddingTop: 5,
+    paddingBottom: 5
   },
   title: {
     // color: '#000',

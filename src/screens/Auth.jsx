@@ -12,7 +12,7 @@ export default Auth = observer(({ navigation, route }) => {
   const theme = useTheme();
   const { singIn } = authStore
 
-  const [email, setEmail] = useState('1@mail.ru')
+  const [email, setEmail] = useState('321@mail.ru')
   const [password, setPassword] = useState('123456')
   
   const newEmail = route.params?.email || null
@@ -34,7 +34,7 @@ export default Auth = observer(({ navigation, route }) => {
 
   // удалить
   useEffect(() => {
-    // login(email, password)
+    // singIn(email, password)
   }, [email])
 
   // удалить

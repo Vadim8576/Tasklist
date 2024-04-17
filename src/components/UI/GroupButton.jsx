@@ -1,40 +1,63 @@
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { FAB, Portal, PaperProvider, useTheme } from 'react-native-paper';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { FAB, useTheme, IconButton, Text } from 'react-native-paper';
 
-export default GroupButton = ({
-  addButtonVisible,
-  buttonGroupIsOpen,
-  setButtonGroupIsOpen,
-  checkboxChange = null,
-  addTask,
-  edit,
-  remove
-}) => {
+
+export default GroupButton = ({ buttonGroup }) => {
+
+  const {
+    buttonVisible,
+    addTask,
+    idOfSelectedItems,
+    setIdOfSelectedItems,
+    selectionMode,
+    setSelectionMode,
+    checkboxChange = null,
+    clearSelection,
+    edit,
+    remove,
+    removeSelected,
+    buttonGroupIsOpen,
+    hide,
+    show
+  } = buttonGroup
+
+  // console.log('buttonVisible = ', buttonGroup.buttonVisible)
+
+
+
 
   const theme = useTheme()
 
-  const onStateChange = () => setButtonGroupIsOpen(state => !state);
-
   const open = buttonGroupIsOpen;
+
+  const onStateChange = () => {
+
+    if (!open && idOfSelectedItems.length === 1) {
+      show()
+    } else {
+      hide()
+    }
+  }
 
 
 
   const pressActions = [
     {
-      icon: 'check',
-      onPress: checkboxChange
-    },
-    {
       icon: 'pencil',
-      onPress: edit
+      onPress: () => {
+        edit()
+        clearSelection()
+      }
     },
     {
       icon: 'delete',
-      onPress: remove
+      onPress: () => {
+        remove()
+        clearSelection()
+      }
     }
   ]
-
 
 
 
@@ -45,21 +68,33 @@ export default GroupButton = ({
       color='white'
       style={styles.group}
       open={buttonGroupIsOpen}
-      visible={addButtonVisible}
-      icon={!open ? 'plus' : 'chevron-down'}
-      // icon={open ? 'calendar-today' : 'plus'}
+      visible={buttonVisible}
+      icon={
+        idOfSelectedItems.length === 0
+          ? 'plus'
+          : idOfSelectedItems.length === 1 ? 'chevron-up'
+            : 'delete'
+      }
       actions={pressActions}
-      onStateChange={() => open && onStateChange()}
+      onStateChange={onStateChange}
       onPress={() => {
         if (open) {
-          console.log('if open')
+          //console.log('if open')
           return
         }
-        console.log('if not open')
-        addTask()
+        //console.log('if not open')
+
+        if(idOfSelectedItems.length > 1) {
+          removeSelected()
+          clearSelection()
+        }
+        if(idOfSelectedItems.length === 0) addTask()
+
+        
+
       }}
     />
-  );
+  )
 };
 
 const styles = StyleSheet.create({
@@ -68,5 +103,13 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: 10
   },
+  deleteMenu: {
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 70,
+    backgroundColor: '#999',
+  }
 
 })

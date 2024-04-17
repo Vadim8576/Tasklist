@@ -2,13 +2,12 @@
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { List, useTheme, TextInput, HelperText } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import FoundFriend from './FoundFriend';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
-import friendsStore from '../../store/friendsStore';
 import { useSeachFriend } from '../../hooks/useSeachFriend';
 
 
@@ -26,29 +25,28 @@ export default SeachFriends = observer(({ friends }) => {
 
 
   const onSubmit = async () => {
-    const [friend, error] = await getFriend({friendId, userId: user.uid})
+    const [friend, error] = await getFriend({ friendId, userId: user.uid })
     setError(error)
     setFoundFriend(friend)
   }
 
-  const clearInput = () => {
+  const resetState = () => {
     setFriendId('')
     setError('')
     setFoundFriend(null)
   }
 
   const friendIdInputHandler = (value) => {
-    if (friendId === '') clearInput()
+    if (friendId === '') resetState()
     setFriendId(value)
   }
 
 
   return (
     <>
-      <View style={[
-        styles.wrapper,
-        { paddingRight: 10 },
-      ]}>
+      <View style={
+        styles.wrapper
+      }>
         <View style={styles.textWrapper}>
           <Text style={styles.text}>ID:</Text>
         </View>
@@ -65,7 +63,7 @@ export default SeachFriends = observer(({ friends }) => {
                   size={20}
                   color={theme.colors.outline}
                   icon="close"
-                  onPress={clearInput}
+                  onPress={resetState}
                 />
               )
             }
@@ -106,6 +104,7 @@ export default SeachFriends = observer(({ friends }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    paddingRight: 10,
     alignContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',

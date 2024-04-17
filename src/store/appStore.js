@@ -59,6 +59,8 @@ class appStore {
 
   getTaskTitleAndComment = (id) => {
 
+    console.log('getTaskTitleAndComment id = ', id)
+
     const subTasks = this.subTaskList.filter(task => task.subTaskListId === id)
     const title = subTasks[0]?.title
     const comment = subTasks[0]?.comment
@@ -97,6 +99,9 @@ class appStore {
     fb.removeTaskList(taskListId)
   }
 
+  removeSelectedTaskList = async (ids) => {
+    await fb.removeSelectedTaskList(ids)
+  }
 
 
 

@@ -22,6 +22,12 @@ export const useInputDialog = (props) => {
 
   const { type, listId = null} = props
 
+
+
+  console.log('useInputDialog type, listId = ', type, listId)
+
+
+
   const {user} = useAuth()
   const userId = user.uid
 

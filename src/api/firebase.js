@@ -279,7 +279,7 @@ export const fb = {
   addTaskList: (payload) => {
     const { userId, title, createdAt } = payload
 
-    if(title === '') return
+    if (title === '') return
 
     const data = {
       title: title,
@@ -345,7 +345,27 @@ export const fb = {
       })
       .catch((error) => {
         setErrorMessage()
+        console.log('Ошбика удаления списка задач: ', error)
       })
+  },
+
+  removeSelectedTaskList: async (ids) => {
+
+    const removePromise = ids.map(async (id) => {
+
+      try {
+        await deleteDoc( doc(db, DB_NAME, id))
+      } catch (error) {
+        setErrorMessage()
+          console.log('Ошбика удаления списка задач c id: ', id, error)
+      }
+      return id
+    })
+
+
+    const removeIds = await Promise.all(removePromise);
+
+    console.log(removeIds)
   },
 
 
@@ -380,7 +400,6 @@ export const fb = {
     return unsubscribe
   },
 
-
   addTask: (payload) => {
     const { title, comment, listId } = payload
 
@@ -400,7 +419,7 @@ export const fb = {
       .then(() => {
         // console.log('Задача успешно добавлена.');
 
-        firstDocAdded = true;      
+        firstDocAdded = true;
 
         const docId = newDocRef.id;
         const updatedData = { ...data, subTaskListId: docId };
@@ -476,7 +495,7 @@ export const fb = {
 
     const docRef = doc(db, 'subtasklist', listId);
 
-    updateDoc(docRef, 
+    updateDoc(docRef,
       updateData
     )
       .then(() => {
@@ -528,7 +547,7 @@ export const fb = {
 
   removeTask: (listId) => {
 
-  
+
 
     if (!listId) return
 
