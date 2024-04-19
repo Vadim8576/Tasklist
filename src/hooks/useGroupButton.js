@@ -13,7 +13,7 @@ export const useGroupButton = (payload) => {
     name: type === 'ADD_TASK_LIST' ? 'TASK_LIST' : 'SUB_TASK_LIST', id: null
   })
 
-  const [idOfSelectedItems, setIdOfSelectedItems] = useState([])
+  const [idsOfSelectedItems, setIdsOfSelectedItems] = useState([])
   const [selectionMode, setSelectionMode] = useState(false)
 
   const getOptions = (listId) => ({
@@ -21,12 +21,13 @@ export const useGroupButton = (payload) => {
       type: dialogActions.editTaskListTitle,
       listId,
       remove: () => appStore.removeTaskList(listId),
-      removeSelectedTaskList: () => appStore.removeSelectedTaskList(idOfSelectedItems)
+      removeSelected: () => appStore.removeSelectedTaskList(idsOfSelectedItems)
     },
     'SUB_TASK_LIST': {
       type: dialogActions.editTask,
       listId,
-      remove: () => appStore.removeTask(listId)
+      remove: () => appStore.removeTask(listId),
+      removeSelected: () => appStore.removeSelectedTask(idsOfSelectedItems)
     }
   })
 
@@ -40,12 +41,12 @@ export const useGroupButton = (payload) => {
 
 
   useEffect(() => {
-    console.log(idOfSelectedItems, idOfSelectedItems.length)
+    console.log(idsOfSelectedItems, idsOfSelectedItems.length)
 
-    if (idOfSelectedItems.length === 1) {
-      setCurrentList(state => ({ ...state, id: idOfSelectedItems[0] }))
+    if (idsOfSelectedItems.length === 1) {
+      setCurrentList(state => ({ ...state, id: idsOfSelectedItems[0] }))
     }
-  }, [idOfSelectedItems])
+  }, [idsOfSelectedItems])
 
 
 
@@ -56,10 +57,10 @@ export const useGroupButton = (payload) => {
     buttonVisible: !errorStore.message.isError && !errorStore.message.isSuccess,
 
 
-    idOfSelectedItems,
+    idsOfSelectedItems,
 
 
-    setIdOfSelectedItems,
+    setIdsOfSelectedItems,
 
 
     selectionMode,
@@ -82,13 +83,21 @@ export const useGroupButton = (payload) => {
 
 
     clearSelection: () => {
-      setIdOfSelectedItems([])
+      setIdsOfSelectedItems([])
     },
 
+    getSelected: (id) => {
+
+      for (let i = 0; i < idsOfSelectedItems?.length; i++) {
+        if (idsOfSelectedItems[i] === id) return true
+      }
+  
+      return false
+    },
 
     edit: () => {
       console.log('edit currentList.id = ', currentList.id)
-      const { remove, removeSelectedTaskList, ...otherOptions } = getOptions(currentList.id)[currentList.name]
+      const { remove, removeSelected, ...otherOptions } = getOptions(currentList.id)[currentList.name]
       navigation.navigate('DialogScreen', otherOptions)
     },
 
@@ -99,21 +108,29 @@ export const useGroupButton = (payload) => {
     },
     
 
-    removeSelectedTaskList: () => {
-      console.log('Удалить: ', idOfSelectedItems)
-      getOptions(currentList.id)[currentList.name].removeSelectedTaskList()
+    removeSelected: () => {
+      console.log('Удалить: ', idsOfSelectedItems)
+      getOptions(currentList.id)[currentList.name].removeSelected()
     },
 
 
     onPressItem: (item) => {
-      if (idOfSelectedItems.length > 0) {
-        if (idOfSelectedItems.includes(item.taskListId)) {
-          setIdOfSelectedItems(items => items.filter((id) => id !== item.taskListId))
+      if (idsOfSelectedItems.length > 0) {
+
+        const key = currentList.name === 'SUB_TASK_LIST' ? 'subTaskListId' : 'taskListId'
+        if (idsOfSelectedItems.includes(item[key])) {
+          setIdsOfSelectedItems(items => items.filter((id) => id !== item[key]))
           return
         }
-        setIdOfSelectedItems(items => [...items, item.taskListId])
+        setIdsOfSelectedItems(items => [...items, item[key]])
         return
       }
+
+      if(currentList.name === 'SUB_TASK_LIST') {
+        // нажал на subtask
+        return
+      }
+
       navigation.navigate(
         'SubTaskList', {
         taskList: item
@@ -122,8 +139,8 @@ export const useGroupButton = (payload) => {
 
 
     onLongPressItem: (listId) => {
-      if (idOfSelectedItems.length === 0) {
-        setIdOfSelectedItems([listId])
+      if (idsOfSelectedItems.length === 0) {
+        setIdsOfSelectedItems([listId])
       }
       setCurrentList(state => ({ ...state, id: listId }))
     },
@@ -151,6 +168,6 @@ export const useGroupButton = (payload) => {
     listId,
     buttonGroup.buttonGroupIsOpen,
     currentList.id,
-    idOfSelectedItems
+    idsOfSelectedItems
   ])
 }

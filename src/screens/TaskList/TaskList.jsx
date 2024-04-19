@@ -8,7 +8,6 @@ import { useListFilter } from '../../hooks/useListFilter';
 import appStore from '../../store/appStore';
 import { TouchableRipple, useTheme } from 'react-native-paper';
 import { useGroupButton } from '../../hooks/useGroupButton';
-import { useState } from 'react';
 
 
 
@@ -34,16 +33,6 @@ export default TaskList = observer(({ navigation, route }) => {
 
 
 
-  const getSelected = (taskListId) => {
-
-    for (let i = 0; i < buttonGroup.idOfSelectedItems?.length; i++) {
-      if (buttonGroup.idOfSelectedItems[i] === taskListId) return true
-    }
-
-    return false
-  }
-
-
   return (
     <>
       <View style={[
@@ -59,14 +48,11 @@ export default TaskList = observer(({ navigation, route }) => {
               background={theme.colors.surfaceVariant}
               onPress={() => buttonGroup.onPressItem(item)}
               onLongPress={() => {
-
                 buttonGroup.onLongPressItem(item.taskListId)
-                
-                console.log('LongPress')
               }}
             >
-              <ListItem
-                isSelected={getSelected(item.taskListId)}
+              <ListItem     
+                isSelected={buttonGroup.getSelected(item.taskListId)}
                 item={item}
                 // currentListId={currentListId}
               />

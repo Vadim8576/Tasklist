@@ -7,7 +7,7 @@ import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 
 
 //SubTaskList
-export default ListItem = observer(({ item, taskListId, subTaskListId, currentListId }) => {
+export default ListItem = observer(({ item, taskListId, subTaskListId, isSelected }) => {
 
 
   console.log('List Item taskListId = ', taskListId)
@@ -42,21 +42,22 @@ export default ListItem = observer(({ item, taskListId, subTaskListId, currentLi
     <View style={styles.listItemWrapper}>
       <List.Item
         title={item.title}
+        style={[
+          styles.listItem,
+          {
+            backgroundColor:
+              isSelected
+                ? theme.colors.tertiaryContainer
+                : theme.colors.background
+          }
+        ]}
         description={item.comment}
         descriptionStyle={descriptionStyle}
         titleStyle={[
           titleStyle,
           styles.title
         ]}
-        style={[
-          styles.listItem,
-          {
-            backgroundColor:
-              currentListId === item.subTaskListId
-                ? theme.colors.tertiaryContainer
-                : theme.colors.background
-          }
-        ]}
+       
         left={() =>
           <BouncyCheckbox
             size={24}

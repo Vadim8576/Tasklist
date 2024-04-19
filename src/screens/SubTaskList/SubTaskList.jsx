@@ -1,12 +1,12 @@
 import { useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { FlatList, StyleSheet, View } from "react-native";
-import appStore from '../../store/appStore';
 import ListItem from "./listItem";
 import { dialogActions } from "../../const/constants";
 import { TouchableRipple, useTheme } from "react-native-paper";
 import { useGroupButton } from "../../hooks/useGroupButton";
 import GroupButton from "../../components/UI/GroupButton";
+import appStore from "../../store/appStore";
 
 
 
@@ -17,29 +17,16 @@ export default SubTaskList = observer(({ route, navigation }) => {
   const { title, taskListId, createdAt } = taskList
 
 
-  // const {
-  //   addButtonVisible,
-  //   buttonGroupIsOpen,
-  //   setButtonGroupIsOpen,
-  //   currentListId,
-  //   addTask,
-  //   edit,
-  //   remove,
-  //   onPressItem,
-  //   onLongPressItem
-  // } = useGroupButton({
-  //   navigation,
-  //   type: dialogActions.addTask,
-  //   listId: taskList.taskListId
-  // })
+  console.log(taskList)
 
+  // debugger
 
   const {
     buttonGroup
   } = useGroupButton({
     navigation,
     type: dialogActions.addTask,
-    listId: taskList.taskListId
+    listId: taskListId
   })
 
 
@@ -76,17 +63,16 @@ export default SubTaskList = observer(({ route, navigation }) => {
             <TouchableRipple
               key={item.subTaskListId}
               background={theme.colors.surfaceVariant}
-              onPress={() => onPressItem(item)}
+              onPress={() => buttonGroup.onPressItem(item)}
               onLongPress={() => {
-                onLongPressItem(item.subTaskListId)
-                setButtonGroupIsOpen(true)
+                buttonGroup.onLongPressItem(item.subTaskListId)
               }}
             >
               <ListItem
+                isSelected={buttonGroup.getSelected(item.subTaskListId)}
                 item={item}
                 taskListId={taskListId}
                 subTaskListId={item.subTaskListId}
-                currentListId={currentListId}
               />
             </TouchableRipple>
 

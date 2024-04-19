@@ -33,11 +33,11 @@ class appStore {
     // console.log('appStore data = ', data)
 
     this.taskList = data.map(d => ({
-        createdAt: d.createdAt,
-        creatorId: d.creatorId,
-        taskListId: d.taskListId,
-        title: d.title,
-        groupUsersIds: d.groupUsersIds
+      createdAt: d.createdAt,
+      creatorId: d.creatorId,
+      taskListId: d.taskListId,
+      title: d.title,
+      groupUsersIds: d.groupUsersIds
     }))
 
     // let task = {}
@@ -64,8 +64,8 @@ class appStore {
     const subTasks = this.subTaskList.filter(task => task.subTaskListId === id)
     const title = subTasks[0]?.title
     const comment = subTasks[0]?.comment
-    
-    return { title , comment }
+
+    return { title, comment }
   }
 
 
@@ -107,7 +107,8 @@ class appStore {
 
 
 
-    
+
+
   setSubTaskList = (data) => {
     this.subTaskList = data
 
@@ -141,12 +142,9 @@ class appStore {
   }
 
 
-
-
-
-  // getTaskByIndex = (index) => {
-  //   return this.taskList[index]
-  // }
+  removeSelectedTask = async (ids) => {
+    await fb.removeSelectedTask(ids)
+  }
 
 }
 

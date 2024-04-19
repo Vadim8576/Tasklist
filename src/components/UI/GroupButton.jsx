@@ -8,15 +8,15 @@ export default GroupButton = ({ buttonGroup }) => {
   const {
     buttonVisible,
     addTask,
-    idOfSelectedItems,
-    setIdOfSelectedItems,
+    idsOfSelectedItems,
+    setIdsOfSelectedItems,
     selectionMode,
     setSelectionMode,
     checkboxChange = null,
     clearSelection,
     edit,
     remove,
-    removeSelectedTaskList,
+    removeSelected,
     buttonGroupIsOpen,
     hide,
     show
@@ -33,7 +33,7 @@ export default GroupButton = ({ buttonGroup }) => {
 
   const onStateChange = () => {
 
-    if (!open && idOfSelectedItems.length === 1) {
+    if (!open && idsOfSelectedItems.length === 1) {
       show()
     } else {
       hide()
@@ -70,9 +70,9 @@ export default GroupButton = ({ buttonGroup }) => {
       open={buttonGroupIsOpen}
       visible={buttonVisible}
       icon={
-        idOfSelectedItems.length === 0
+        idsOfSelectedItems.length === 0
           ? 'plus'
-          : idOfSelectedItems.length === 1 ? 'chevron-up'
+          : idsOfSelectedItems.length === 1 ? 'chevron-up'
             : 'delete'
       }
       actions={pressActions}
@@ -84,11 +84,11 @@ export default GroupButton = ({ buttonGroup }) => {
         }
         //console.log('if not open')
 
-        if(idOfSelectedItems.length > 1) {
-          removeSelectedTaskList()
+        if(idsOfSelectedItems.length > 1) {
+          removeSelected()
           clearSelection()
         }
-        if(idOfSelectedItems.length === 0) addTask()
+        if(idsOfSelectedItems.length === 0) addTask()
 
         
 

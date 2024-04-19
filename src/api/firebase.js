@@ -588,6 +588,22 @@ export const fb = {
   },
 
 
+  removeSelectedTask: async (ids) => {
+
+    const removePromise = ids.map(async (id) => {
+
+      try {
+        await deleteDoc( doc(db, 'subtasklist', id))
+      } catch (error) {
+        setErrorMessage()
+          console.log('Ошбика удаления задач c id: ', id, error)
+      }
+      return id
+    })
+
+    const removeIds = await Promise.all(removePromise);
+
+  },
 
 
   removeAllTaskList: () => {
