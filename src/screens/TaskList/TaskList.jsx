@@ -54,7 +54,6 @@ export default TaskList = observer(({ navigation, route }) => {
               <ListItem     
                 isSelected={buttonGroup.getSelected(item.taskListId)}
                 item={item}
-                // currentListId={currentListId}
               />
             </TouchableRipple>
 

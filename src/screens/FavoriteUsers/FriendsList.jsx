@@ -10,7 +10,7 @@ import friendsStore from '../../store/friendsStore';
 
 
 
-export default FavoriteUsers = observer(({friends}) => {
+export default FriendsList = observer(({friends}) => {
   const theme = useTheme()
 
   const { user } = useAuth()

@@ -97,7 +97,7 @@ export default SeachFriends = observer(({ friends }) => {
 
 
     </>
-  );
+  )
 })
 
 

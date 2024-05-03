@@ -11,8 +11,6 @@ export default ListItem = observer(({ item, isSelected }) => {
 
   const theme = useTheme();
 
-
-
   return (
     <View style={styles.listItemWrapper}>
       <List.Item
@@ -35,7 +33,6 @@ export default ListItem = observer(({ item, isSelected }) => {
         descriptionStyle={styles.description}
         left={() =>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-
             <Avatar.Text
               style={{ backgroundColor: theme.colors.tertiary }}
               color={theme.colors.onTertiary}

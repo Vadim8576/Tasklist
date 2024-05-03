@@ -50,11 +50,17 @@ export const useGroupButton = (payload) => {
 
 
 
+  useEffect(() => {
+    console.log('currentList = ', currentList.name)
+  }, [currentList])
+
 
 
 
   const buttonGroup = {
     buttonVisible: !errorStore.message.isError && !errorStore.message.isSuccess,
+
+    currentList,
 
 
     idsOfSelectedItems,

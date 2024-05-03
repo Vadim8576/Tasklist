@@ -112,7 +112,7 @@ class appStore {
   setSubTaskList = (data) => {
     this.subTaskList = data
 
-    console.log('subTaskList.subTaskListId = ', this.subTaskList.subTaskListId)
+    // console.log('subTaskList.subTaskListId = ', this.subTaskList.subTaskListId)
   }
 
 

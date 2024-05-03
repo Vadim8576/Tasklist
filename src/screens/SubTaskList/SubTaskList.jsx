@@ -1,9 +1,9 @@
 import { useLayoutEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { FlatList, StyleSheet, View } from "react-native";
-import ListItem from "./listItem";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import ListItem from "./ListItem";
 import { dialogActions } from "../../const/constants";
-import { TouchableRipple, useTheme } from "react-native-paper";
+import { Avatar, Text, TouchableRipple, useTheme } from "react-native-paper";
 import { useGroupButton } from "../../hooks/useGroupButton";
 import GroupButton from "../../components/UI/GroupButton";
 import appStore from "../../store/appStore";
@@ -15,7 +15,10 @@ export default SubTaskList = observer(({ route, navigation }) => {
   const theme = useTheme()
   const { taskList } = route.params;
   const { title, taskListId, createdAt } = taskList
+  const screenName = route.name
 
+  console.log('SubTaskList screenName = ', screenName)
+  // console.log('SubTaskList taskList = ', taskList.groupUsersIds)
 
   console.log(taskList)
 
@@ -28,6 +31,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
     type: dialogActions.addTask,
     listId: taskListId
   })
+
 
 
 
@@ -51,6 +55,28 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
   return (
     <>
+      {
+        taskList.groupUsersIds.length > 0 &&
+        <View style={{ padding: 20 }}>
+          <ScrollView
+            horizontal={true}
+            style={{ marginTop: 10, marginBottom: 10 }}
+          >
+            {
+              // taskList.groupUsersIds.map(id => (
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].map(id => (
+                <Avatar.Text
+                  key={id}
+                  style={{ backgroundColor: theme.colors.primaryContainer, marginRight: 10 }}
+                  size={40}
+                  label="XD"
+                />
+              ))
+            }
+          </ScrollView>
+        </View>
+      }
+
       <View style={[
         styles.container,
         { backgroundColor: theme.colors.background }
@@ -63,6 +89,8 @@ export default SubTaskList = observer(({ route, navigation }) => {
             <TouchableRipple
               key={item.subTaskListId}
               background={theme.colors.surfaceVariant}
+
+
               onPress={() => buttonGroup.onPressItem(item)}
               onLongPress={() => {
                 buttonGroup.onLongPressItem(item.subTaskListId)
@@ -83,9 +111,8 @@ export default SubTaskList = observer(({ route, navigation }) => {
           buttonGroup={buttonGroup}
         />
       </View>
-
     </>
-  );
+  )
 })
 
 
@@ -93,7 +120,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    marginTop: 30,
+    // marginTop: 30,
     // paddingTop: 5,
     // paddingLeft: 5,
     // paddingRight: 5,
