@@ -9,7 +9,7 @@ export default styles = StyleSheet.create({
     paddingRight: 0,
     paddingLeft: 10,
     borderRadius: 3,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   pressable: {
     borderRadius: RIGHT_BUTTON_SIZE / 2,

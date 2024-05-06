@@ -52,7 +52,7 @@ export default SeachFriends = observer(({ friends }) => {
         </View>
         <View style={styles.inputWrapper}>
           <CustomInput
-            placeholder='Введите ID друга'
+            placeholder='Введите ID пользователя'
             value={friendId}
             onChangeText={friendIdInputHandler}
             multiline={false}

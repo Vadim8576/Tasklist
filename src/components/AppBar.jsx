@@ -6,7 +6,7 @@ import appStore from '../store/appStore';
 
 
 
-export default AppBar = ({ navigation, route, options, back }) => {
+export default AppBar = ({ navigation, route, options, back, screenTitle }) => {
 
   const theme = useTheme();
 
@@ -38,7 +38,7 @@ export default AppBar = ({ navigation, route, options, back }) => {
             <Text
               style={{ color: theme.colors.surface, fontSize: 16 }}
             >
-              {title || ''}
+              {title || screenTitle || ''}
             </Text>
             {description &&
               <Text

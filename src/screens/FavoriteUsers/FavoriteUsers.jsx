@@ -18,6 +18,7 @@ export default FavoriteUsers = observer((props) => {
   const [friendId, setFriendId] = useState()
 
   console.log('Favorite Users render')
+  // console.log('navigation = ', navigation)
 
   const theme = useTheme()
 
@@ -27,11 +28,6 @@ export default FavoriteUsers = observer((props) => {
 
 
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     title: 'Мои друзья'
-  //   })
-  // }, [])
 
 
 
@@ -46,6 +42,12 @@ export default FavoriteUsers = observer((props) => {
   }, [userId])
 
   // const {value, onChangeText, placeholder} = props
+
+
+  
+
+
+
 
 
   return (

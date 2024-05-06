@@ -1,23 +1,43 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { Button, FlatList, ScrollView, StyleSheet, View } from "react-native";
 import ListItem from "./ListItem";
 import { dialogActions } from "../../const/constants";
-import { Avatar, Text, TouchableRipple, useTheme } from "react-native-paper";
+import { Avatar, Portal, Dialog, TouchableRipple, useTheme, IconButton } from "react-native-paper";
 import { useGroupButton } from "../../hooks/useGroupButton";
 import GroupButton from "../../components/UI/GroupButton";
 import appStore from "../../store/appStore";
+import friendsStore from "../../store/friendsStore";
+import { useAuth } from "../../hooks/useAuth";
+import FriendsList from "../FavoriteUsers/FriendsList";
+import AddButton from "../../components/UI/AddButton";
 
 
 
 export default SubTaskList = observer(({ route, navigation }) => {
+
+
+
+  const { user } = useAuth()
+  const userId = user.uid
+
+
+  const [visible, setVisible] = useState(true);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  // const containerStyle = {  };
+
+
 
   const theme = useTheme()
   const { taskList } = route.params;
   const { title, taskListId, createdAt } = taskList
   const screenName = route.name
 
-  console.log('SubTaskList screenName = ', screenName)
+
+
+
+  // console.log('SubTaskList screenName = ', screenName)
   // console.log('SubTaskList taskList = ', taskList.groupUsersIds)
 
   console.log(taskList)
@@ -53,6 +73,17 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
 
 
+
+  useEffect(() => {
+
+    // authStore.createUser()
+    if (!userId) return
+    friendsStore.getFriends(userId)
+
+  }, [userId])
+
+
+
   return (
     <>
       {
@@ -74,8 +105,22 @@ export default SubTaskList = observer(({ route, navigation }) => {
               ))
             }
           </ScrollView>
+
+
         </View>
       }
+
+
+
+
+
+      <Button
+        title="Press me"
+        onPress={showModal}
+      />
+
+
+
 
       <View style={[
         styles.container,
@@ -111,6 +156,50 @@ export default SubTaskList = observer(({ route, navigation }) => {
           buttonGroup={buttonGroup}
         />
       </View>
+
+
+
+      <Portal>
+        <Dialog
+          visible={visible}
+          onDismiss={hideModal}
+          style={{
+            padding: 0,
+            backgroundColor: 'white',
+            maxHeight: '70%'
+          }}
+        >
+          <Dialog.Title>Участники</Dialog.Title>
+
+          <Dialog.ScrollArea>
+            <FriendsList
+              friends={[
+                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs1", "nickName": "Александр" },
+                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz2", "nickName": "Люся" },
+                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs3", "nickName": "Александр" },
+                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz4", "nickName": "Люся" },
+                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs5", "nickName": "Александр" },
+                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz6", "nickName": "Люся" },
+                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs7", "nickName": "Александр" },
+                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz8", "nickName": "Люся" },
+                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs9", "nickName": "Александр" },
+                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz0", "nickName": "Люся" },
+              ]} />
+          </Dialog.ScrollArea>
+          <Dialog.Actions>
+            <IconButton
+              icon="plus"
+              size={26}
+              containerColor={theme.colors.tertiary}
+              iconColor={theme.colors.onTertiary}
+              onPress={() => console.log('Pressed')}
+            />
+
+
+          </Dialog.Actions>
+        </Dialog>
+
+      </Portal >
     </>
   )
 })
@@ -127,5 +216,5 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: 85
-  }
+  },
 })

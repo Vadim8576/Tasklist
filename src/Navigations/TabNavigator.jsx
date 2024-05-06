@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { StyleSheet } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
@@ -15,7 +15,17 @@ import FavoriteUsers from "../screens/FavoriteUsers/FavoriteUsers";
 
 const Tab = createBottomTabNavigator();
 
-export default TabNavigator = observer(() => {
+export default TabNavigator = observer(({navigation, setScreenTitle}) => {
+
+
+  const TITLE = {
+    TaskList: 'Мои задачи',
+    GroupTaskList: 'Групповые задачи',
+    FavoriteUsers: 'Избранные пользователи',
+    Setting: 'Настройки',
+  }
+
+
 
   const [numberOfTasks, setNumberOfTasks] = useState(0)
   const [numberOfGorupTasks, setNumberOfGroupTasks] = useState(0)
@@ -53,17 +63,21 @@ export default TabNavigator = observer(() => {
   }, [userId])
 
 
+
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        headerShown: false,
+        headerShown: false
       })}
+      
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
           // getBadge={(props) => {
           //   return props.route.name === 'TaskList' ? '1' : ''
           // }}
           
+
           navigationState={state}
           safeAreaInsets={insets}
           onTabPress={({ route, preventDefault }) => {
@@ -76,6 +90,9 @@ export default TabNavigator = observer(() => {
             if (event.defaultPrevented) {
               preventDefault();
             } else {
+
+              setScreenTitle(TITLE[route.name])
+
               navigation.dispatch({
                 ...CommonActions.navigate(route.name, route.params),
                 target: state.key,
@@ -86,7 +103,7 @@ export default TabNavigator = observer(() => {
           renderIcon={({ route, focused, color }) => {
             const { options } = descriptors[route.key];
             if (options.tabBarIcon) {
-              return options.tabBarIcon({ focused, color, size: 22 });
+              return options.tabBarIcon({ focused, color, size: 28 });
             }
             return null;
           }}
@@ -100,45 +117,49 @@ export default TabNavigator = observer(() => {
                   : route.title;
             return label;
           }}
+          labeled={false}
         />
       )}
     >
+
+
       <Tab.Screen
-        name="TaskList"
+        name='TaskList'
         component={TaskList}
         options={{
-          tabBarLabel: 'Мои задачи',
+          // tabBarLabel: TITLE['TaskList'],
           tabBarIcon: ({ color, size }) => {
-            return <Icon name="format-list-bulleted" size={size} color={color} />;
+            return <Icon name="playlist-check" size={size} color={color} />;
           },
         }}
       />
       <Tab.Screen
-        name="GroupTaskList"
+        name='GroupTaskList'
         component={TaskList}
+       
         options={{
-          tabBarLabel: 'Групповые задачи',
+          // tabBarLabel: TITLE['GroupTaskList'],
           tabBarIcon: ({ color, size }) => {
-            return <Icon name="format-list-bulleted" size={size} color={color} />;
+            return <Icon name="playlist-star" size={size} color={color} />;
           },
         }}
       />
         
       <Tab.Screen
-        name="FavoriteUsers"
+        name='FavoriteUsers'
         component={FavoriteUsers}
         options={{
-          tabBarLabel: 'Мои друзья',
+          tabBarLabel: TITLE['FavoriteUsers'],
           tabBarIcon: ({ color, size }) => {
-            return <Icon name="account-multiple" size={size} color={color} />;
+            return <Icon name="account-star" size={size} color={color} />;
           },
         }}
       />
        
       <Tab.Screen
-        name="Setting"
+        name='Setting'
         options={{
-          tabBarLabel: 'Настройки',
+          // tabBarLabel: TITLE['Setting'],
           tabBarIcon: ({ color, size }) => {
             return <Icon name="cog" size={size} color={color} />;
           },

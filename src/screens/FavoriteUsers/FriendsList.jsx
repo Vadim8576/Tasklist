@@ -15,7 +15,7 @@ export default FriendsList = observer(({friends}) => {
 
   const { user } = useAuth()
   console.log('FriensLisrt render')
-  console.log('FriensLisrt friend List = ', friends)
+  // console.log('FriensLisrt friend List = ', friends)
 
 
 
@@ -30,7 +30,7 @@ export default FriendsList = observer(({friends}) => {
       // { backgroundColor: theme.colors.primaryContainer },
       styles.wrapper
     ]}>
-      <Text>Мои друзья:</Text>
+      {/* <Text>Избранные пользователи:</Text> */}
       <FlatList
         data={friends}
         renderItem={({ item }) => (
@@ -81,9 +81,9 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 12,
   },
-  submit: {
-    flexGrow: 0,
-    flexBasis: RIGHT_BUTTON_SIZE,
-    flexShrink: 0,
-  },
+  // submit: {
+  //   flexGrow: 0,
+  //   flexBasis: RIGHT_BUTTON_SIZE,
+  //   flexShrink: 0,
+  // },
 });
