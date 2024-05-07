@@ -5,15 +5,13 @@ export default useGetFriendById = (groupUsersIds) => {
   const [friends, setFriends] = useState([])
 
   useEffect(() => {
-    (async () => {
-      const fr = await groupUsersIds.map(async id => {
-        const fr = await friendsStore.getFriendById(id)
-        setFriends(prev => [...prev, fr])
-      })
-    })()
+    const fr = groupUsersIds.map(async id => {
+      const fr = await friendsStore.getFriendById(id)
+      setFriends(prev => [...prev, fr])
+      // console.log('//////////////////// ', fr)
+    })
+
   }, [groupUsersIds])
-
-
+   
   return {friends}
-
 }
