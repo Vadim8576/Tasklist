@@ -5,13 +5,13 @@ import { observer } from "mobx-react-lite";
 import { useState } from 'react';
 import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
-import FoundFriend from './FoundFriend';
+import FoundUser from './FoundUser';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
 import { useSeachFriend } from '../../hooks/useSeachFriend';
 
 
-export default SeachFriends = observer(({ friends }) => {
+export default SeachUsers = observer(({ friends }) => {
   console.log('SeachFriends render')
 
   const theme = useTheme()

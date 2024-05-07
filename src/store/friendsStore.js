@@ -23,16 +23,19 @@ class FriendsStore {
   }
 
   setFriends = (friend) => {
-    console.log('authStore friend = ', friend)
+    // console.log('authStore friend = ', friend)
     this.friends = friend
     // this.friends = [...this.friends, friend]
   }
 
-  getFriendById = async  (friendId) => {
-    // this.setFoundFriend({})
-    this.setFoundFriend(await fb.getFriendById(friendId))
+  getFriendById = async (friendId) => {
     
-    return this.foundFriend
+    const ff = await fb.getFriendById(friendId)
+    this.setFoundFriend(ff)
+    
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', ff)
+    
+    return ff
   }
 
   setFoundFriend = (foundFriend) => {

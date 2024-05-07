@@ -9,8 +9,9 @@ import GroupButton from "../../components/UI/GroupButton";
 import appStore from "../../store/appStore";
 import friendsStore from "../../store/friendsStore";
 import { useAuth } from "../../hooks/useAuth";
-import FriendsList from "../FavoriteUsers/FriendsList";
+import FavoriteUserList from "../FavoriteUsers/FavoriteUserList";
 import AddButton from "../../components/UI/AddButton";
+import FavoriteUsersDialog from "../../components/FavoriteUsersDialog";
 
 
 
@@ -112,8 +113,6 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
 
 
-
-
       <Button
         title="Press me"
         onPress={showModal}
@@ -158,48 +157,12 @@ export default SubTaskList = observer(({ route, navigation }) => {
       </View>
 
 
+      <FavoriteUsersDialog
+        visible={visible}
+        hideModal={hideModal}
+        groupUsersIds={taskList?.groupUsersIds}
+      />
 
-      <Portal>
-        <Dialog
-          visible={visible}
-          onDismiss={hideModal}
-          style={{
-            padding: 0,
-            backgroundColor: 'white',
-            maxHeight: '70%'
-          }}
-        >
-          <Dialog.Title>Участники</Dialog.Title>
-
-          <Dialog.ScrollArea>
-            <FriendsList
-              friends={[
-                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs1", "nickName": "Александр" },
-                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz2", "nickName": "Люся" },
-                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs3", "nickName": "Александр" },
-                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz4", "nickName": "Люся" },
-                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs5", "nickName": "Александр" },
-                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz6", "nickName": "Люся" },
-                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs7", "nickName": "Александр" },
-                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz8", "nickName": "Люся" },
-                { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs9", "nickName": "Александр" },
-                { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz0", "nickName": "Люся" },
-              ]} />
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <IconButton
-              icon="plus"
-              size={26}
-              containerColor={theme.colors.tertiary}
-              iconColor={theme.colors.onTertiary}
-              onPress={() => console.log('Pressed')}
-            />
-
-
-          </Dialog.Actions>
-        </Dialog>
-
-      </Portal >
     </>
   )
 })

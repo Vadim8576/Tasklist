@@ -8,7 +8,7 @@ export default UserList = observer((users) => {
 
   const theme = useTheme()
 
-  console.log('UserList users = ', users)
+  // console.log('UserList users = ', users)
   return (
     <>
       <View style={styles.container}>

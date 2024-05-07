@@ -7,8 +7,8 @@ import authStore from '../../store/authStore';
 import { useAuth } from '../../hooks/useAuth';
 import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
-import SeachFriends from './SeachFriends';
-import FriendsList from './FriendsList';
+import SeachUsers from './SeachUsers';
+import FavoriteUserList from './FavoriteUserList';
 import friendsStore from '../../store/friendsStore';
 
 export default FavoriteUsers = observer((props) => {
@@ -52,8 +52,8 @@ export default FavoriteUsers = observer((props) => {
 
   return (
     <View style={styles.container}>
-      <SeachFriends friends={friendsStore.friends} />
-      <FriendsList friends={friendsStore.friends} />
+      <SeachUsers friends={friendsStore.friends} />
+      <FavoriteUserList friends={friendsStore.friends} />
     </View>
   );
 })

@@ -126,7 +126,7 @@ export const fb = {
     })
 
     const friends = await Promise.all(friendsPromises);
-    console.log('friends = ', friends)
+    // console.log('friends = ', friends)
 
     return friends
 
@@ -138,16 +138,26 @@ export const fb = {
 
   getFriendById: async (friendId) => {
 
+    console.log('FIRABASE friendId = ', friendId)
 
+    // debugger
     try {
       const q = query(collection(db, 'users'), where('id', '==', friendId));
 
       const friend = await getDocs(q)
 
+
+
+      console.log('FIRABASE friend = ', friend.docs)
+
       if (!friend.docs[0]) return null
 
       const id = friend.docs[0].data().id
       const nickName = friend.docs[0].data().nickName
+
+
+      console.log('111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+      console.log('id = ', id, 'nickName = ', nickName)
 
       return { id, nickName }
     } catch (error) {
@@ -175,7 +185,7 @@ export const fb = {
         const friends = [...user.docs[0].data().friends, friendId]
         const docId = user.docs[0].id
 
-        console.log('friends = ', user.docs[0].data())
+        // console.log('friends = ', user.docs[0].data())
         const newDocRef = doc(db, 'users', docId);
 
         await updateDoc(newDocRef, {
@@ -390,7 +400,7 @@ export const fb = {
         })
       })
 
-      console.log('allDocs = ', allDocs)
+      // console.log('allDocs = ', allDocs)
       setSubTaskList(allDocs)
     })
 

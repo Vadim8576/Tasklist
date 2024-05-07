@@ -6,23 +6,40 @@ import { colors } from "../const/constants"
 import authStore from '../store/authStore'
 import { useTheme, Button, TextInput } from 'react-native-paper';
 import Input from "../components/UI/Input";
+import { useAuth } from "../hooks/useAuth";
+
 
 
 export default Auth = observer(({ navigation, route }) => {
   const theme = useTheme();
+
+  const {user} = useAuth()
+
   const { singIn } = authStore
 
-  const [email, setEmail] = useState('321@mail.ru')
+  const [email, setEmail] = useState('321@gmail.com')
   const [password, setPassword] = useState('123456')
   
   const newEmail = route.params?.email || null
   const newPassword = route.params?.password || null
 
-  const onSubmit = async () => {
+  const onSingIn = async () => {
     await singIn(email.trim(), password.trim())
     navigation.navigate('TabNavigator', { name: 'TabNavigator' })
     // navigation.navigate('FavoriteUsers', { name: 'FavoriteUsers' })
   }
+
+
+  useEffect(() => {
+
+    onSingIn()
+    // console.log('*******************************************')
+    // console.log(user.uid)
+    // console.log('*******************************************')
+
+    if(user.uid) navigation.navigate('TabNavigator', { name: 'TabNavigator' })
+  }, [user])
+
 
 
   useEffect(() => {
@@ -32,11 +49,7 @@ export default Auth = observer(({ navigation, route }) => {
     }
   }, [newEmail, newPassword])
 
-  // удалить
-  useEffect(() => {
-    // singIn(email, password)
-  }, [email])
-
+ 
   // удалить
   const changeHandler = (value) => {
     setEmail(value)
@@ -78,7 +91,7 @@ export default Auth = observer(({ navigation, route }) => {
         <Button
           style={styles.loginButton}
           mode='contained'
-          onPress={onSubmit}
+          onPress={onSingIn}
         >
           Войти
         </Button>

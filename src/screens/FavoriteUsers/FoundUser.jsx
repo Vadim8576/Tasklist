@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import friendsStore from '../../store/friendsStore';
 
 
-export default FoundFriends = observer(({ foundFriend, clearInput }) => {
+export default FoundUser = observer(({ foundFriend, clearInput }) => {
 
   const theme = useTheme()
 

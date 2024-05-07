@@ -10,8 +10,8 @@ import ContextMenu from '../../components/ContextMenu/ContextMenuContainer';
 export default ListItem = observer(({ item, taskListId, subTaskListId, isSelected }) => {
 
 
-  console.log('List Item taskListId = ', taskListId)
-  console.log('List Item subTaskListId = ', subTaskListId)
+  // console.log('List Item taskListId = ', taskListId)
+  // console.log('List Item subTaskListId = ', subTaskListId)
   const theme = useTheme();
 
   const titleStyle = {
