@@ -106,29 +106,30 @@ export const fb = {
 
   },
 
-  getFriends: async (userId) => {
+  getFavoriteUsers: async (userId) => {
     const q = query(collection(db, 'users'), where('id', '==', userId));
 
     const docs = await getDocs(q)
-    const friendsIds = docs.docs[0].data().friends
+    const favoriteUsersIds = docs.docs[0].data().friends
 
-    if (friendsIds.length === 0) return []
+    if (favoriteUsersIds.length === 0) return []
 
-    const friendsPromises = friendsIds.map(async (id) => {
+    const favoriteUsersPromises = favoriteUsersIds.map(async (id) => {
       const q = query(collection(db, 'users'), where('id', '==', id));
-      const friend = await getDocs(q)
+      const favoriteUser = await getDocs(q)
 
-      if (!friend) return null
+      if (!favoriteUser) return null
+
       return {
-        nickName: friend.docs[0].data().nickName,
-        id: friend.docs[0].data().id,
+        nickName: favoriteUser.docs[0].data().nickName,
+        id: favoriteUser.docs[0].data().id,
       }
     })
 
-    const friends = await Promise.all(friendsPromises);
-    // console.log('friends = ', friends)
+    const favoriteUsers = await Promise.all(favoriteUsersPromises);
+    console.log('favoriteUsers = ', favoriteUsers)
 
-    return friends
+    return favoriteUsers
 
   },
 
@@ -136,28 +137,28 @@ export const fb = {
 
 
 
-  getFriendById: async (friendId) => {
+  getUserById: async (friendId) => {
 
-    console.log('FIRABASE friendId = ', friendId)
+    // console.log('FIRABASE friendId = ', friendId)
 
     // debugger
     try {
       const q = query(collection(db, 'users'), where('id', '==', friendId));
 
-      const friend = await getDocs(q)
+      const member = await getDocs(q)
 
 
 
-      console.log('FIRABASE friend = ', friend.docs)
+      console.log('FIRABASE member = ', member.docs)
 
-      if (!friend.docs[0]) return null
+      if (!member.docs[0]) return null
 
-      const id = friend.docs[0].data().id
-      const nickName = friend.docs[0].data().nickName
+      const id = member.docs[0].data().id
+      const nickName = member.docs[0].data().nickName
 
 
-      console.log('111111111111111111111111111111111111111111111111111111111111111111111111111111111')
-      console.log('id = ', id, 'nickName = ', nickName)
+      // console.log('111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+      // console.log('id = ', id, 'nickName = ', nickName)
 
       return { id, nickName }
     } catch (error) {
@@ -169,13 +170,13 @@ export const fb = {
 
 
 
-  addFriend: async (ids) => {
+  addFavoriteUser: async (ids) => {
     const { userId, friendId } = ids
 
     if (!userId && !friendId) return
 
 
-    console.log('firebase addFriend')
+    console.log('firebase addFavoriteUser')
     try {
       const q = query(collection(db, 'users'), where('id', '==', userId));
 

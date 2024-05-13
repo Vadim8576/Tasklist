@@ -1,9 +1,9 @@
 import { useMemo } from "react"
-import friendsStore from "../store/friendsStore"
+import usersStore from "../store/usersStore"
 
-export const useSeachFriend = (friends) => { 
+export const useSeachFavoriteUser = (favoriteUsers) => { 
 
-  const getFriend = async (ids) => {
+  const getFavoriteUser = async (ids) => {
 
     const {friendId, userId } = ids
 
@@ -14,14 +14,14 @@ export const useSeachFriend = (friends) => {
       return [null, error]
     }
 
-    const len = friends.filter(friend => friend.id === friendId).length
+    const len = favoriteUsers.filter(user => user.id === friendId).length
 
     if (len > 0) {
       error = 'Пользователь с этим ID уже есть в списке друзей!'
       return [null, error]
     }
 
-    const friend = await friendsStore.getFriendById(friendId)
+    const friend = await usersStore.getUserById(friendId)
     if (friend === null) {
       error = 'Пользователь с таким ID не существует!'
       return [null, error]
@@ -33,8 +33,8 @@ export const useSeachFriend = (friends) => {
   }
 
   const value = {
-    getFriend
+    getFavoriteUser
   }
 
-  return useMemo(() => value, [friends])
+  return useMemo(() => value, [favoriteUsers])
 }

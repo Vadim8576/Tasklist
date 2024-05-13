@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite";
 import { Dialog, IconButton, Portal, useTheme } from "react-native-paper";
 import FavoriteUserList from "../screens/FavoriteUsers/FavoriteUserList";
-import FavoriteUsersForTask from "./FavoriteUsersForTask";
+import MembersList from "./MembersList";
 
 
-export default FavoriteUsersDialog = observer(({ visible, hideModal, groupUsersIds }) => {
+export default MembersListDialog = observer(({ visible, hideModal, groupUsersIds }) => {
 
 
   const theme = useTheme();
@@ -24,7 +24,7 @@ export default FavoriteUsersDialog = observer(({ visible, hideModal, groupUsersI
         <Dialog.Title>Участники</Dialog.Title>
 
         <Dialog.ScrollArea>
-          <FavoriteUsersForTask
+          <MembersList
             groupUsersIds={
               groupUsersIds
               // [

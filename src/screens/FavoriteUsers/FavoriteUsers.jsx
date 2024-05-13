@@ -9,13 +9,13 @@ import CustomInput from '../../components/CustomInput';
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import SeachUsers from './SeachUsers';
 import FavoriteUserList from './FavoriteUserList';
-import friendsStore from '../../store/friendsStore';
+import usersStore from '../../store/usersStore';
 
 export default FavoriteUsers = observer((props) => {
 
   const { navigation } = props
 
-  const [friendId, setFriendId] = useState()
+  // const [friendId, setFriendId] = useState()
 
   console.log('Favorite Users render')
   // console.log('navigation = ', navigation)
@@ -37,7 +37,7 @@ export default FavoriteUsers = observer((props) => {
     // authStore.createUser()
     if (!userId) return
 
-    friendsStore.getFriends(userId)
+    usersStore.getFavoriteUsers(userId)
 
   }, [userId])
 
@@ -52,8 +52,8 @@ export default FavoriteUsers = observer((props) => {
 
   return (
     <View style={styles.container}>
-      <SeachUsers friends={friendsStore.friends} />
-      <FavoriteUserList friends={friendsStore.friends} />
+      <SeachUsers favoriteUsers={usersStore.favoriteUsers} />
+      <FavoriteUserList favoriteUsers={usersStore.favoriteUsers} />
     </View>
   );
 })

@@ -8,10 +8,10 @@ import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import FoundUser from './FoundUser';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
-import { useSeachFriend } from '../../hooks/useSeachFriend';
+import { useSeachFavoriteUser } from '../../hooks/useSeachFavoriteUser';
 
 
-export default SeachUsers = observer(({ friends }) => {
+export default SeachUsers = observer(({ favoriteUsers }) => {
   console.log('SeachFriends render')
 
   const theme = useTheme()
@@ -21,11 +21,11 @@ export default SeachUsers = observer(({ friends }) => {
   const [friendId, setFriendId] = useState('')
   const [error, setError] = useState('')
 
-  const { getFriend } = useSeachFriend(friends)
+  const { getFavoriteUser } = useSeachFavoriteUser(favoriteUsers)
 
 
   const onSubmit = async () => {
-    const [friend, error] = await getFriend({ friendId, userId: user.uid })
+    const [friend, error] = await getFavoriteUser({ friendId, userId: user.uid })
     setError(error)
     setFoundFriend(friend)
   }
@@ -92,7 +92,7 @@ export default SeachUsers = observer(({ friends }) => {
       </HelperText>
 
       {(error === '' && foundFriend) && (
-        <FoundFriend foundFriend={foundFriend} clearInput={clearInput} />
+        <FoundUser foundFriend={foundFriend} clearInput={clearInput} />
       )}
 
 

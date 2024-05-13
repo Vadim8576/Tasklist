@@ -3,30 +3,27 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { List, Avatar, useTheme } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import commonStyles from '../screens/FavoriteUsers/commonStyles';
-import { useAuth } from '../hooks/useAuth';
-import friendsStore from '../store/friendsStore';
-import { useEffect, useState } from 'react';
-import useGetFriendById from '../hooks/useGetFriendById';
+import useGetMemberById from '../hooks/useGetMemberById';
 
 
 
 
-export default FavoriteUsersForTask = observer(({ groupUsersIds }) => {
+export default MembersList = observer(({ groupUsersIds }) => {
   const theme = useTheme()
 
 
-  console.log('FavoriteUsersForTask render')
-  console.log('FavoriteUsersForTask friendsIds = ', groupUsersIds)
+  console.log('MembersList render')
+  console.log('MembersList membersIds = ', groupUsersIds)
 
 
-  const { friends } = useGetFriendById(groupUsersIds)
+  const { members } = useGetMemberById(groupUsersIds)
 
-  console.log('FavoriteUsersForTask friends = ', friends)
+  console.log('MembersList members = ', members)
 
 
-  const removeFriend = (friendId) => {
+  const removeMembers = (memberId) => {
 
-    // friendsStore.removeFriend({ friendId, userId: user.uid })
+    // usersStore.removeFriend({ friendId, userId: user.uid })
   }
 
 
@@ -40,7 +37,7 @@ export default FavoriteUsersForTask = observer(({ groupUsersIds }) => {
     ]}>
       {/* <Text>Избранные пользователи:</Text> */}
       <FlatList
-        data={friends}
+        data={members}
         renderItem={({ item }) => (
           <List.Item
             style={{
@@ -62,7 +59,7 @@ export default FavoriteUsersForTask = observer(({ groupUsersIds }) => {
             )}
             right={() => (
               <Pressable
-                onPress={() => removeFriend(item.id)}
+                onPress={() => removeMembers(item.id)}
                 style={({ pressed }) => [
                   { backgroundColor: pressed ? theme.colors.primaryContainer : theme.colors.background },
 

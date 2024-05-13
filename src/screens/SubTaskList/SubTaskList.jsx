@@ -7,11 +7,11 @@ import { Avatar, Portal, Dialog, TouchableRipple, useTheme, IconButton } from "r
 import { useGroupButton } from "../../hooks/useGroupButton";
 import GroupButton from "../../components/UI/GroupButton";
 import appStore from "../../store/appStore";
-import friendsStore from "../../store/friendsStore";
+import usersStore from "../../store/usersStore";
 import { useAuth } from "../../hooks/useAuth";
 import FavoriteUserList from "../FavoriteUsers/FavoriteUserList";
 import AddButton from "../../components/UI/AddButton";
-import FavoriteUsersDialog from "../../components/FavoriteUsersDialog";
+import MembersListDialog from "../../components/MembersListDialog";
 
 
 
@@ -79,7 +79,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
     // authStore.createUser()
     if (!userId) return
-    friendsStore.getFriends(userId)
+    usersStore.getFavoriteUsers(userId)
 
   }, [userId])
 
@@ -156,8 +156,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
         />
       </View>
 
-
-      <FavoriteUsersDialog
+      <MembersListDialog
         visible={visible}
         hideModal={hideModal}
         groupUsersIds={taskList?.groupUsersIds}

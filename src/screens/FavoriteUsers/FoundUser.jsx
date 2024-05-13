@@ -4,7 +4,7 @@ import { List, useTheme, Avatar, Icon } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
-import friendsStore from '../../store/friendsStore';
+import usersStore from '../../store/usersStore';
 
 
 export default FoundUser = observer(({ foundFriend, clearInput }) => {
@@ -15,8 +15,8 @@ export default FoundUser = observer(({ foundFriend, clearInput }) => {
 
   console.log('FoundFriends render')
 
-  const addFriend = () => {
-    friendsStore.addFriend({ userId: user.uid, friendId: friendsStore.foundFriend?.id })
+  const addFavoriteUser = () => {
+    usersStore.addFavoriteUser({ userId: user.uid, friendId: usersStore.foundFriend?.id })
     clearInput()
   }
 
@@ -42,7 +42,7 @@ export default FoundUser = observer(({ foundFriend, clearInput }) => {
         )}
         right={() => (
           <Pressable
-            onPress={addFriend}
+            onPress={addFavoriteUser}
             style={({ pressed }) => [
               { backgroundColor: pressed ? theme.colors.primaryContainer : theme.colors.background },
               styles.pressable

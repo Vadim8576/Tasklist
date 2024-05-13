@@ -5,23 +5,23 @@ import { observer } from "mobx-react-lite";
 import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
-import friendsStore from '../../store/friendsStore';
-// import friendsStore from '../../store/friendsStore';
+import usersStore from '../../store/usersStore';
 
 
 
-export default FriendsList = observer(({friends}) => {
+
+export default FavoriteUserList = observer(({favoriteUsers}) => {
   const theme = useTheme()
 
   const { user } = useAuth()
   console.log('FriensLisrt render')
-  // console.log('FriensLisrt friend List = ', friends)
+  // console.log('FriensLisrt favoriteUsers = ', favoriteUsers)
 
 
 
   const removeFriend = (friendId) => {
 
-    friendsStore.removeFriend({ friendId, userId: user.uid })
+    usersStore.removeFriend({ friendId, userId: user.uid })
   }
 
 
@@ -32,7 +32,7 @@ export default FriendsList = observer(({friends}) => {
     ]}>
       {/* <Text>Избранные пользователи:</Text> */}
       <FlatList
-        data={friends}
+        data={favoriteUsers}
         renderItem={({ item }) => (
           <List.Item
             style={{
