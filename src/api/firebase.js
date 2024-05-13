@@ -149,7 +149,7 @@ export const fb = {
 
 
 
-      console.log('FIRABASE member = ', member.docs)
+      // console.log('FIRABASE member = ', member.docs)
 
       if (!member.docs[0]) return null
 
@@ -203,7 +203,7 @@ export const fb = {
 
 
 
-  removeFriend: async (ids) => {
+  removeFavoriteUser: async (ids) => {
 
     const { userId, friendId } = ids
 
@@ -245,6 +245,62 @@ export const fb = {
       })
       .catch((error) => {
         console.log('Ошибка получения документа для удаления', error)
+        setErrorMessage()
+      })
+
+  },
+
+
+
+  removeMember: async (ids) => {
+
+    const { taskListId, memberId } = ids
+
+    console.log('memberId = ', memberId)
+    console.log('taskListId = ', taskListId)
+
+
+    if (!memberId && !taskListId) return
+
+    const q = query(collection(db, 'list'), where('taskListId', '==', taskListId));
+
+
+    await getDocs(q)
+      .then((data) => {
+        const members = data.docs[0].data().groupUsersIds.filter(id => id !== memberId)
+
+        const docId = data.docs[0].id
+
+
+        console.log('update members = ', members)
+        console.log('docId = ', docId)
+
+
+
+        // y4Q2IaI2TSSAhPEmJGC1SvhnCnz1
+
+        // X4hFQZ8eNwROulLW4BRY4b70gmA3
+
+
+
+        const newDocRef = doc(db, 'list', docId);
+
+        updateDoc(newDocRef, {
+          groupUsersIds: members
+        })
+          .then(() => {
+            console.log('Участник успешно удален')
+
+            // setSuccessMessage()
+          })
+          .catch((error) => {
+            console.log('Ошибка при удалении участника: ', error)
+            setErrorMessage()
+          })
+
+      })
+      .catch((error) => {
+        console.log('Ошибка получения документа для удаления участника', error)
         setErrorMessage()
       })
 

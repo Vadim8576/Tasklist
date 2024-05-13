@@ -30,6 +30,7 @@ export default TaskList = observer(({ navigation, route }) => {
 
  
   console.log('mAINtASKlIST render')
+  // console.log('appStore.taskList.group ids = ', taskList)
 
 
 

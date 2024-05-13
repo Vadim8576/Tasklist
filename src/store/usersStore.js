@@ -7,6 +7,8 @@ class UsersStore {
 
   
   favoriteUsers = []
+  // members = []
+
   foundFavoriteUser = null
 
   constructor() {
@@ -50,10 +52,16 @@ class UsersStore {
     this.setFoundUser(null)
   }
 
-  removeFriend = async (ids) => {
-    await fb.removeFriend(ids)
+  removeFavoriteUser = async (ids) => {
+    await fb.removeFavoriteUser(ids)
     this.getFavoriteUsers(ids.userId)
   }
+
+
+
+
+
+
 
 }
 

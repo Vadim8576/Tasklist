@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import usersStore from "../store/usersStore"
 
-export default useGetMemberById = (groupUsersIds) => {
+export default useGetMembersByIds = (groupUsersIds) => {
   const [members, setMembers] = useState([])
 
+
+  console.log('useGetMembersByIds groupUsersIds = ', groupUsersIds)
+
   useEffect(() => {
+    setMembers([])
     const fr = groupUsersIds.map(async id => {
       const fr = await usersStore.getUserById(id)
       setMembers(prev => [...prev, fr])
@@ -12,6 +16,10 @@ export default useGetMemberById = (groupUsersIds) => {
     })
 
   }, [groupUsersIds])
-   
+
+
+  
   return {members}
+
+
 }

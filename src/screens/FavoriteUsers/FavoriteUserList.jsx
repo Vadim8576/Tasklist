@@ -6,6 +6,7 @@ import { RIGHT_BUTTON_SIZE } from '../../const/constants';
 import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
 import usersStore from '../../store/usersStore';
+import appStore from '../../store/appStore';
 
 
 
@@ -19,9 +20,8 @@ export default FavoriteUserList = observer(({favoriteUsers}) => {
 
 
 
-  const removeFriend = (friendId) => {
-
-    usersStore.removeFriend({ friendId, userId: user.uid })
+  const removeFavoriteUser = (friendId) => {
+    usersStore.removeFavoriteUser({ friendId, userId: user.uid })
   }
 
 
@@ -54,7 +54,7 @@ export default FavoriteUserList = observer(({favoriteUsers}) => {
             )}
             right={() => (
               <Pressable
-                onPress={() => removeFriend(item.id)}
+                onPress={() => removeFavoriteUser(item.id)}
                 style={({ pressed }) => [
                   { backgroundColor: pressed ? theme.colors.primaryContainer : theme.colors.background },
 

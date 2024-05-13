@@ -23,7 +23,11 @@ export const useListFilter = (list, screenName) => {
   }, [list, screenName])
 
 
+  // console.log('newList.groupUsersIds = ', newList.groupUsersIds)
+
+
   const values = { list, screenName }
 
+  // return useMemo(() => newList, [list, screenName])
   return useMemo(() => newList, [values])
 }

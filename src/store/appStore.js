@@ -1,8 +1,5 @@
 import { makeAutoObservable } from "mobx";
 import { fb } from "../api/firebase";
-import { AuthErrorCodes } from "firebase/auth";
-import errorStore from "./errorStore";
-
 
 
 class appStore {
@@ -10,9 +7,11 @@ class appStore {
   isLoggedIn = false
   // isLoading = false
   taskList = []
-  groupTaskList = []
+  // groupTaskList = []
   subTaskList = []
   unsubscribeVoid = null
+
+  members = {}
 
   message = {}
 
@@ -27,25 +26,49 @@ class appStore {
   // }
 
 
+  setMembers = (members) => {
+    this.members = members
+  }
+
+  
+  removeMember = async (ids) => {
+    await fb.removeMember(ids)
+    // this.getFavoriteUsers(ids.userId)
+  }
+
+
   setTaskList = (data) => {
     if (!data) return
 
     // console.log('appStore data = ', data)
 
-    this.taskList = data.map(d => ({
-      createdAt: d.createdAt,
-      creatorId: d.creatorId,
-      taskListId: d.taskListId,
-      title: d.title,
-      groupUsersIds: d.groupUsersIds
-    }))
 
-    // let task = {}
-    // data.forEach(taskList => {
-    //   task = { ...task, [taskList.taskListId]: taskList.tasks }
-    // })
+    let membersObj = {}
 
-    // this.setTasks(task)
+
+
+    this.taskList = data.map(d => {
+      const list = {
+        createdAt: d.createdAt,
+        creatorId: d.creatorId,
+        taskListId: d.taskListId,
+        title: d.title,
+        groupUsersIds: d.groupUsersIds
+      }
+      
+      membersObj = {...membersObj, [d.taskListId]: d.groupUsersIds}
+
+      return list
+    })
+
+
+    this.setMembers(membersObj)
+
+
+
+    console.log('APP_STORE members array = ', membersObj)
+    console.log('APP_STORE members = ', this.taskList[this.taskList.length - 1].groupUsersIds)
+
 
   }
 

@@ -2,12 +2,26 @@ import { observer } from "mobx-react-lite";
 import { Dialog, IconButton, Portal, useTheme } from "react-native-paper";
 import FavoriteUserList from "../screens/FavoriteUsers/FavoriteUserList";
 import MembersList from "./MembersList";
+import useGetMembersByIds from "../hooks/useGetMembersByIds";
+import appStore from "../store/appStore";
 
 
-export default MembersListDialog = observer(({ visible, hideModal, groupUsersIds }) => {
+export default MembersListDialog = observer(({ visible, hideModal, taskList }) => {
 
 
   const theme = useTheme();
+
+  const {members} = useGetMembersByIds(appStore.members[taskList.taskListId])
+
+
+
+  const removeMember = (memberId) => {
+    appStore.removeMember({ memberId, taskListId: taskList.taskListId })
+  }
+
+
+  if(members.length === 0) return null
+
 
 
   return (
@@ -25,8 +39,9 @@ export default MembersListDialog = observer(({ visible, hideModal, groupUsersIds
 
         <Dialog.ScrollArea>
           <MembersList
-            groupUsersIds={
-              groupUsersIds
+            removeMember={removeMember}
+            members={
+              members
               // [
               //   { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs1", "nickName": "Александр" },
               //   { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz2", "nickName": "Люся" },

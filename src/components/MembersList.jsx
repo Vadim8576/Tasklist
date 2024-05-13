@@ -3,28 +3,36 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { List, Avatar, useTheme } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import commonStyles from '../screens/FavoriteUsers/commonStyles';
-import useGetMemberById from '../hooks/useGetMemberById';
+import useGetMembersByIds from '../hooks/useGetMembersByIds';
+import usersStore from '../store/usersStore';
+import appStore from '../store/appStore';
 
 
 
 
-export default MembersList = observer(({ groupUsersIds }) => {
+export default MembersList = observer(({members, removeMember}) => {
   const theme = useTheme()
 
 
+
+
+
   console.log('MembersList render')
-  console.log('MembersList membersIds = ', groupUsersIds)
 
 
-  const { members } = useGetMemberById(groupUsersIds)
+
+  // console.log('!!!!!!!!!  taskList.groupUsersIds] = ', taskList.groupUsersIds)
+  // console.log('appStore.members[taskList.taskListId] = ', appStore.members[taskList.taskListId])
+
+
+  // const {members} = useGetMembersByIds(appStore.members[taskList.taskListId])
 
   console.log('MembersList members = ', members)
 
 
-  const removeMembers = (memberId) => {
 
-    // usersStore.removeFriend({ friendId, userId: user.uid })
-  }
+
+
 
 
 
@@ -59,7 +67,7 @@ export default MembersList = observer(({ groupUsersIds }) => {
             )}
             right={() => (
               <Pressable
-                onPress={() => removeMembers(item.id)}
+                onPress={() => removeMember(item.id)}
                 style={({ pressed }) => [
                   { backgroundColor: pressed ? theme.colors.primaryContainer : theme.colors.background },
 

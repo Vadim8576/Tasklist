@@ -32,6 +32,11 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
   const theme = useTheme()
   const { taskList } = route.params;
+  // const taskList = appStore.taskList
+
+
+
+
   const { title, taskListId, createdAt } = taskList
   const screenName = route.name
 
@@ -41,7 +46,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
   // console.log('SubTaskList screenName = ', screenName)
   // console.log('SubTaskList taskList = ', taskList.groupUsersIds)
 
-  console.log(taskList)
+  // console.log('taskList!!!!!!!!!!!!!!! = ', taskList)
 
   // debugger
 
@@ -159,7 +164,8 @@ export default SubTaskList = observer(({ route, navigation }) => {
       <MembersListDialog
         visible={visible}
         hideModal={hideModal}
-        groupUsersIds={taskList?.groupUsersIds}
+        // groupUsersIds={taskList?.groupUsersIds}
+        taskList={taskList}
       />
 
     </>
