@@ -7,7 +7,7 @@ class appStore {
   isLoggedIn = false
   // isLoading = false
   taskList = []
-  // groupTaskList = []
+  groupTaskList = []
   subTaskList = []
   unsubscribeVoid = null
 
@@ -30,7 +30,7 @@ class appStore {
     this.members = members
   }
 
-  
+
   removeMember = async (ids) => {
     await fb.removeMember(ids)
     // this.getFavoriteUsers(ids.userId)
@@ -38,14 +38,11 @@ class appStore {
 
 
   setTaskList = (data) => {
+
+    // console.log('setTaskList data = ', data)
     if (!data) return
 
-    // console.log('appStore data = ', data)
-
-
     let membersObj = {}
-
-
 
     this.taskList = data.map(d => {
       const list = {
@@ -55,28 +52,63 @@ class appStore {
         title: d.title,
         groupUsersIds: d.groupUsersIds
       }
-      
-      membersObj = {...membersObj, [d.taskListId]: d.groupUsersIds}
+
+      membersObj = { ...membersObj, [d.taskListId]: d.groupUsersIds }
 
       return list
     })
 
+    this.setMembers(membersObj)
+  }
+
+
+  setGroupTaskList = (data) => {
+
+
+    console.log('setGroupTaskList data = ', data) 
+
+
+    if (!data) return
+
+    let membersObj = {}
+
+    this.groupTaskList = data.map(d => {
+      const list = {
+        createdAt: d.createdAt,
+        creatorId: d.creatorId,
+        taskListId: d.taskListId,
+        title: d.title,
+        groupUsersIds: d.groupUsersIds
+      }
+
+      membersObj = { ...membersObj, [d.taskListId]: d.groupUsersIds }
+
+      return list
+    })
 
     this.setMembers(membersObj)
-
-
-
-    console.log('APP_STORE members array = ', membersObj)
-    console.log('APP_STORE members = ', this.taskList[this.taskList.length - 1].groupUsersIds)
-
-
   }
+
+
+
+  get getTaskList() {
+    return this.taskList
+  }
+
+
+  get getGroupTaskList() {
+    return this.groupTaskList
+  }
+
 
 
   getTaskListTitle = (id) => {
     const task = this.taskList.filter((item) => item.taskListId === id)
-    // console.log('appStore taskList = ',this.taskList)
-    // console.log('appStore title = ',title[0])
+    return task[0]?.title
+  }
+
+  getGroupTaskListTitle = (id) => {
+    const task = this.groupTaskList.filter((item) => item.taskListId === id)
     return task[0]?.title
   }
 
@@ -92,11 +124,20 @@ class appStore {
   }
 
 
-  subscribeToTaskList = (userId) => {
-    const unsubscribe = fb.taskListSnapshot({
-      setTaskList: this.setTaskList,
-      userId
-    })
+  subscribeToTaskList = (payload) => {
+    const { userId, collectionId } = payload
+
+
+    console.log('subscribeToTaskList collectionId = ', collectionId)
+
+    const payloadObj = {
+      setTaskList: collectionId === 'list' ? this.setTaskList : this.setGroupTaskList,
+      userId,
+      collectionId
+    }
+
+
+    const unsubscribe = fb.taskListSnapshot(payloadObj)
 
     return unsubscribe
   }

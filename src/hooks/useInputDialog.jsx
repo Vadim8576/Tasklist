@@ -3,6 +3,7 @@ import { useAuth } from "./useAuth"
 import appStore from "../store/appStore"
 import { dialogActions } from "../const/constants"
 import authStore from "../store/authStore"
+import { getFBCollectionId } from "../helpers/getFBCollectionId"
 
 
 
@@ -18,9 +19,12 @@ import authStore from "../store/authStore"
 //  строка не состоит только из одной или двух точек (.) и не содержит символ "/"
 // const regex = /^(?!(?:\.|\.{2})$)(?!.*\/).*$/;
 
-export const useInputDialog = (props) => {
 
-  const { type, listId = null} = props
+
+
+export const useInputDialog = (payload) => {
+
+  const { type, listId = null} = payload
 
 
 
@@ -41,12 +45,18 @@ export const useInputDialog = (props) => {
   const onShowDialog = () => {
     console.log('Show dialog')
    
-    if(type === dialogActions.addTaskList) {
+    if(type === dialogActions.addTaskList || type === dialogActions.addGroupList) {
       setTitle('')
     }
 
     if(type === dialogActions.editTaskListTitle) {
       setTitle(listId ? appStore.getTaskListTitle(listId) : '')
+     
+    }
+
+    if(type === dialogActions.editGroupTaskListTitle) {
+      setTitle(listId ? appStore.getGroupTaskListTitle(listId) : '')
+     
     }
 
     if(type === dialogActions.addTask) {
@@ -77,22 +87,37 @@ export const useInputDialog = (props) => {
   const onSubmit = () => {
     console.log('onSubmit')
 
-    // const userId = authStore.user.uid
     console.log('Title = ', title)
     console.log('Comment = ', comment)
+    console.log('type = ', type)
   
     const trimTitle = title.trim()
     const trimComment = comment.trim()
 
-    if (type === dialogActions.addTaskList) {
-      console.log('userId = ', userId)
-      console.log('trimTitle = ', trimTitle)
+    if (type === dialogActions.addTaskList || type === dialogActions.addGroupList) {
       if(trimTitle === '') return
-      appStore.addTaskList({ userId, title: trimTitle, createdAt })
+
+
+      appStore.addTaskList({
+        userId,
+        title: trimTitle,
+        createdAt,
+        collectionId: getFBCollectionId(type)
+      })
     }
-    if (type === dialogActions.editTaskListTitle) {
-      appStore.updateTaskList({ listId, title: trimTitle })
+
+    if (type === dialogActions.editTaskListTitle || type === dialogActions.editGroupTaskListTitle) {
+      appStore.updateTaskList({
+        listId,
+        title: trimTitle,
+        collectionId: getFBCollectionId(type)
+      })
     }
+
+
+
+
+
 
     if (type === dialogActions.addTask) {
       console.log(title, comment, listId)

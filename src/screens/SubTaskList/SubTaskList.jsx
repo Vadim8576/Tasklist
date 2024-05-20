@@ -161,12 +161,11 @@ export default SubTaskList = observer(({ route, navigation }) => {
         />
       </View>
 
-      <MembersListDialog
+      {/* <MembersListDialog
         visible={visible}
         hideModal={hideModal}
-        // groupUsersIds={taskList?.groupUsersIds}
         taskList={taskList}
-      />
+      /> */}
 
     </>
   )

@@ -313,11 +313,15 @@ export const fb = {
 
 
   taskListSnapshot: (payload) => {
-    const { setTaskList, userId } = payload
+    const { setTaskList, userId, collectionId } = payload
 
-    if (!userId) return
+    console.log('taskListSnapshot = ', collectionId)
 
-    const q = query(collection(db, DB_NAME), where('creatorId', '==', userId));
+    if (!userId || !collectionId) return
+
+
+  
+    const q = query(collection(db, collectionId), where('creatorId', '==', userId));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const allDocs = []
@@ -344,7 +348,9 @@ export const fb = {
 
 
   addTaskList: (payload) => {
-    const { userId, title, createdAt } = payload
+    const { userId, title, createdAt, collectionId } = payload
+
+    console.log('collectionId = ', collectionId)
 
     if (title === '') return
 
@@ -355,7 +361,7 @@ export const fb = {
       groupUsersIds: []
     }
 
-    const collectionRef = collection(db, DB_NAME)
+    const collectionRef = collection(db, collectionId)
     const newDocRef = doc(collectionRef)
 
     setDoc(newDocRef, data)
@@ -387,10 +393,10 @@ export const fb = {
   },
 
   updateTaskList: (payload) => {
-    const { title, listId } = payload
-    if (!listId) return
+    const { title, listId, collectionId } = payload
+    if (!listId || !collectionId) return
 
-    const docRef = doc(db, DB_NAME, listId);
+    const docRef = doc(db, collectionId, listId);
 
     updateDoc(docRef, {
       title: title
@@ -405,8 +411,9 @@ export const fb = {
       })
   },
 
-  removeTaskList: (listId) => {
-    deleteDoc(doc(db, DB_NAME, listId))
+  removeTaskList: (payload) => {
+    const {listId, collectionId} = payload
+    deleteDoc(doc(db, collectionId, listId))
       .then(() => {
         // setSuccessMessage()
       })
@@ -416,12 +423,13 @@ export const fb = {
       })
   },
 
-  removeSelectedTaskList: async (ids) => {
+  removeSelectedTaskList: async (payload) => {
 
-    const removePromise = ids.map(async (id) => {
+    const {selectedItemsIds, collectionId} = payload
+    const removePromise = selectedItemsIds.map(async (id) => {
 
       try {
-        await deleteDoc( doc(db, DB_NAME, id))
+        await deleteDoc( doc(db, collectionId, id))
       } catch (error) {
         setErrorMessage()
           console.log('Ошбика удаления списка задач c id: ', id, error)

@@ -52,8 +52,15 @@ export default TabNavigator = observer(({navigation, setScreenTitle}) => {
 
   useEffect(() => {
     if (!userId) return
-    const unsubscribe = appStore.subscribeToTaskList(userId)
-    return unsubscribe
+    const unsubscribe1 = appStore.subscribeToTaskList({userId, collectionId: 'list'})
+    return unsubscribe1
+  }, [userId])
+
+
+  useEffect(() => {
+    if (!userId) return
+    const unsubscribe2 = appStore.subscribeToTaskList({userId, collectionId: 'grouplist'})
+    return unsubscribe2
   }, [userId])
 
 

@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { Dialog, IconButton, Portal, useTheme } from "react-native-paper";
-import FavoriteUserList from "../screens/FavoriteUsers/FavoriteUserList";
 import MembersList from "./MembersList";
 import useGetMembersByIds from "../hooks/useGetMembersByIds";
 import appStore from "../store/appStore";
@@ -40,21 +39,7 @@ export default MembersListDialog = observer(({ visible, hideModal, taskList }) =
         <Dialog.ScrollArea>
           <MembersList
             removeMember={removeMember}
-            members={
-              members
-              // [
-              //   { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs1", "nickName": "Александр" },
-              //   { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz2", "nickName": "Люся" },
-              //   { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs3", "nickName": "Александр" },
-              //   { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz4", "nickName": "Люся" },
-              //   { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs5", "nickName": "Александр" },
-              //   { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz6", "nickName": "Люся" },
-              //   { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs7", "nickName": "Александр" },
-              //   { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz8", "nickName": "Люся" },
-              //   { "id": "17dNpCh4kDX5dhQBPyiOaVEBBxs9", "nickName": "Александр" },
-              //   { "id": "y4Q2IaI2TSSAhPEmJGC1SvhnCnz0", "nickName": "Люся" },
-              // ]
-            } />
+            members={members} />
         </Dialog.ScrollArea>
         <Dialog.Actions>
           <IconButton

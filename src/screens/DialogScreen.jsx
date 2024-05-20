@@ -20,7 +20,9 @@ export default DialogScreen = observer(({ route, navigation }) => {
   const theme = useTheme()
   const [commentVisible, setCommentVisible] = useState(false)
   const { type, listId = null } = route.params
+  const screenName = route.name
 
+  // console.log('DialogScreen screenName = ', screenName)
 
 
   const {

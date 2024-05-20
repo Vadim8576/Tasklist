@@ -8,7 +8,7 @@ export default GroupButton = ({ buttonGroup }) => {
   const {
     buttonVisible,
     addTask,
-    idsOfSelectedItems,
+    selectedItemsIds,
     setIdsOfSelectedItems,
     selectionMode,
     setSelectionMode,
@@ -33,7 +33,7 @@ export default GroupButton = ({ buttonGroup }) => {
 
   const onStateChange = () => {
 
-    if (!open && idsOfSelectedItems.length === 1) {
+    if (!open && selectedItemsIds.length === 1) {
       show()
     } else {
       hide()
@@ -70,9 +70,9 @@ export default GroupButton = ({ buttonGroup }) => {
       open={buttonGroupIsOpen}
       visible={buttonVisible}
       icon={
-        idsOfSelectedItems.length === 0
+        selectedItemsIds.length === 0
           ? 'plus'
-          : idsOfSelectedItems.length === 1 ? 'chevron-up'
+          : selectedItemsIds.length === 1 ? 'chevron-up'
             : 'delete'
       }
       actions={pressActions}
@@ -84,11 +84,11 @@ export default GroupButton = ({ buttonGroup }) => {
         }
         //console.log('if not open')
 
-        if(idsOfSelectedItems.length > 1) {
+        if(selectedItemsIds.length > 1) {
           removeSelected()
           clearSelection()
         }
-        if(idsOfSelectedItems.length === 0) addTask()
+        if(selectedItemsIds.length === 0) addTask()
 
         
 

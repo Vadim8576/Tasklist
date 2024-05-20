@@ -4,33 +4,33 @@ import { observer } from "mobx-react-lite";
 import { dialogActions } from '../../const/constants';
 import GroupButton from '../../components/UI/GroupButton';
 import ListItem from './ListItem';
-import { useListFilter } from '../../hooks/useListFilter';
+import { useGetListByScreenName } from '../../hooks/useGetListByScreenName';
 import appStore from '../../store/appStore';
 import { TouchableRipple, useTheme } from 'react-native-paper';
 import { useGroupButton } from '../../hooks/useGroupButton';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 
 
 
 export default TaskList = observer(({ navigation, route }) => {
 
+
+
   const theme = useTheme()
 
-  const taskList = appStore.taskList
   const screenName = route.name
-  const filteredList = useListFilter(taskList, screenName)
-
-  
 
   const {
     buttonGroup
   } = useGroupButton({
     navigation,
-    type: dialogActions.addTaskList
+    type: screenName === 'TaskList' ? dialogActions.addTaskList : dialogActions.addGroupList
   })
 
  
   console.log('mAINtASKlIST render')
-  // console.log('appStore.taskList.group ids = ', taskList)
+  console.log('screenName = ', screenName)
 
 
 
@@ -42,7 +42,7 @@ export default TaskList = observer(({ navigation, route }) => {
       ]}
       >
         <FlatList
-          data={filteredList}
+          data={screenName === 'TaskList' ? appStore.taskList: appStore.groupTaskList}
           renderItem={({ item }) => (
             <TouchableRipple
               key={item.taskListId}
