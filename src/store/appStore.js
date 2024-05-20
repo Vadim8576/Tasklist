@@ -90,18 +90,6 @@ class appStore {
   }
 
 
-
-  get getTaskList() {
-    return this.taskList
-  }
-
-
-  get getGroupTaskList() {
-    return this.groupTaskList
-  }
-
-
-
   getTaskListTitle = (id) => {
     const task = this.taskList.filter((item) => item.taskListId === id)
     return task[0]?.title

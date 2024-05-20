@@ -262,8 +262,12 @@ export const fb = {
 
     if (!memberId && !taskListId) return
 
-    const q = query(collection(db, 'list'), where('taskListId', '==', taskListId));
+    const q = query(collection(db, 'grouplist'), where('taskListId', '==', taskListId));
 
+
+
+    // X4hFQZ8eNwROulLW4BRY4b70gmA3
+    // y4Q2IaI2TSSAhPEmJGC1SvhnCnz1
 
     await getDocs(q)
       .then((data) => {
@@ -275,15 +279,7 @@ export const fb = {
         console.log('update members = ', members)
         console.log('docId = ', docId)
 
-
-
-        // y4Q2IaI2TSSAhPEmJGC1SvhnCnz1
-
-        // X4hFQZ8eNwROulLW4BRY4b70gmA3
-
-
-
-        const newDocRef = doc(db, 'list', docId);
+        const newDocRef = doc(db, 'grouplist', docId);
 
         updateDoc(newDocRef, {
           groupUsersIds: members
