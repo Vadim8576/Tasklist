@@ -271,18 +271,18 @@ export const fb = {
 
     await getDocs(q)
       .then((data) => {
-        const members = data.docs[0].data().groupUsersIds.filter(id => id !== memberId)
+        const membersIds = data.docs[0].data().membersIds.filter(id => id !== memberId)
 
         const docId = data.docs[0].id
 
 
-        console.log('update members = ', members)
+        console.log('update membersIds = ', membersIds)
         console.log('docId = ', docId)
 
         const newDocRef = doc(db, 'grouplist', docId);
 
         updateDoc(newDocRef, {
-          groupUsersIds: members
+          membersIds
         })
           .then(() => {
             console.log('Участник успешно удален')
@@ -321,6 +321,7 @@ export const fb = {
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const allDocs = []
+
       querySnapshot.forEach((doc) => {
         const data = doc.data()
 
@@ -330,9 +331,11 @@ export const fb = {
           createdAt: data.createdAt,
           tasks: data.tasks,
           creatorId: data.creatorId,
-          groupUsersIds: data.groupUsersIds
+          membersIds: collectionId === 'grouplist' ? data.membersIds : null
         })
+        
       })
+
 
       // console.log('allDocs = ', allDocs)
       setTaskList(allDocs)
@@ -354,7 +357,7 @@ export const fb = {
       title: title,
       createdAt,
       creatorId: userId,
-      groupUsersIds: []
+      membersIds: []
     }
 
     const collectionRef = collection(db, collectionId)

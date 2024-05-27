@@ -13,22 +13,18 @@ import FavoriteUserList from "../FavoriteUsers/FavoriteUserList";
 import AddButton from "../../components/UI/AddButton";
 import MembersListDialog from "../../components/MembersListDialog";
 import useGetMembersByIds from "../../hooks/useGetMembersByIds";
+import HorizontalMembersList from "../../components/HorizontalMembersList";
 
 
 
 export default SubTaskList = observer(({ route, navigation }) => {
 
-
-
-  const { user } = useAuth()
-  const userId = user.uid
-
-
   const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  // const containerStyle = {  };
 
+  const { user } = useAuth()
+  const userId = user.uid
 
 
   const theme = useTheme()
@@ -45,15 +41,11 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
 
   // console.log('SubTaskList screenName = ', screenName)
-  // console.log('SubTaskList taskList = ', taskList.groupUsersIds)
+  // console.log('SubTaskList taskList = ', taskList.membersIds)
 
   // console.log('taskList!!!!!!!!!!!!!!! = ', taskList)
 
-  // debugger
-
-  const {
-    buttonGroup
-  } = useGroupButton({
+  const { buttonGroup } = useGroupButton({
     navigation,
     type: dialogActions.addTask,
     listId: taskListId
@@ -61,6 +53,9 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
   const { members } = useGetMembersByIds(appStore.members[taskList.taskListId])
 
+  // const membersIds = members.map(member => member.id)
+
+  console.log('members!!!!!!!!!!!!!!! = ', members)
 
 
 
@@ -95,42 +90,12 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
   return (
     <>
-      {
-        members.length > 0 &&
-        <View style={{ padding: 20 }}>
-          <ScrollView
-            horizontal={true}
-            style={{ marginTop: 10, marginBottom: 10 }}
-          >
-            {
-              members.map(member => (
-                // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].map(id => (
-                <Avatar.Text
-                  key={member.id}
-                  style={{ backgroundColor: theme.colors.tertiary, marginRight: 10 }}
-                  size={40}
-                  label={member.nickName.substring(0, 1)}
-                />
-              ))
-            }
-
-            <IconButton
-              size={24}
-              icon="plus"
-              style={{ backgroundColor: theme.colors.primaryContainer }}
-              color={theme.colors.surface}
-              onPress={showModal}
-            />
+      <View style={{ padding: 20 }}>
+        <HorizontalMembersList members={members} size={30} showModal={showModal} />
+      </View>
 
 
-          </ScrollView>
-
-
-        </View>
-      }
-
-
-{/* 
+      {/* 
       <Button
         title="Press me"
         onPress={showModal}
@@ -177,7 +142,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
       <MembersListDialog
         visible={visible}
         hideModal={hideModal}
-        taskList={taskList}
+        taskListId={taskListId}
       />
 
     </>

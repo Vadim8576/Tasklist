@@ -5,21 +5,21 @@ import useGetMembersByIds from "../hooks/useGetMembersByIds";
 import appStore from "../store/appStore";
 
 
-export default MembersListDialog = observer(({ visible, hideModal, taskList }) => {
+export default MembersListDialog = observer(({ visible, hideModal, taskListId }) => {
 
 
   const theme = useTheme();
 
-  const {members} = useGetMembersByIds(appStore.members[taskList.taskListId])
+  const {members} = useGetMembersByIds(appStore.members[taskListId])
 
 
 
   const removeMember = (memberId) => {
-    appStore.removeMember({ memberId, taskListId: taskList.taskListId })
+    appStore.removeMember({ memberId, taskListId })
   }
 
 
-  if(members.length === 0) return null
+  if(members?.length === 0) return null
 
 
 

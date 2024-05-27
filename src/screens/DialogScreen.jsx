@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import { Text, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import { useInputDialog } from '../hooks/useInputDialog'
-import { createRef, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { dateOptions, dialogActions } from "../const/constants";
 import CustomInput from "../components/CustomInput";
 
@@ -17,10 +17,9 @@ import CustomInput from "../components/CustomInput";
 
 
 export default DialogScreen = observer(({ route, navigation }) => {
-  const theme = useTheme()
   const [commentVisible, setCommentVisible] = useState(false)
   const { type, listId = null } = route.params
-  const screenName = route.name
+  // const screenName = route.name
 
   // console.log('DialogScreen screenName = ', screenName)
 

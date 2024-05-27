@@ -24,11 +24,11 @@ import { getFBCollectionId } from "../helpers/getFBCollectionId"
 
 export const useInputDialog = (payload) => {
 
-  const { type, listId = null} = payload
+  const { actionType, listId = null} = payload
 
 
 
-  console.log('useInputDialog type, listId = ', type, listId)
+  console.log('useInputDialog actionType, listId = ', actionType, listId)
 
 
 
@@ -45,26 +45,26 @@ export const useInputDialog = (payload) => {
   const onShowDialog = () => {
     console.log('Show dialog')
    
-    if(type === dialogActions.addTaskList || type === dialogActions.addGroupList) {
+    if(actionType === dialogActions.addTaskList || actionType === dialogActions.addGroupList) {
       setTitle('')
     }
 
-    if(type === dialogActions.editTaskListTitle) {
+    if(actionType === dialogActions.editTaskListTitle) {
       setTitle(listId ? appStore.getTaskListTitle(listId) : '')
      
     }
 
-    if(type === dialogActions.editGroupTaskListTitle) {
+    if(actionType === dialogActions.editGroupTaskListTitle) {
       setTitle(listId ? appStore.getGroupTaskListTitle(listId) : '')
      
     }
 
-    if(type === dialogActions.addTask) {
+    if(actionType === dialogActions.addTask) {
       setTitle('')
       setComment('')
     }
 
-    if(type === dialogActions.editTask) {   
+    if(actionType === dialogActions.editTask) {   
       console.log('edit Task')
       console.log('listId = ', listId)
 
@@ -89,12 +89,12 @@ export const useInputDialog = (payload) => {
 
     console.log('Title = ', title)
     console.log('Comment = ', comment)
-    console.log('type = ', type)
+    console.log('actionType = ', actionType)
   
     const trimTitle = title.trim()
     const trimComment = comment.trim()
 
-    if (type === dialogActions.addTaskList || type === dialogActions.addGroupList) {
+    if (actionType === dialogActions.addTaskList || actionType === dialogActions.addGroupList) {
       if(trimTitle === '') return
 
 
@@ -102,15 +102,15 @@ export const useInputDialog = (payload) => {
         userId,
         title: trimTitle,
         createdAt,
-        collectionId: getFBCollectionId(type)
+        collectionId: getFBCollectionId(actionType)
       })
     }
 
-    if (type === dialogActions.editTaskListTitle || type === dialogActions.editGroupTaskListTitle) {
+    if (actionType === dialogActions.editTaskListTitle || actionType === dialogActions.editGroupTaskListTitle) {
       appStore.updateTaskList({
         listId,
         title: trimTitle,
-        collectionId: getFBCollectionId(type)
+        collectionId: getFBCollectionId(actionType)
       })
     }
 
@@ -119,13 +119,13 @@ export const useInputDialog = (payload) => {
 
 
 
-    if (type === dialogActions.addTask) {
+    if (actionType === dialogActions.addTask) {
       console.log(title, comment, listId)
       
       if(trimTitle === '') return
       appStore.addTask({ title: trimTitle, comment: trimComment, listId })
     }
-    if (type === dialogActions.editTask) {
+    if (actionType === dialogActions.editTask) {
       appStore.updateTask({ title: trimTitle, comment: trimComment, listId })
     }
   }
@@ -135,7 +135,7 @@ export const useInputDialog = (payload) => {
 
   useEffect(() => {
     onShowDialog()
-  }, [type])
+  }, [actionType])
 
 
   const value = {

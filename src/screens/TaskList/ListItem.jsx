@@ -2,14 +2,30 @@ import { View, StyleSheet } from 'react-native';
 import { observer } from "mobx-react-lite";
 import { useTheme, List, Icon, Avatar } from 'react-native-paper';
 import { dateConversion } from '../../helpers/dateСonversion';
-import UsersList from '../../components/UsersList';
+import HorizontalMembersList from '../../components/HorizontalMembersList';
+import useGetMembersByIds from '../../hooks/useGetMembersByIds';
+import { useState } from 'react';
+import MembersListDialog from '../../components/MembersListDialog';
 
 
 
 //TaskList
 export default ListItem = observer(({ item, isSelected }) => {
 
+
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+
   const theme = useTheme();
+
+  // const {membersIds} = item
+
+  console.log('ListItem item.taskListId = ', item.taskListId)
+
+  const { members } = useGetMembersByIds(item.membersIds)
+
+  console.log('ListItem members = ', members)
 
   return (
     <View style={styles.listItemWrapper}>
@@ -26,9 +42,9 @@ export default ListItem = observer(({ item, isSelected }) => {
         ]}
         titleStyle={styles.title}
         description={
-          item.groupUsersIds.length === 0
+          item.membersIds === null
             ? dateConversion(item.createdAt)
-            : () => <UsersList users={item.groupUsersIds} />
+            : () => <HorizontalMembersList members={members} showModal={showModal} />
         }
         descriptionStyle={styles.description}
         left={() =>
@@ -61,7 +77,14 @@ export default ListItem = observer(({ item, isSelected }) => {
       //   />
       // }
       />
+      <MembersListDialog
+        visible={visible}
+        hideModal={hideModal}
+        taskListId={item.taskListId}
+      />
     </View>
+
+
   )
 })
 

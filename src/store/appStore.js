@@ -50,10 +50,10 @@ class appStore {
         creatorId: d.creatorId,
         taskListId: d.taskListId,
         title: d.title,
-        groupUsersIds: d.groupUsersIds
+        membersIds: d.membersIds
       }
 
-      membersObj = { ...membersObj, [d.taskListId]: d.groupUsersIds }
+      membersObj = { ...membersObj, [d.taskListId]: d.membersIds }
 
       return list
     })
@@ -78,10 +78,10 @@ class appStore {
         creatorId: d.creatorId,
         taskListId: d.taskListId,
         title: d.title,
-        groupUsersIds: d.groupUsersIds
+        membersIds: d.membersIds
       }
 
-      membersObj = { ...membersObj, [d.taskListId]: d.groupUsersIds }
+      membersObj = { ...membersObj, [d.taskListId]: d.membersIds }
 
       return list
     })

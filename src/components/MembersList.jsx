@@ -21,7 +21,7 @@ export default MembersList = observer(({members, removeMember}) => {
 
 
 
-  // console.log('!!!!!!!!!  taskList.groupUsersIds] = ', taskList.groupUsersIds)
+  // console.log('!!!!!!!!!  taskList.members] = ', taskList.members)
   // console.log('appStore.members[taskList.taskListId] = ', appStore.members[taskList.taskListId])
 
 
