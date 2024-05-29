@@ -18,7 +18,7 @@ import CustomInput from "../components/CustomInput";
 
 export default DialogScreen = observer(({ route, navigation }) => {
   const [commentVisible, setCommentVisible] = useState(false)
-  const { type, listId = null } = route.params
+  const { actionType, listId = null } = route.params
   // const screenName = route.name
 
   // console.log('DialogScreen screenName = ', screenName)
@@ -32,7 +32,7 @@ export default DialogScreen = observer(({ route, navigation }) => {
     setComment,
     createdAt,
     setCreatedAt
-  } = useInputDialog({ type, listId })
+  } = useInputDialog({ actionType, listId })
 
 
  
@@ -53,10 +53,10 @@ export default DialogScreen = observer(({ route, navigation }) => {
   }, [title, comment, commentVisible])
 
   useLayoutEffect(() => {
-    const visible = type === dialogActions.addTask || type === dialogActions.editTask
+    const visible = actionType === dialogActions.addTask || actionType === dialogActions.editTask
     console.log('comment is visible = ', visible)
     setCommentVisible(visible)
-  }, [type])
+  }, [actionType])
 
 
 

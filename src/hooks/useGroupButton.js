@@ -6,9 +6,9 @@ import { getFBCollectionId } from "../helpers/getFBCollectionId"
 
 
 
-const getCurrentList = (type) => {
-  if(type === dialogActions.addTaskList) return 'TASK_LIST'
-  if(type === dialogActions.addGroupList) return 'GROUPE_LIST'
+const getCurrentList = (actionType) => {
+  if(actionType === dialogActions.addTaskList) return 'TASK_LIST'
+  if(actionType === dialogActions.addGroupList) return 'GROUPE_LIST'
   return 'SUB_TASK_LIST'
 }
 
@@ -18,11 +18,11 @@ const getCurrentList = (type) => {
 
 export const useGroupButton = (payload) => {
 
-  const { navigation, type, listId = null } = payload
+  const { navigation, actionType, listId = null } = payload
 
   const [buttonGroupIsOpen, setButtonGroupIsOpen] = useState(false)
   const [currentList, setCurrentList] = useState({
-    name: getCurrentList(type), id: null
+    name: getCurrentList(actionType), id: null
   })
 
   const [selectedItemsIds, setIdsOfSelectedItems] = useState([])
@@ -30,16 +30,16 @@ export const useGroupButton = (payload) => {
 
   const getOptions = (listId) => ({
     'TASK_LIST': {
-      type: type === dialogActions.addTaskList ? dialogActions.editTaskListTitle : dialogActions.editGroupTaskListTitle,
+      actionType: actionType === dialogActions.addTaskList ? dialogActions.editTaskListTitle : dialogActions.editGroupTaskListTitle,
       listId,
-      remove: () => appStore.removeTaskList({listId, collectionId: getFBCollectionId(type)}),
+      remove: () => appStore.removeTaskList({listId, collectionId: getFBCollectionId(actionType)}),
       removeSelected: () => appStore.removeSelectedTaskList({
         selectedItemsIds,
-        collectionId: getFBCollectionId(type)
+        collectionId: getFBCollectionId(actionType)
       })
     },
     'SUB_TASK_LIST': {
-      type: dialogActions.editTask,
+      actionType: dialogActions.editTask,
       listId,
       remove: () => appStore.removeTask(listId),
       removeSelected: () => appStore.removeSelectedTask(selectedItemsIds)
@@ -171,7 +171,7 @@ export const useGroupButton = (payload) => {
     addTask: () => {
       navigation.navigate(
         'DialogScreen', {
-        type,
+        actionType,
         listId
       })
     },
@@ -186,7 +186,7 @@ export const useGroupButton = (payload) => {
   }
 
   return useMemo(() => values, [
-    type,
+    actionType,
     listId,
     buttonGroup.buttonGroupIsOpen,
     currentList.id,

@@ -1,9 +1,9 @@
 import { dialogActions } from "../const/constants"
 
-export const getFBCollectionId = (type) => {
-  if(type === dialogActions.addTaskList) return 'list'
-  if(type === dialogActions.addGroupList) return 'grouplist'
-  if(type === dialogActions.editTaskListTitle) return 'list'
-  if(type === dialogActions.editGroupTaskListTitle) return 'grouplist'
+export const getFBCollectionId = (actionType) => {
+  if(actionType === dialogActions.addTaskList) return 'list'
+  if(actionType === dialogActions.addGroupList) return 'grouplist'
+  if(actionType === dialogActions.editTaskListTitle) return 'list'
+  if(actionType === dialogActions.editGroupTaskListTitle) return 'grouplist'
 
 }

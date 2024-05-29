@@ -7,7 +7,7 @@ class UsersStore {
 
   
   favoriteUsers = []
-  // members = []
+  members = []
 
   foundFavoriteUser = null
 
@@ -31,15 +31,24 @@ class UsersStore {
     // this.favoriteUsers = [...this.favoriteUsers, favoriteUsers]
   }
 
-  getUserById = async (friendId) => {
-    
-    const ff = await fb.getUserById(friendId)
-    this.setFoundUser(ff)
-    
-    // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', ff)
-    
-    return ff
+
+
+  setMembers = (members) => {
+    this.members = members
   }
+
+
+
+  getMembersById = async (ids) => {  
+    const members = await fb.getMembersById(ids)
+    
+    // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!getUsersById members', members)
+    
+    this.setMembers(members)  
+    return members
+  }
+
+
 
   setFoundUser= (foundFavoriteUser) => {
     this.foundFavoriteUser = foundFavoriteUser

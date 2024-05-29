@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Dialog, IconButton, Portal, useTheme } from "react-native-paper";
-import MembersList from "./MembersList";
+import MembersVerticalList from "./MembersVerticalList";
 import useGetMembersByIds from "../hooks/useGetMembersByIds";
 import appStore from "../store/appStore";
 
@@ -10,7 +10,7 @@ export default MembersListDialog = observer(({ visible, hideModal, taskListId })
 
   const theme = useTheme();
 
-  const {members} = useGetMembersByIds(appStore.members[taskListId])
+  const members = useGetMembersByIds(appStore.members[taskListId])
 
 
 
@@ -37,7 +37,7 @@ export default MembersListDialog = observer(({ visible, hideModal, taskListId })
         <Dialog.Title>Участники</Dialog.Title>
 
         <Dialog.ScrollArea>
-          <MembersList
+          <MembersVerticalList
             removeMember={removeMember}
             members={members} />
         </Dialog.ScrollArea>

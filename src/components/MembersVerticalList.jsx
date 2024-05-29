@@ -3,37 +3,23 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { List, Avatar, useTheme } from 'react-native-paper';
 import { observer } from "mobx-react-lite";
 import commonStyles from '../screens/FavoriteUsers/commonStyles';
-import useGetMembersByIds from '../hooks/useGetMembersByIds';
 import usersStore from '../store/usersStore';
 import appStore from '../store/appStore';
 
 
 
 
-export default MembersList = observer(({members, removeMember}) => {
+export default MembersVerticalList = observer(({members, removeMember}) => {
   const theme = useTheme()
 
 
 
-
-
-  console.log('MembersList render')
-
-
-
-  // console.log('!!!!!!!!!  taskList.members] = ', taskList.members)
-  // console.log('appStore.members[taskList.taskListId] = ', appStore.members[taskList.taskListId])
-
-
-  // const {members} = useGetMembersByIds(appStore.members[taskList.taskListId])
-
-  console.log('MembersList members = ', members)
+  console.log('MembersVerticalList render')
 
 
 
 
-
-
+  console.log('MembersVerticalList members = ', members)
 
 
 

@@ -4,12 +4,12 @@ import { observer } from "mobx-react-lite";
 
 
 
-export default HorizontalMembersList = observer(({ members, size = 20, showModal }) => {
+export default MembersHorizontalList = observer(({ members, size = 20, showModal }) => {
 
   const theme = useTheme()
 
 
-  console.log('HorizontalMembersList members = ', members)
+  console.log('MembersHorizontalList members = ', members)
 
   if (members.length === 0) return null
 
@@ -20,9 +20,12 @@ export default HorizontalMembersList = observer(({ members, size = 20, showModal
           horizontal={true}
           data={members}
           renderItem={({ item }) => (
-            <View style={styles.avatar}>
+            <View
+              // key={item.id}
+              style={styles.avatar}
+            >
               <Pressable
-                onPress={() => console.log('HorizontalMembersList Press!')}
+                onPress={() => console.log('MembersHorizontalList Press!')}
               >
                 <Avatar.Text
                   style={{ backgroundColor: theme.colors.primaryContainer }}

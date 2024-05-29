@@ -137,32 +137,33 @@ export const fb = {
 
 
 
-  getUserById: async (friendId) => {
+  getMembersById: async (ids) => {
 
-    // console.log('FIRABASE friendId = ', friendId)
+    if(!ids) return []
 
-    // debugger
     try {
-      const q = query(collection(db, 'users'), where('id', '==', friendId));
 
-      const member = await getDocs(q)
+      const promise = ids.map(async (memberId) => {
+
+        const q = query(collection(db, 'users'), where('id', '==', memberId));
+        const member = await getDocs(q)
+
+        const id = member.docs[0].data().id
+        const nickName = member.docs[0].data().nickName
+
+        return { id, nickName }
+      })
+
+      const members = await Promise.all(promise);
 
 
-
-      // console.log('FIRABASE member = ', member.docs)
-
-      if (!member.docs[0]) return null
-
-      const id = member.docs[0].data().id
-      const nickName = member.docs[0].data().nickName
-
-
-      // console.log('111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+      // console.log('111111111111111111111111111111111111111111111111111111111 ', members)
       // console.log('id = ', id, 'nickName = ', nickName)
 
-      return { id, nickName }
+      return members
+
     } catch (error) {
-      console.error('Ошибка получения друга', error)
+      console.error('Ошбика получения данных пользователей по id', error)
       setErrorMessage()
     }
   },
@@ -316,7 +317,7 @@ export const fb = {
     if (!userId || !collectionId) return
 
 
-  
+
     const q = query(collection(db, collectionId), where('creatorId', '==', userId));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -333,7 +334,7 @@ export const fb = {
           creatorId: data.creatorId,
           membersIds: collectionId === 'grouplist' ? data.membersIds : null
         })
-        
+
       })
 
 
@@ -411,7 +412,7 @@ export const fb = {
   },
 
   removeTaskList: (payload) => {
-    const {listId, collectionId} = payload
+    const { listId, collectionId } = payload
     deleteDoc(doc(db, collectionId, listId))
       .then(() => {
         // setSuccessMessage()
@@ -424,14 +425,14 @@ export const fb = {
 
   removeSelectedTaskList: async (payload) => {
 
-    const {selectedItemsIds, collectionId} = payload
+    const { selectedItemsIds, collectionId } = payload
     const removePromise = selectedItemsIds.map(async (id) => {
 
       try {
-        await deleteDoc( doc(db, collectionId, id))
+        await deleteDoc(doc(db, collectionId, id))
       } catch (error) {
         setErrorMessage()
-          console.log('Ошбика удаления списка задач c id: ', id, error)
+        console.log('Ошбика удаления списка задач c id: ', id, error)
       }
       return id
     })
@@ -667,10 +668,10 @@ export const fb = {
     const removePromise = ids.map(async (id) => {
 
       try {
-        await deleteDoc( doc(db, 'subtasklist', id))
+        await deleteDoc(doc(db, 'subtasklist', id))
       } catch (error) {
         setErrorMessage()
-          console.log('Ошбика удаления задач c id: ', id, error)
+        console.log('Ошбика удаления задач c id: ', id, error)
       }
       return id
     })

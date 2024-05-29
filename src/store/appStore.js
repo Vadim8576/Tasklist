@@ -11,7 +11,7 @@ class appStore {
   subTaskList = []
   unsubscribeVoid = null
 
-  members = {}
+  members = []
 
   message = {}
 

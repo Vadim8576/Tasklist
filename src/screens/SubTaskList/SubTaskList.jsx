@@ -13,7 +13,7 @@ import FavoriteUserList from "../FavoriteUsers/FavoriteUserList";
 import AddButton from "../../components/UI/AddButton";
 import MembersListDialog from "../../components/MembersListDialog";
 import useGetMembersByIds from "../../hooks/useGetMembersByIds";
-import HorizontalMembersList from "../../components/HorizontalMembersList";
+import MembersHorizontalList from "../../components/MembersHorizontalList";
 
 
 
@@ -47,11 +47,11 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
   const { buttonGroup } = useGroupButton({
     navigation,
-    type: dialogActions.addTask,
+    actionType: dialogActions.addTask,
     listId: taskListId
   })
 
-  const { members } = useGetMembersByIds(appStore.members[taskList.taskListId])
+  const members = useGetMembersByIds(appStore.members[taskList.taskListId])
 
   // const membersIds = members.map(member => member.id)
 
@@ -91,7 +91,7 @@ export default SubTaskList = observer(({ route, navigation }) => {
   return (
     <>
       <View style={{ padding: 20 }}>
-        <HorizontalMembersList members={members} size={30} showModal={showModal} />
+        <MembersHorizontalList members={members} size={30} showModal={showModal} />
       </View>
 
 

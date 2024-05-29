@@ -21,11 +21,9 @@ export default TaskList = observer(({ navigation, route }) => {
 
   const screenName = route.name
 
-  const {
-    buttonGroup
-  } = useGroupButton({
+  const { buttonGroup } = useGroupButton({
     navigation,
-    type: screenName === 'TaskList' ? dialogActions.addTaskList : dialogActions.addGroupList
+    actionType: screenName === 'TaskList' ? dialogActions.addTaskList : dialogActions.addGroupList
   })
 
  
