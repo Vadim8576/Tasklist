@@ -4,12 +4,24 @@ import { observer } from "mobx-react-lite";
 
 
 
-export default MembersHorizontalList = observer(({ members, size = 20, showModal }) => {
+export default MembersHorizontalList = observer(({ navigation, taskListId, members, size = 20, showModal }) => {
 
   const theme = useTheme()
 
 
   console.log('MembersHorizontalList members = ', members)
+
+
+
+
+
+  const navigateToGroupListMembers = () => {
+
+    navigation.navigate('GroupListMembers', {taskListId})
+  }
+
+
+
 
   if (members.length === 0) return null
 
@@ -38,7 +50,7 @@ export default MembersHorizontalList = observer(({ members, size = 20, showModal
           )}
           ListFooterComponent={
             <Pressable
-              onPress={showModal}
+              onPress={navigateToGroupListMembers}
             >
               <Avatar.Icon
                 size={size}

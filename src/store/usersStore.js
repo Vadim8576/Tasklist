@@ -5,7 +5,7 @@ import { fb } from "../api/firebase";
 
 class UsersStore {
 
-  
+
   favoriteUsers = []
   members = []
 
@@ -16,19 +16,17 @@ class UsersStore {
   }
 
 
-  // resetFriends = () => {
-  //   this.favoriteUsers= []
-  // }
 
   getFavoriteUsers = async (userId) => {
-    // this.resetFriends()
-    this.setFavoriteUsers(await fb.getFavoriteUsers(userId))
+    const favoriteUsers = await fb.getFavoriteUsers(userId)
+    this.setFavoriteUsers(favoriteUsers)
+
+    return favoriteUsers
   }
 
+
   setFavoriteUsers = (favoriteUsers) => {
-    // console.log('authStore favoriteUsers = ', favoriteUsers)
     this.favoriteUsers = favoriteUsers
-    // this.favoriteUsers = [...this.favoriteUsers, favoriteUsers]
   }
 
 
@@ -39,18 +37,18 @@ class UsersStore {
 
 
 
-  getMembersById = async (ids) => {  
+  getMembersById = async (ids) => {
     const members = await fb.getMembersById(ids)
-    
+
     // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!getUsersById members', members)
-    
-    this.setMembers(members)  
+
+    this.setMembers(members)
     return members
   }
 
 
 
-  setFoundUser= (foundFavoriteUser) => {
+  setFoundUser = (foundFavoriteUser) => {
     this.foundFavoriteUser = foundFavoriteUser
   }
 

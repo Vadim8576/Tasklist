@@ -51,6 +51,7 @@ export default TaskList = observer(({ navigation, route }) => {
               }}
             >
               <ListItem     
+                navigation={navigation}
                 isSelected={buttonGroup.getSelected(item.taskListId)}
                 item={item}
               />

@@ -7,23 +7,32 @@ import commonStyles from './commonStyles';
 import { useAuth } from '../../hooks/useAuth';
 import usersStore from '../../store/usersStore';
 import appStore from '../../store/appStore';
+import FavoriteUsersRightButton from '../../components/UI/FavoriteUsersRightButton';
 
 
 
 
-export default FavoriteUserList = observer(({favoriteUsers}) => {
+export default FavoriteUserList = observer(({type, favoriteUsers, userId}) => {
+
+
+  // const type = 'INVITE' // 'DELETE'
+
   const theme = useTheme()
 
-  const { user } = useAuth()
   console.log('FriensLisrt render')
   // console.log('FriensLisrt favoriteUsers = ', favoriteUsers)
 
 
 
-  const removeFavoriteUser = (friendId) => {
-    usersStore.removeFavoriteUser({ friendId, userId: user.uid })
+  const pressHandler = (friendId) => {
+    if(type === 'INVITE') {
+      console.log('Пригласили участника')
+    }
+    if(type === 'DELETE') {
+      if(friendId === null) return
+      usersStore.removeFavoriteUser({ friendId, userId })
+    }
   }
-
 
   return (
     <View style={[
@@ -52,22 +61,7 @@ export default FavoriteUserList = observer(({favoriteUsers}) => {
                 />
               </View>
             )}
-            right={() => (
-              <Pressable
-                onPress={() => removeFavoriteUser(item.id)}
-                style={({ pressed }) => [
-                  { backgroundColor: pressed ? theme.colors.primaryContainer : theme.colors.background },
-
-                  styles.pressable
-                ]}
-              >
-                <List.Icon
-                  color={theme.colors.secondary}
-                  style={styles.rightIcon}
-                  icon="close"
-                />
-              </Pressable>
-            )}
+            right={() => <FavoriteUsersRightButton type={type} favoriteUserId={item.id} pressHandler={pressHandler} />}
           />
         )}
       />

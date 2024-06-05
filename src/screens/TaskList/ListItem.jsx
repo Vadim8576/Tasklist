@@ -10,8 +10,10 @@ import usersStore from '../../store/usersStore';
 
 
 
+
+
 //TaskList
-export default ListItem = observer(({ item, isSelected }) => {
+export default ListItem = observer(({ navigation, item, isSelected }) => {
 
   const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
@@ -42,7 +44,13 @@ export default ListItem = observer(({ item, isSelected }) => {
         description={
           item.membersIds === null
             ? dateConversion(item.createdAt)
-            : () => members && <MembersHorizontalList members={members} showModal={showModal} />
+            : () => members && (
+            <MembersHorizontalList
+              navigation={navigation}
+              taskListId={item.taskListId}
+              members={members}
+              showModal={showModal}
+            />)
         }
         descriptionStyle={styles.description}
         left={() =>

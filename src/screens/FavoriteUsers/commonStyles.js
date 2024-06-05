@@ -7,7 +7,7 @@ export default styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     paddingRight: 0,
-    paddingLeft: 10,
+    paddingLeft: 0,
     borderRadius: 3,
     marginBottom: 10,
   },
@@ -15,7 +15,7 @@ export default styles = StyleSheet.create({
     borderRadius: RIGHT_BUTTON_SIZE / 2,
     height: RIGHT_BUTTON_SIZE,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rightIcon: {
     width: RIGHT_BUTTON_SIZE,

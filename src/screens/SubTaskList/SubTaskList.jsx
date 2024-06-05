@@ -78,20 +78,26 @@ export default SubTaskList = observer(({ route, navigation }) => {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
     // authStore.createUser()
-    if (!userId) return
-    usersStore.getFavoriteUsers(userId)
+    // if (!userId) return
+    // usersStore.getFavoriteUsers(userId)
 
-  }, [userId])
+  // }, [userId])
 
 
 
   return (
     <>
       <View style={{ padding: 20 }}>
-        <MembersHorizontalList members={members} size={30} showModal={showModal} />
+        <MembersHorizontalList
+          navigation={navigation}
+          taskListId={taskList.taskListId}
+          members={members}
+          size={30}
+          showModal={showModal}
+        />
       </View>
 
 

@@ -107,29 +107,39 @@ export const fb = {
   },
 
   getFavoriteUsers: async (userId) => {
-    const q = query(collection(db, 'users'), where('id', '==', userId));
 
-    const docs = await getDocs(q)
-    const favoriteUsersIds = docs.docs[0].data().friends
+    if (!userId) return []
 
-    if (favoriteUsersIds.length === 0) return []
+    try {
+      const q = query(collection(db, 'users'), where('id', '==', userId));
 
-    const favoriteUsersPromises = favoriteUsersIds.map(async (id) => {
-      const q = query(collection(db, 'users'), where('id', '==', id));
-      const favoriteUser = await getDocs(q)
+      const docs = await getDocs(q)
+      const favoriteUsersIds = docs.docs[0].data().friends
 
-      if (!favoriteUser) return null
+      if (favoriteUsersIds.length === 0) return []
 
-      return {
-        nickName: favoriteUser.docs[0].data().nickName,
-        id: favoriteUser.docs[0].data().id,
-      }
-    })
+      const favoriteUsersPromises = favoriteUsersIds.map(async (id) => {
+        const q = query(collection(db, 'users'), where('id', '==', id));
+        const favoriteUser = await getDocs(q)
 
-    const favoriteUsers = await Promise.all(favoriteUsersPromises);
-    console.log('favoriteUsers = ', favoriteUsers)
+        if (!favoriteUser) return null
 
-    return favoriteUsers
+        return {
+          nickName: favoriteUser.docs[0].data().nickName,
+          id: favoriteUser.docs[0].data().id,
+        }
+      })
+
+      const favoriteUsers = await Promise.all(favoriteUsersPromises);
+      console.log('favoriteUsers = ', favoriteUsers)
+
+      return favoriteUsers
+
+    } catch (error) {
+      console.error('Ошбика получения избранных пользователей', error)
+      setErrorMessage()
+    }
+
 
   },
 
@@ -139,11 +149,11 @@ export const fb = {
 
   getMembersById: async (ids) => {
 
-    if(!ids) return []
+    if (!ids) return []
 
     try {
 
-      const promise = ids.map(async (memberId) => {
+      const membersPromises = ids.map(async (memberId) => {
 
         const q = query(collection(db, 'users'), where('id', '==', memberId));
         const member = await getDocs(q)
@@ -154,7 +164,7 @@ export const fb = {
         return { id, nickName }
       })
 
-      const members = await Promise.all(promise);
+      const members = await Promise.all(membersPromises);
 
 
       // console.log('111111111111111111111111111111111111111111111111111111111 ', members)
@@ -163,7 +173,7 @@ export const fb = {
       return members
 
     } catch (error) {
-      console.error('Ошбика получения данных пользователей по id', error)
+      console.error('Ошбика получения участников по id', error)
       setErrorMessage()
     }
   },

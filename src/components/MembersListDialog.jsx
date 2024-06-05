@@ -39,7 +39,8 @@ export default MembersListDialog = observer(({ visible, hideModal, taskListId })
         <Dialog.ScrollArea>
           <MembersVerticalList
             removeMember={removeMember}
-            members={members} />
+            members={members}
+          />
         </Dialog.ScrollArea>
         <Dialog.Actions>
           <IconButton

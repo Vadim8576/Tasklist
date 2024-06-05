@@ -11,11 +11,10 @@ import { useAuth } from '../../hooks/useAuth';
 import { useSeachFavoriteUser } from '../../hooks/useSeachFavoriteUser';
 
 
-export default SeachUsers = observer(({ favoriteUsers }) => {
+export default SeachUsers = observer(({ favoriteUsers, userId }) => {
   console.log('SeachFriends render')
 
   const theme = useTheme()
-  const { user } = useAuth()
 
   const [foundFriend, setFoundFriend] = useState(null)
   const [friendId, setFriendId] = useState('')
@@ -25,7 +24,7 @@ export default SeachUsers = observer(({ favoriteUsers }) => {
 
 
   const onSubmit = async () => {
-    const [friend, error] = await getFavoriteUser({ friendId, userId: user.uid })
+    const [friend, error] = await getFavoriteUser({ friendId, userId })
     setError(error)
     setFoundFriend(friend)
   }
